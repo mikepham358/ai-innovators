@@ -29,16 +29,9 @@ import {
 } from "@/data/club-data";
 import { HallSynthEngine } from "@/lib/audio/hall-synth";
 
-const TIER_PRIORITY: Record<TeamMember["tier"], number> = {
-  executive: 0,
-  head: 1,
-  member: 2,
-};
-
-// Proud runway order: President & VP first, then Heads/Co-Heads, then Division Members
-const ORDERED_HERO_MEMBERS: TeamMember[] = [...TEAM_MEMBERS].sort(
-  (a, b) => TIER_PRIORITY[a.tier] - TIER_PRIORITY[b.tier],
-);
+// Division-complete runway order: PM -> DOT -> PR -> ER -> LOG -> HR
+// Keeps each Head/Co-Head paired consecutively with every member of their division (29 total)
+const ORDERED_HERO_MEMBERS: TeamMember[] = [...TEAM_MEMBERS];
 
 const EQUALIZER_WEIGHTS = [0.55, 0.95, 0.72, 1.0, 0.64];
 
@@ -134,12 +127,20 @@ export function HeroMemberCarousel() {
   const [slowMode, setSlowMode] = useState(false);
   const [musicPlaying, setMusicPlaying] = useState(false);
   const [userMuted, setUserMuted] = useState(false);
+  const [pendingAutoBeat, setPendingAutoBeat] = useState(true);
+  const [volumePct, setVolumePct] = useState(20);
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
 
   const engineRef = useRef<HallSynthEngine | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
+  const beatButtonRef = useRef<HTMLButtonElement | null>(null);
+  const pauseButtonRef = useRef<HTMLButtonElement | null>(null);
   const barRefs = useRef<Array<HTMLSpanElement | null>>([]);
   const decayTimerRef = useRef<number | null>(null);
+  const userMutedRef = useRef(false);
+  const isPausedRef = useRef(false);
+  const hasCrescendoStartedRef = useRef(false);
+  const isStartingAudioRef = useRef(false);
 
   const { divisionByCode, accentByCode } = useMemo(() => {
     const divMap = {} as Record<DivisionCode, (typeof CLUB_DIVISIONS)[number]>;
@@ -205,23 +206,123 @@ export function HeroMemberCarousel() {
     return engineRef.current;
   }, []);
 
+  // Default beat ON when opening the web, ramping cleanly 20% -> 80% over 10s
+  // (unlocks immediately on first interaction if browser autoplay policy holds AudioContext)
   useEffect(() => {
+    let active = true;
+    const unlockEvents = ["pointerdown", "touchstart", "keydown", "click"] as const;
+
+    const detachUnlock = () => {
+      for (const evt of unlockEvents) {
+        window.removeEventListener(evt, handleFirstGesture, true);
+      }
+    };
+
+    async function launchInitialBeat() {
+      if (
+        userMutedRef.current ||
+        isPausedRef.current ||
+        hasCrescendoStartedRef.current ||
+        isStartingAudioRef.current
+      ) {
+        return false;
+      }
+      isStartingAudioRef.current = true;
+      try {
+        const engine = ensureEngine();
+        engine.setBpm(108);
+        const started = await engine.startOrResume({
+          startLevel: 0.2,
+          targetLevel: 0.8,
+          rampSeconds: 10,
+        });
+        if (started && active) {
+          hasCrescendoStartedRef.current = true;
+          setMusicPlaying(true);
+          setPendingAutoBeat(false);
+          setVolumePct(20);
+          detachUnlock();
+        }
+        return started;
+      } finally {
+        isStartingAudioRef.current = false;
+      }
+    }
+
+    function handleFirstGesture(event: Event) {
+      if (userMutedRef.current || isPausedRef.current || hasCrescendoStartedRef.current) {
+        detachUnlock();
+        return;
+      }
+      const target = event.target;
+      if (
+        target instanceof Node &&
+        (beatButtonRef.current?.contains(target) ||
+          pauseButtonRef.current?.contains(target))
+      ) {
+        // Explicit button clicks handle toggle directly without double-firing
+        return;
+      }
+      void launchInitialBeat();
+    }
+
+    void launchInitialBeat().then((started) => {
+      if (!started && active && !userMutedRef.current) {
+        for (const evt of unlockEvents) {
+          window.addEventListener(evt, handleFirstGesture, {
+            capture: true,
+            passive: true,
+          });
+        }
+      }
+    });
+
     return () => {
+      active = false;
+      detachUnlock();
       if (decayTimerRef.current !== null) {
         window.clearTimeout(decayTimerRef.current);
       }
       engineRef.current?.dispose();
       engineRef.current = null;
     };
-  }, []);
+  }, [ensureEngine]);
+
+  // Smooth live readout during 20% -> 80% 10s crescendo
+  useEffect(() => {
+    if (!musicPlaying) return;
+    const id = window.setInterval(() => {
+      const pct = engineRef.current?.getVolumePercent();
+      if (typeof pct === "number" && pct > 0) {
+        setVolumePct(pct);
+      }
+    }, 250);
+    return () => window.clearInterval(id);
+  }, [musicPlaying]);
 
   async function startMusicIfAllowed(bpm: number, forceUnmute = false) {
-    if (!forceUnmute && userMuted) return;
-    const engine = ensureEngine();
-    engine.setBpm(bpm);
-    const started = await engine.startOrResume();
-    if (started) {
-      setMusicPlaying(true);
+    if (!forceUnmute && userMutedRef.current) return;
+    if (isStartingAudioRef.current) return;
+    isStartingAudioRef.current = true;
+    try {
+      const engine = ensureEngine();
+      engine.setBpm(bpm);
+      const isInitial = !hasCrescendoStartedRef.current;
+      const started = await engine.startOrResume(
+        isInitial
+          ? { startLevel: 0.2, targetLevel: 0.8, rampSeconds: 10 }
+          : { startLevel: 0.28, targetLevel: 0.8, rampSeconds: 0.45 },
+      );
+      if (started) {
+        if (isInitial) {
+          hasCrescendoStartedRef.current = true;
+        }
+        setMusicPlaying(true);
+        setPendingAutoBeat(false);
+        setVolumePct(engine.getVolumePercent() || 20);
+      }
+    } finally {
+      isStartingAudioRef.current = false;
     }
   }
 
@@ -233,13 +334,17 @@ export function HeroMemberCarousel() {
 
   function handleToggleMusic() {
     if (musicPlaying) {
+      userMutedRef.current = true;
       setUserMuted(true);
+      setPendingAutoBeat(false);
       stopMusic();
       return;
     }
 
+    userMutedRef.current = false;
     setUserMuted(false);
     if (isPaused) {
+      isPausedRef.current = false;
       setIsPaused(false);
     }
     const bpm = slowMode ? 84 : 108;
@@ -259,12 +364,14 @@ export function HeroMemberCarousel() {
   function handleTogglePlayPause() {
     if (isPaused) {
       // Resume carousel & music smoothly on beat
+      isPausedRef.current = false;
       setIsPaused(false);
       if (!userMuted) {
         void startMusicIfAllowed(slowMode ? 84 : 108);
       }
     } else {
       // Pause carousel & fade/pause beat cleanly
+      isPausedRef.current = true;
       setIsPaused(true);
       stopMusic();
     }
@@ -321,6 +428,7 @@ export function HeroMemberCarousel() {
         <div className="flex flex-wrap items-center gap-2">
           {/* Interactive Runway Synth Beat Control + Live Equalizer */}
           <button
+            ref={beatButtonRef}
             type="button"
             onClick={handleToggleMusic}
             aria-label={
@@ -331,11 +439,15 @@ export function HeroMemberCarousel() {
             className={`group inline-flex items-center gap-2 rounded-lg border px-2.5 py-1.5 font-mono text-[11px] font-semibold transition ${
               musicPlaying
                 ? "border-cyan-300/45 bg-gradient-to-r from-cyan-500/20 via-blue-500/20 to-fuchsia-500/20 text-cyan-100 shadow-[0_0_18px_rgba(34,211,238,0.22)]"
-                : "border-white/15 bg-white/[0.05] text-slate-200 hover:border-cyan-300/40 hover:bg-white/10 hover:text-white"
+                : pendingAutoBeat && !userMuted
+                  ? "border-cyan-300/35 bg-cyan-500/10 text-cyan-100 hover:border-cyan-300/60 hover:bg-cyan-500/20"
+                  : "border-white/15 bg-white/[0.05] text-slate-200 hover:border-cyan-300/40 hover:bg-white/10 hover:text-white"
             }`}
           >
             {musicPlaying ? (
               <Volume2 className="h-3.5 w-3.5 text-cyan-300" />
+            ) : pendingAutoBeat && !userMuted ? (
+              <Volume2 className="h-3.5 w-3.5 animate-pulse text-cyan-300" />
             ) : (
               <VolumeX className="h-3.5 w-3.5 text-slate-400 group-hover:text-cyan-200" />
             )}
@@ -357,7 +469,9 @@ export function HeroMemberCarousel() {
                       ? index % 2 === 0
                         ? "bg-cyan-300"
                         : "bg-fuchsia-300"
-                      : "bg-slate-500"
+                      : pendingAutoBeat && !userMuted
+                        ? "bg-cyan-400/50"
+                        : "bg-slate-500"
                   }`}
                 />
               ))}
@@ -365,10 +479,10 @@ export function HeroMemberCarousel() {
 
             <span>
               {musicPlaying
-                ? `Beat ${currentBpm} BPM`
+                ? `Beat ${currentBpm} BPM • ${volumePct}%`
                 : userMuted
                   ? "Đã tắt nhạc"
-                  : "Nhấn bật beat"}
+                  : "Auto Beat 20→80%"}
             </span>
           </button>
 
@@ -381,6 +495,7 @@ export function HeroMemberCarousel() {
           </button>
 
           <button
+            ref={pauseButtonRef}
             type="button"
             onClick={handleTogglePlayPause}
             aria-label={isPaused ? "Chạy tiếp carousel và nhạc" : "Tạm dừng carousel và nhạc"}

@@ -54,6 +54,12 @@ const ARP_STEPS: Record<number, number> = {
   14: 2,
 };
 
+export interface SynthStartOptions {
+  startLevel?: number;
+  targetLevel?: number;
+  rampSeconds?: number;
+}
+
 export class HallSynthEngine {
   private ctx: AudioContext | null = null;
   private masterGain: GainNode | null = null;
@@ -69,6 +75,11 @@ export class HallSynthEngine {
   private nextNoteTime = 0;
   private listener: BeatPulseListener | null = null;
 
+  private rampStartVal = 0.2;
+  private rampTargetVal = 0.8;
+  private rampDurationSec = 10;
+  private rampStartTime = 0;
+
   public onBeat(listener: BeatPulseListener | null) {
     this.listener = listener;
   }
@@ -79,6 +90,18 @@ export class HallSynthEngine {
 
   public getIsPlaying(): boolean {
     return this.isPlayingState;
+  }
+
+  public getVolumePercent(): number {
+    if (!this.isPlayingState) return 0;
+    if (!this.ctx || this.rampDurationSec <= 0) {
+      return Math.round(this.rampTargetVal * 100);
+    }
+    const elapsed = Math.max(0, this.ctx.currentTime - this.rampStartTime);
+    const progress = Math.min(1, elapsed / this.rampDurationSec);
+    const currentVal =
+      this.rampStartVal + (this.rampTargetVal - this.rampStartVal) * progress;
+    return Math.round(currentVal * 100);
   }
 
   private ensureContext(): AudioContext | null {
@@ -93,10 +116,13 @@ export class HallSynthEngine {
       const master = ctx.createGain();
       master.gain.setValueAtTime(0.0001, ctx.currentTime);
 
-      // Gentle master glue compressor for clean speaker playback
+      // Gentle master glue compressor calibrated for up to 80% output gain
       const compressor = ctx.createDynamicsCompressor();
-      compressor.threshold.setValueAtTime(-16, ctx.currentTime);
-      compressor.ratio.setValueAtTime(3.2, ctx.currentTime);
+      compressor.threshold.setValueAtTime(-12, ctx.currentTime);
+      compressor.knee.setValueAtTime(18, ctx.currentTime);
+      compressor.ratio.setValueAtTime(2.8, ctx.currentTime);
+      compressor.attack.setValueAtTime(0.008, ctx.currentTime);
+      compressor.release.setValueAtTime(0.18, ctx.currentTime);
 
       master.connect(compressor);
       compressor.connect(ctx.destination);
@@ -139,7 +165,15 @@ export class HallSynthEngine {
     return this.ctx;
   }
 
-  public async startOrResume(): Promise<boolean> {
+  public async startOrResume(
+    options: SynthStartOptions = {},
+  ): Promise<boolean> {
+    const {
+      startLevel = 0.2,
+      targetLevel = 0.8,
+      rampSeconds = 10,
+    } = options;
+
     const ctx = this.ensureContext();
     if (!ctx || !this.masterGain) return false;
 
@@ -148,17 +182,39 @@ export class HallSynthEngine {
       this.pauseTimeoutId = null;
     }
 
+    // Invoke resume synchronously within the current call stack (important for Safari/iOS gestures)
     if (ctx.state === "suspended") {
-      await ctx.resume();
+      const resumeAttempt = ctx.resume().catch(() => undefined);
+      await Promise.race([
+        resumeAttempt,
+        new Promise<void>((resolve) => window.setTimeout(resolve, 140)),
+      ]);
     }
+
+    if ((ctx.state as AudioContextState) !== "running") {
+      return false;
+    }
+
+    const clampedStart = Math.max(0.0001, Math.min(1, startLevel));
+    const clampedTarget = Math.max(0.0001, Math.min(1, targetLevel));
+    const safeRamp = Math.max(0, rampSeconds);
 
     const now = ctx.currentTime;
     this.masterGain.gain.cancelScheduledValues(now);
-    this.masterGain.gain.setValueAtTime(
-      Math.max(this.masterGain.gain.value, 0.0001),
-      now,
-    );
-    this.masterGain.gain.linearRampToValueAtTime(0.46, now + 0.16);
+    this.masterGain.gain.setValueAtTime(clampedStart, now);
+    if (safeRamp > 0.02) {
+      this.masterGain.gain.linearRampToValueAtTime(
+        clampedTarget,
+        now + safeRamp,
+      );
+    } else {
+      this.masterGain.gain.setValueAtTime(clampedTarget, now);
+    }
+
+    this.rampStartVal = clampedStart;
+    this.rampTargetVal = clampedTarget;
+    this.rampDurationSec = safeRamp;
+    this.rampStartTime = now;
 
     if (!this.isPlayingState) {
       this.isPlayingState = true;
@@ -258,7 +314,7 @@ export class HallSynthEngine {
     // Warm Electric Piano / Synth Pad Swell on bar start & syncopated step 6
     if (step === 0 || step === 6) {
       const duration = step === 0 ? 1.35 : 0.9;
-      const gain = step === 0 ? 0.11 : 0.065;
+      const gain = step === 0 ? 0.095 : 0.055;
       this.triggerWarmChord(time, chord.pad, duration, gain);
       this.triggerSubBass(time, chord.bass, step === 0 ? 0.85 : 0.55);
       pulseIntensity = Math.max(pulseIntensity, step === 0 ? 0.96 : 0.64);
@@ -298,7 +354,7 @@ export class HallSynthEngine {
     osc.frequency.exponentialRampToValueAtTime(42, time + 0.14);
 
     gain.gain.setValueAtTime(0.0001, time);
-    gain.gain.linearRampToValueAtTime(0.56 * accent, time + 0.008);
+    gain.gain.linearRampToValueAtTime(0.44 * accent, time + 0.008);
     gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.28);
 
     osc.connect(gain);
@@ -320,7 +376,7 @@ export class HallSynthEngine {
     filter.Q.setValueAtTime(1.1, time);
 
     const nGain = this.ctx.createGain();
-    nGain.gain.setValueAtTime(0.18, time);
+    nGain.gain.setValueAtTime(0.14, time);
     nGain.gain.exponentialRampToValueAtTime(0.0001, time + 0.13);
 
     noise.connect(filter);
@@ -341,7 +397,7 @@ export class HallSynthEngine {
     body.type = "triangle";
     body.frequency.setValueAtTime(215, time);
     body.frequency.exponentialRampToValueAtTime(125, time + 0.065);
-    bGain.gain.setValueAtTime(0.15, time);
+    bGain.gain.setValueAtTime(0.12, time);
     bGain.gain.exponentialRampToValueAtTime(0.0001, time + 0.08);
     body.connect(bGain);
     bGain.connect(this.masterGain);
@@ -382,7 +438,7 @@ export class HallSynthEngine {
     filter.frequency.setValueAtTime(340, time);
 
     gain.gain.setValueAtTime(0.0001, time);
-    gain.gain.linearRampToValueAtTime(0.26, time + 0.025);
+    gain.gain.linearRampToValueAtTime(0.22, time + 0.025);
     gain.gain.exponentialRampToValueAtTime(0.0001, time + duration);
 
     osc.connect(filter);
@@ -438,7 +494,7 @@ export class HallSynthEngine {
     osc.type = "sine";
     osc.frequency.setValueAtTime(freq, time);
     gain.gain.setValueAtTime(0.0001, time);
-    gain.gain.linearRampToValueAtTime(0.065, time + 0.012);
+    gain.gain.linearRampToValueAtTime(0.058, time + 0.012);
     gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.26);
 
     osc.connect(gain);

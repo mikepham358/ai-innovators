@@ -43,6 +43,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { CosmicGalaxyCanvas } from "@/components/CosmicGalaxyCanvas";
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
@@ -50,7 +52,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${plusJakarta.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="cyber-bg min-h-full flex flex-col text-slate-100 selection:bg-fuchsia-500/30 selection:text-white">
-        {children}
+        <CosmicGalaxyCanvas />
+        <div className="relative z-10 flex min-h-full flex-1 flex-col">
+          {children}
+        </div>
       </body>
     </html>
   );
