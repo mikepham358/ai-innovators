@@ -19,11 +19,11 @@ Website chính thức của **CLB Học sinh AI INNOVATORS** (Trường PTLC Vin
 
 ---
 
-## 1. Hướng dẫn Deploy lên Vercel (`https://ai-innovators.vercel.app`)
+## 1. Hướng dẫn Deploy lên Vercel (`https://ai-innovators-vgp.vercel.app`)
 
 1. Truy cập https://vercel.com → **Sign Up / Log In** bằng tài khoản GitHub **`mikepham358`**.
 2. Chọn **Add New...** → **Project** → tìm repository **`mikepham358/ai-innovators`** → bấm **Import**.
-3. Ở mục **Project Name**, giữ tên `ai-innovators` (để nhận domain `https://ai-innovators.vercel.app` nếu còn trống).
+3. Ở mục **Project Name** / **Settings → Domains**, gán domain `ai-innovators-vgp.vercel.app` (nếu tên `ai-innovators` đã có người dùng trước).
 4. **Framework Preset:** Vercel tự nhận diện **Next.js**.
 5. Bấm **Deploy**. Sau khi build xong (~1 phút), trang web sẽ hoạt động ngay!
 
@@ -39,9 +39,9 @@ Trang chủ `/` hoạt động ngay lập tức không cần biến môi trườ
    - `Project URL` → dùng cho `NEXT_PUBLIC_SUPABASE_URL`
    - `anon public` key → dùng cho `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 3. Vào **Authentication** → **URL Configuration**:
-   - **Site URL:** `https://ai-innovators.vercel.app` *(đổi đúng theo domain Vercel của bạn)*
+   - **Site URL:** `https://ai-innovators-vgp.vercel.app`
    - **Redirect URLs:** Thêm:
-     - `https://ai-innovators.vercel.app/auth/callback`
+     - `https://ai-innovators-vgp.vercel.app/auth/callback`
      - `http://localhost:3000/auth/callback` *(nếu muốn test trên máy cá nhân)*
 
 ### Bước B: Tạo Google OAuth Client ID trên Google Cloud Console
@@ -50,7 +50,7 @@ Trang chủ `/` hoạt động ngay lập tức không cần biến môi trườ
    - Điền tên ứng dụng (`AI INNOVATORS`), email hỗ trợ, các scope cơ bản (`email`, `profile`, `openid`).
 2. Vào **Credentials** → **Create Credentials** → **OAuth client ID** → chọn **Web application**:
    - **Authorized JavaScript origins:**
-     - `https://ai-innovators.vercel.app`
+     - `https://ai-innovators-vgp.vercel.app`
      - `http://localhost:3000`
    - **Authorized redirect URIs:**
      - Dán **Callback URL** lấy từ Supabase (**Authentication** → **Providers** → **Google**), có dạng:

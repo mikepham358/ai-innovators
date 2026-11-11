@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.VERCEL_PROJECT_PRODUCTION_URL
       ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-      : "https://ai-innovators.vercel.app"
+      : "https://ai-innovators-vgp.vercel.app"
   ),
   title: "AI INNOVATORS — Safe AI, Stronger Minds | Vinschool Grand Park",
   description:
