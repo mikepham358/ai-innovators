@@ -581,7 +581,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     roleVi: "Trưởng Ban Nhân Sự",
     divisionCode: "HR",
     tier: "head",
-    imageSrc: "/images/team/hr-01-tran-thi-khanh-ngoc.jpg",
+    imageSrc: "/images/team/hr-01-tran-thi-khanh-ngoc-29a.jpg",
   },
   {
     id: "hr-02-chau-bao-thanh",
@@ -824,7 +824,7 @@ export const ADVISOR_PROFILE: AdvisorProfileData = {
   id: "5087615831769088",
   vietnameseName: "Thầy Mike Phạm",
   vietnameseTitle: "Chuyên gia toàn cầu của Google cho giáo dục",
-  roleBadge: "Chuyên gia Cố vấn CLB • Google for Education Global",
+  roleBadge: "Chuyên gia Cố vấn CLB • Google for Education 🌐",
   googleBadgeTitle: "Google for Education Certified Innovator (#MEL26)",
   name: "Mike Pham Bá Hong Son",
   location: "Ho Chi Minh, Vietnam",
