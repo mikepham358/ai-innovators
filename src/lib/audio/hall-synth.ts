@@ -77,13 +77,13 @@ export class HallSynthEngine {
   private listener: BeatPulseListener | null = null;
   private playStateListener: ((playing: boolean) => void) | null = null;
 
-  private pendingStartLevel = 0.2;
-  private pendingTargetLevel = 0.8;
-  private pendingRampSeconds = 10;
+  private pendingStartLevel = 0.5;
+  private pendingTargetLevel = 0.5;
+  private pendingRampSeconds = 0;
 
-  private rampStartVal = 0.2;
-  private rampTargetVal = 0.8;
-  private rampDurationSec = 10;
+  private rampStartVal = 0.5;
+  private rampTargetVal = 0.5;
+  private rampDurationSec = 0;
   private rampStartTime = 0;
 
   public onBeat(listener: BeatPulseListener | null) {
@@ -126,7 +126,7 @@ export class HallSynthEngine {
       const master = ctx.createGain();
       master.gain.setValueAtTime(0.0001, ctx.currentTime);
 
-      // Gentle master glue compressor calibrated for up to 80% output gain
+      // Gentle master glue compressor calibrated for steady 50% default output gain
       const compressor = ctx.createDynamicsCompressor();
       compressor.threshold.setValueAtTime(-12, ctx.currentTime);
       compressor.knee.setValueAtTime(18, ctx.currentTime);
@@ -264,9 +264,9 @@ export class HallSynthEngine {
     options: SynthStartOptions = {},
   ): Promise<boolean> {
     const {
-      startLevel = 0.2,
-      targetLevel = 0.8,
-      rampSeconds = 10,
+      startLevel = 0.5,
+      targetLevel = 0.5,
+      rampSeconds = 0,
     } = options;
 
     this.pendingStartLevel = startLevel;

@@ -128,7 +128,6 @@ export function HeroMemberCarousel() {
   const [musicPlaying, setMusicPlaying] = useState(false);
   const [userMuted, setUserMuted] = useState(false);
   const [pendingAutoBeat, setPendingAutoBeat] = useState(true);
-  const [volumePct, setVolumePct] = useState(20);
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
 
   const engineRef = useRef<HallSynthEngine | null>(null);
@@ -139,7 +138,7 @@ export function HeroMemberCarousel() {
   const decayTimerRef = useRef<number | null>(null);
   const userMutedRef = useRef(false);
   const isPausedRef = useRef(false);
-  const hasCrescendoStartedRef = useRef(false);
+  const hasAutoStartedRef = useRef(false);
 
   const { divisionByCode, accentByCode } = useMemo(() => {
     const divMap = {} as Record<DivisionCode, (typeof CLUB_DIVISIONS)[number]>;
@@ -205,7 +204,7 @@ export function HeroMemberCarousel() {
     return engineRef.current;
   }, []);
 
-  // Default beat ON when opening the web, ramping cleanly 20% -> 80% over 10s
+  // Default beat ON when opening the web at constant 50% volume
   // Works synchronously on mount AND catches late AudioContext wakeup + every valid user gesture
   useEffect(() => {
     let active = true;
@@ -231,10 +230,9 @@ export function HeroMemberCarousel() {
     engine.onPlayStateChange((playing) => {
       if (!active) return;
       if (playing) {
-        hasCrescendoStartedRef.current = true;
+        hasAutoStartedRef.current = true;
         setMusicPlaying(true);
         setPendingAutoBeat(false);
-        setVolumePct(engine.getVolumePercent() || 20);
         detachUnlock();
       } else {
         setMusicPlaying(false);
@@ -242,7 +240,7 @@ export function HeroMemberCarousel() {
     });
 
     function handleFirstGesture(event: Event) {
-      if (userMutedRef.current || isPausedRef.current || hasCrescendoStartedRef.current) {
+      if (userMutedRef.current || isPausedRef.current || hasAutoStartedRef.current) {
         detachUnlock();
         return;
       }
@@ -278,11 +276,11 @@ export function HeroMemberCarousel() {
     document.addEventListener("visibilitychange", handleVisibilityOrPageShow);
     window.addEventListener("pageshow", handleVisibilityOrPageShow);
 
-    // Arm and start right on page mount (never aborts on slow hardware wakeup)
+    // Arm and start at steady 50% volume right on page mount
     void engine.startOrResume({
-      startLevel: 0.2,
-      targetLevel: 0.8,
-      rampSeconds: 10,
+      startLevel: 0.5,
+      targetLevel: 0.5,
+      rampSeconds: 0,
     });
 
     return () => {
@@ -299,35 +297,19 @@ export function HeroMemberCarousel() {
     };
   }, [ensureEngine]);
 
-  // Smooth live readout during 20% -> 80% 10s crescendo
-  useEffect(() => {
-    if (!musicPlaying) return;
-    const id = window.setInterval(() => {
-      const pct = engineRef.current?.getVolumePercent();
-      if (typeof pct === "number" && pct > 0) {
-        setVolumePct(pct);
-      }
-    }, 250);
-    return () => window.clearInterval(id);
-  }, [musicPlaying]);
-
   async function startMusicIfAllowed(bpm: number, forceUnmute = false) {
     if (!forceUnmute && userMutedRef.current) return;
     const engine = ensureEngine();
     engine.setBpm(bpm);
-    const isInitial = !hasCrescendoStartedRef.current;
-    const started = await engine.startOrResume(
-      isInitial
-        ? { startLevel: 0.2, targetLevel: 0.8, rampSeconds: 10 }
-        : { startLevel: 0.28, targetLevel: 0.8, rampSeconds: 0.45 },
-    );
+    const started = await engine.startOrResume({
+      startLevel: 0.5,
+      targetLevel: 0.5,
+      rampSeconds: 0,
+    });
     if (started) {
-      if (isInitial) {
-        hasCrescendoStartedRef.current = true;
-      }
+      hasAutoStartedRef.current = true;
       setMusicPlaying(true);
       setPendingAutoBeat(false);
-      setVolumePct(engine.getVolumePercent() || 20);
     }
   }
 
@@ -481,11 +463,7 @@ export function HeroMemberCarousel() {
             </span>
 
             <span>
-              {musicPlaying
-                ? `Beat ${currentBpm} BPM • ${volumePct}%`
-                : userMuted
-                  ? "Đã tắt nhạc"
-                  : `Beat ${currentBpm} BPM • 20→80%`}
+              {userMuted ? "Đã tắt nhạc" : `Beat ${currentBpm} BPM • 50%`}
             </span>
           </button>
 
