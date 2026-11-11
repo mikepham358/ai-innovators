@@ -5,6 +5,7 @@ import {
   Space_Grotesk,
 } from "next/font/google";
 import { CosmicGalaxyCanvas } from "@/components/CosmicGalaxyCanvas";
+import { MirrorGlintOrchestrator } from "@/components/MirrorGlintOrchestrator";
 import "./globals.css";
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -52,6 +53,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="cyber-bg min-h-full flex flex-col text-slate-100 selection:bg-fuchsia-500/30 selection:text-white">
         <CosmicGalaxyCanvas />
+        <MirrorGlintOrchestrator />
         <div className="relative z-10 flex min-h-full flex-1 flex-col">
           {children}
         </div>
