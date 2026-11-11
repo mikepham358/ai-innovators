@@ -464,8 +464,7 @@ export default function HomePage() {
             </h2>
             <p className="mt-2 text-sm text-slate-300 sm:text-base">
               Đội ngũ Ban Chủ Nhiệm, Trưởng ban và thành viên nòng cốt vận hành theo
-              chuẩn tổ chức chuyên nghiệp - trưng bày theo từng ban trong không gian
-              gương kính khói sang trọng, bảo lưu tuyệt đối thông tin định danh cá nhân.
+              chuẩn tổ chức chuyên nghiệp.
             </p>
           </div>
 
