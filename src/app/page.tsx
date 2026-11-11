@@ -414,8 +414,8 @@ export default function HomePage() {
               </h2>
               <p className="mt-2 text-sm text-slate-300 sm:text-base">
                 Danh mục các sản phẩm và nguyên mẫu thực tế mà thành viên câu lạc
-                bộ đã ứng dụng AI để sáng tạo trong các môn học trước đó — chọn từng
-                mô hình để xem bản preview web tích hợp ngay bên cạnh.
+                bộ đã ứng dụng AI để sáng tạo trong các môn học trước đó — chạm vào
+                từng thẻ bài để mở Web Preview tương tác của sản phẩm gốc.
               </p>
             </div>
 
