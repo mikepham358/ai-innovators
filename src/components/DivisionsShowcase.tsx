@@ -1,19 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   ArrowRight,
-  ChevronLeft,
-  ChevronRight,
   Crown,
   Layers,
   Maximize2,
   Palette,
-  Sparkles,
   Users,
-  X,
 } from "lucide-react";
+import { MemberSpotlightModal } from "@/components/MemberSpotlightModal";
 import {
   CLUB_DIVISIONS,
   TEAM_MEMBERS,
@@ -372,15 +369,6 @@ export function DivisionsShowcase() {
     return TEAM_MEMBERS;
   }, [activeView, leaderMembers, prMembers]);
 
-  const selectedIndex = useMemo(() => {
-    if (!selectedMember) return -1;
-    const idx = activeLightboxSequence.findIndex(
-      (m) => m.id === selectedMember.id,
-    );
-    if (idx !== -1) return idx;
-    return TEAM_MEMBERS.findIndex((m) => m.id === selectedMember.id);
-  }, [selectedMember, activeLightboxSequence]);
-
   const lightboxList = useMemo(() => {
     if (!selectedMember) return TEAM_MEMBERS;
     const inActive = activeLightboxSequence.some(
@@ -388,50 +376,6 @@ export function DivisionsShowcase() {
     );
     return inActive ? activeLightboxSequence : TEAM_MEMBERS;
   }, [selectedMember, activeLightboxSequence]);
-
-  useEffect(() => {
-    if (!selectedMember) return;
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setSelectedMember(null);
-        return;
-      }
-      if (event.key === "ArrowRight") {
-        setSelectedMember((current) => {
-          if (!current) return null;
-          const idx = lightboxList.findIndex((m) => m.id === current.id);
-          return lightboxList[(idx + 1) % lightboxList.length] ?? current;
-        });
-      } else if (event.key === "ArrowLeft") {
-        setSelectedMember((current) => {
-          if (!current) return null;
-          const idx = lightboxList.findIndex((m) => m.id === current.id);
-          return (
-            lightboxList[(idx - 1 + lightboxList.length) % lightboxList.length] ??
-            current
-          );
-        });
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [selectedMember, lightboxList]);
-
-  const stepSelectedMember = (delta: number) => {
-    if (!selectedMember) return;
-    const idx = lightboxList.findIndex((m) => m.id === selectedMember.id);
-    if (idx === -1) return;
-    const nextIdx = (idx + delta + lightboxList.length) % lightboxList.length;
-    setSelectedMember(lightboxList[nextIdx] ?? selectedMember);
-  };
 
   return (
     <div className="mt-8">
@@ -781,102 +725,17 @@ export function DivisionsShowcase() {
         </div>
       )}
 
-      {/* LUXURY OBSIDIAN MIRROR LIGHTBOX */}
-      {selectedMember && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label={`Chân dung ${selectedMember.name}`}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-[#030512]/90 p-4 backdrop-blur-2xl sm:p-6"
-          onClick={() => setSelectedMember(null)}
-        >
-          <div
-            className="mirror-card mirror-card-executive relative flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl lg:flex-row"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <button
-              type="button"
-              onClick={() => setSelectedMember(null)}
-              aria-label="Đóng cửa sổ"
-              className="absolute top-3.5 right-3.5 z-20 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-slate-950/75 text-white backdrop-blur-md transition hover:border-white/45 hover:bg-slate-900"
-            >
-              <X className="h-4 w-4" />
-            </button>
-
-            {/* Full Poster View */}
-            <div className="relative flex min-h-[380px] flex-1 items-center justify-center bg-[#05081d] p-4 sm:min-h-[520px] sm:p-6">
-              <div className="relative aspect-[1587/2245] h-[54vh] max-h-[640px] w-auto overflow-hidden rounded-2xl border border-white/20 shadow-[0_25px_70px_rgba(0,0,0,0.85)]">
-                <Image
-                  src={selectedMember.imageSrc}
-                  alt={`${selectedMember.name} — ${selectedMember.role}`}
-                  fill
-                  sizes="(max-width: 1024px) 80vw, 460px"
-                  className="object-cover"
-                />
-                <div aria-hidden="true" className="mirror-glint absolute inset-0" />
-              </div>
-            </div>
-
-            {/* Member Dossier Sidebar */}
-            <div className="flex w-full flex-col justify-between border-t border-white/12 bg-gradient-to-b from-white/[0.05] to-transparent p-5 sm:p-7 lg:w-80 lg:border-t-0 lg:border-l">
-              <div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <span
-                    className={`rounded-lg border px-2.5 py-1 font-mono text-xs font-bold ${
-                      ACCENT_STYLES[divisionByCode[selectedMember.divisionCode].accent]
-                        .badge
-                    }`}
-                  >
-                    BAN {selectedMember.divisionCode}
-                  </span>
-                  <span className="rounded-full border border-white/15 bg-white/5 px-2.5 py-0.5 font-mono text-[11px] text-slate-300">
-                    {selectedIndex + 1} / {lightboxList.length}
-                  </span>
-                </div>
-
-                <h3 className="mt-4 font-[family-name:var(--font-space-grotesk)] text-2xl font-bold text-white">
-                  {selectedMember.name}
-                </h3>
-                <p className="mt-1 font-mono text-xs font-semibold tracking-wider text-blue-200">
-                  {selectedMember.role}
-                </p>
-                <p className="mt-1 text-sm text-slate-300">
-                  {selectedMember.roleVi}
-                </p>
-
-                <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-white">
-                    <Sparkles className="h-3.5 w-3.5 text-fuchsia-300" />
-                    <span>{divisionByCode[selectedMember.divisionCode].name}</span>
-                  </div>
-                  <p className="mt-2 text-xs leading-relaxed text-slate-300">
-                    {divisionByCode[selectedMember.divisionCode].role}
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-6 flex items-center justify-between gap-3 border-t border-white/10 pt-4">
-                <button
-                  type="button"
-                  onClick={() => stepSelectedMember(-1)}
-                  className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-xs font-semibold text-white transition hover:border-white/35 hover:bg-white/10"
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                  Trước
-                </button>
-                <button
-                  type="button"
-                  onClick={() => stepSelectedMember(1)}
-                  className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-xs font-semibold text-white transition hover:border-white/35 hover:bg-white/10"
-                >
-                  Sau
-                  <ChevronRight className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <MemberSpotlightModal
+        member={selectedMember}
+        membersList={lightboxList}
+        division={
+          selectedMember
+            ? divisionByCode[selectedMember.divisionCode]
+            : undefined
+        }
+        onClose={() => setSelectedMember(null)}
+        onSelect={setSelectedMember}
+      />
 
       {/* Footer note */}
       <div className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-6 text-xs text-slate-400">

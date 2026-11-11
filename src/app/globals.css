@@ -154,9 +154,56 @@ body {
   pointer-events: none;
 }
 
+.hero-marquee-mask {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 5%,
+    #000 95%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 5%,
+    #000 95%,
+    transparent 100%
+  );
+}
+
+@keyframes hero-marquee-glide {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.hero-marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: hero-marquee-glide var(--marquee-duration, 56s) linear infinite;
+}
+
+.hero-marquee-stage:hover .hero-marquee-track,
+.hero-marquee-track[data-paused="true"] {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .mirror-card,
   .mirror-sweep {
     transition: none;
+  }
+
+  .hero-marquee-track {
+    animation: none;
+    width: auto;
+  }
+
+  .hero-marquee-stage {
+    overflow-x: auto;
   }
 }

@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { DivisionsShowcase } from "@/components/DivisionsShowcase";
 import { Footer } from "@/components/Footer";
+import { HeroMemberCarousel } from "@/components/HeroMemberCarousel";
 import { Navbar } from "@/components/Navbar";
 import { PrototypeShowcase } from "@/components/PrototypeShowcase";
 import {
@@ -34,7 +35,7 @@ export default function HomePage() {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="relative overflow-hidden border-b border-white/10">
-          <div className="mx-auto max-w-6xl px-4 pb-16 pt-10 sm:px-6 sm:pb-20 sm:pt-14">
+          <div className="mx-auto max-w-6xl px-4 pb-10 pt-8 sm:px-6 sm:pb-12 sm:pt-12">
             <div className="grid items-center gap-10 lg:grid-cols-12">
               <div className="lg:col-span-6">
                 <div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-blue-400/35 bg-blue-500/15 px-3.5 py-1.5 text-xs font-semibold text-blue-100">
@@ -120,6 +121,8 @@ export default function HomePage() {
               </div>
             </div>
           </div>
+
+          <HeroMemberCarousel />
         </section>
 
         {/* Core Pillars + Official Club Poster */}
