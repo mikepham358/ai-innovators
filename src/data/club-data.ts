@@ -98,7 +98,9 @@ export const CLUB_META = {
   school: "Trường PTLC Vinschool Grand Park",
   cohort: "GEN 1.0 • VGP2026",
   flagship: "VIN BEYOND AI",
-  slogan: "SAFE AI — STRONGER MINDS",
+  slogan: "SAFE AI - STRONGER MINDS",
+  instagramUrl: "https://www.instagram.com/aiinnovators.vgp/",
+  instagramHandle: "@aiinnovators.vgp",
   coreQuestion:
     "AI có thể giúp chúng ta tư duy sâu sắc hơn như thế nào mà không thay thế bộ não của chính mình?",
   hackathonDate: "Thứ Bảy, 28/11/2026",
@@ -190,7 +192,7 @@ export const WORKSHOPS: WorkshopItem[] = [
   {
     number: "Workshop 02",
     title: "Prompt Engineering (PARTS & Socratic)",
-    subtitle: "Thiết kế câu lệnh gợi mở — kiên quyết không làm thay",
+    subtitle: "Thiết kế câu lệnh gợi mở - kiên quyết không làm thay",
     topics: [
       "Cấu trúc câu lệnh chuẩn quốc tế PARTS (Persona – Aim – Recipients – Theme – Structure)",
       "Kỹ thuật Socratic Prompting dẫn dắt học sinh tự tìm đáp án",
@@ -229,7 +231,7 @@ export const HACKATHON_SCORECARD: ScorecardCriterion[] = [
     detail: "Đánh trúng điểm nghẽn học tập thực tế của học sinh khối 9–12.",
   },
   {
-    label: "Cơ chế Socratic — không làm thay",
+    label: "Cơ chế Socratic - không làm thay",
     weight: "25%",
     detail: "Trợ lý đặt câu hỏi gợi mở, kích thích tư duy phản biện thay vì đưa đáp án sẵn.",
   },
@@ -581,6 +583,33 @@ export const TEAM_MEMBERS: TeamMember[] = [
     tier: "head",
     imageSrc: "/images/team/hr-01-tran-thi-khanh-ngoc.jpg",
   },
+  {
+    id: "hr-02-chau-bao-thanh",
+    name: "CHAU BAO THANH",
+    role: "VICE HEAD OF HR",
+    roleVi: "Phó Ban Nhân Sự",
+    divisionCode: "HR",
+    tier: "head",
+    imageSrc: "/images/team/hr-02-chau-bao-thanh.jpg",
+  },
+  {
+    id: "hr-03-nguyen-quynh-nhu",
+    name: "NGUYEN QUYNH NHU",
+    role: "MEMBER OF HR",
+    roleVi: "Thành viên Ban Nhân Sự",
+    divisionCode: "HR",
+    tier: "member",
+    imageSrc: "/images/team/hr-03-nguyen-quynh-nhu.jpg",
+  },
+  {
+    id: "hr-04-bach-dang-anh",
+    name: "BACH DANG ANH",
+    role: "MEMBER OF HR",
+    roleVi: "Thành viên Ban Nhân Sự",
+    divisionCode: "HR",
+    tier: "member",
+    imageSrc: "/images/team/hr-04-bach-dang-anh.jpg",
+  },
 ];
 
 export const SAMPLE_PROTOTYPES: PrototypeItem[] = [
@@ -631,7 +660,7 @@ export const SAMPLE_PROTOTYPES: PrototypeItem[] = [
           "Đặt 3 câu hỏi mở yêu cầu học sinh tự bảo vệ quan điểm cá nhân trước khi chốt nhận định văn học.",
         assistantBehavior:
           "Tự động sinh bộ câu hỏi gợi mở và phản biện đa chiều, giúp học sinh tự rèn lập luận thay vì phụ thuộc đáp án mẫu.",
-        pedagogyFocus: "Bảo vệ tư duy độc lập — Safe AI",
+        pedagogyFocus: "Bảo vệ tư duy độc lập - Safe AI",
       },
     ],
   },
@@ -760,3 +789,78 @@ export const SAMPLE_PROTOTYPES: PrototypeItem[] = [
     ],
   },
 ];
+
+export interface AdvisorProfileData {
+  id: string;
+  vietnameseName: string;
+  vietnameseTitle: string;
+  roleBadge: string;
+  googleBadgeTitle: string;
+  name: string;
+  location: string;
+  profileUrl: string;
+  publicApiUrl: string;
+  bannerImage: string;
+  portraitImage: string;
+  badgeImage: string;
+  overviewParagraphs: string[];
+  frameworkLink: {
+    label: string;
+    url: string;
+  };
+  featuredResource: {
+    title: string;
+    url: string;
+    description: string;
+  };
+  quickLinks: {
+    label: string;
+    href: string;
+  }[];
+  highlights: string[];
+}
+
+export const ADVISOR_PROFILE: AdvisorProfileData = {
+  id: "5087615831769088",
+  vietnameseName: "Thầy Mike Phạm",
+  vietnameseTitle: "Chuyên gia toàn cầu của Google cho giáo dục",
+  roleBadge: "Chuyên gia Cố vấn CLB • Google for Education Global",
+  googleBadgeTitle: "Google for Education Certified Innovator (#MEL26)",
+  name: "Mike Pham Bá Hong Son",
+  location: "Ho Chi Minh, Vietnam",
+  profileUrl: "https://edudirectory.withgoogle.com/profiles/5087615831769088",
+  publicApiUrl:
+    "https://directory-service-dot-gweb-edu-activity-app.appspot.com/directory/users/5087615831769088",
+  bannerImage: "/images/advisor/edu-banner.jpg",
+  portraitImage: "/images/advisor/edu-portrait.jpg",
+  badgeImage: "/images/advisor/google-innovator-badge.png",
+  overviewParagraphs: [
+    "Hello 🌐 Xin chào 🇻🇳 Moi 🇫🇮",
+    "I'm Mike (Pham Bá Hong Son), a Google for Education Certified Innovator (#MEL26) and a Finnish-Vietnamese researcher, M.Ed, based in Ho Chi Minh City, Vietnam.",
+    "Inspired by learning & cognitive science, I believe real learning happens when students make mistakes, try again, and timely adjust. Therefore, integrating AI is an essential way to deliver timely, adaptive feedback that guides learners through productive struggle rather than thinking for them, backed by my Scopus Q1 research at IEEE iSTEM-Ed 2026.",
+    "My mission is to empower students to shift from passive AI consumers to ethical creators of their learning tools. To support this, I open-sourced the Student-Led AI Safety Competency Framework on GitHub under MIT License. Aligned with UNESCO and Vietnam MoET guidelines, this blueprint provides schools with plug-and-play guides and protocols, enabling students to lead workshops and safely build their own AI tutors.",
+    "Beyond open resources, I partner with schools to design responsible AI curricula, train educators on Google Workspace for Education, and mentor institutions toward Google Reference School status.",
+    "I am always excited to connect and collaborate on innovative education projects!",
+  ],
+  frameworkLink: {
+    label: "Student-Led AI Safety Competency Framework",
+    url: "https://github.com/mikepham358/student-led-ai-safety-framework",
+  },
+  featuredResource: {
+    title: "Student-Led AI Safety Competency Framework",
+    url: "https://github.com/mikepham358/bao-an-ai",
+    description:
+      "Student-Led AI Safety Framework (MIT License): an open-source, evidence-based blueprint on GitHub that empowers K-12 students to champion responsible AI culture. Aligned with UNESCO competencies and Vietnam MoET guidelines, it provides schools with ready-to-use handbooks, student pitching templates, and Socratic prompting protocols to help young learners build safe, reflective learning assistants.",
+  },
+  quickLinks: [
+    { label: "baoan.ai.vn", href: "https://baoan.ai.vn/" },
+    { label: "vinschool.edu.vn", href: "https://vinschool.edu.vn/" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/mikepham358" },
+    { label: "Zalo Connect", href: "https://zalo.me/0903589120" },
+  ],
+  highlights: [
+    "Google Certified Innovator (#MEL26)",
+    "Nghiên cứu Scopus Q1 • IEEE iSTEM-Ed 2026",
+    "Khung An toàn AI do Học sinh Dẫn dắt (MIT)",
+  ],
+};

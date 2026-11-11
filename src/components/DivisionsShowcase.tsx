@@ -12,6 +12,11 @@ import {
 } from "lucide-react";
 import { MemberSpotlightModal } from "@/components/MemberSpotlightModal";
 import {
+  getMemberRankLabel,
+  MEMBER_RANK_PILL_CLASSES,
+  MemberRankIcon,
+} from "@/components/MemberRankBadge";
+import {
   CLUB_DIVISIONS,
   TEAM_MEMBERS,
   type DivisionAccent,
@@ -79,29 +84,28 @@ function getMembersByDivision(code: DivisionCode): TeamMember[] {
   return TEAM_MEMBERS.filter((member) => member.divisionCode === code);
 }
 
-function getTierPill(member: TeamMember): { label: string; className: string } {
+function getTierPill(
+  member: TeamMember,
+  accent: DivisionAccent,
+): { label: string; className: string } {
+  const label = getMemberRankLabel(member);
   if (member.tier === "executive") {
-    return {
-      label: member.role === "PRESIDENT" ? "CHỦ NHIỆM" : "PHÓ CHỦ NHIỆM",
-      className:
-        "border-indigo-200/40 bg-gradient-to-r from-indigo-400/25 via-fuchsia-400/20 to-slate-200/20 text-white",
-    };
-  }
-  if (member.tier === "head") {
-    const label = member.role.includes("CO-HEAD")
-      ? "ĐỒNG TRƯỞNG BAN"
-      : member.role.includes("VICE HEAD")
-        ? "PHÓ BAN"
-        : "TRƯỞNG BAN";
     return {
       label,
       className:
-        "border-slate-200/35 bg-gradient-to-r from-slate-200/20 to-blue-400/15 text-slate-100",
+        "border-indigo-200/45 bg-gradient-to-r from-indigo-400/30 via-fuchsia-400/20 to-amber-300/20 text-white shadow-[0_0_18px_rgba(129,140,248,0.28)]",
+    };
+  }
+  if (member.tier === "head") {
+    return {
+      label,
+      className:
+        "border-slate-200/40 bg-gradient-to-r from-slate-200/20 to-blue-400/18 text-slate-100 shadow-[0_0_14px_rgba(148,163,184,0.18)]",
     };
   }
   return {
-    label: "THÀNH VIÊN",
-    className: "border-white/15 bg-white/[0.06] text-slate-300",
+    label,
+    className: MEMBER_RANK_PILL_CLASSES[accent],
   };
 }
 
@@ -121,7 +125,7 @@ function PosterMirrorCard({
   sizes = "(max-width: 640px) 46vw, (max-width: 1024px) 30vw, 260px",
 }: PosterMirrorCardProps) {
   const accentStyle = ACCENT_STYLES[accent];
-  const tierPill = getTierPill(member);
+  const tierPill = getTierPill(member, accent);
   const isLeader = member.tier !== "member";
 
   return (
@@ -129,7 +133,7 @@ function PosterMirrorCard({
       <button
         type="button"
         onClick={() => onSelect(member)}
-        aria-label={`Xem chân dung ${member.name} — ${member.role}`}
+        aria-label={`Xem chân dung ${member.name} - ${member.role}`}
         className={`group mirror-card ${
           isLeader ? "mirror-card-executive" : ""
         } ${accentStyle.ring} flex w-full flex-col overflow-hidden rounded-2xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300`}
@@ -138,7 +142,7 @@ function PosterMirrorCard({
         <div className="relative aspect-[1587/2245] w-full overflow-hidden bg-[#06091e]">
           <Image
             src={member.imageSrc}
-            alt={`${member.name} — ${member.role}`}
+            alt={`${member.name} - ${member.role}`}
             fill
             sizes={sizes}
             className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.025]"
@@ -167,7 +171,10 @@ function PosterMirrorCard({
             <span
               className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 font-mono text-[10px] font-semibold tracking-wider ${tierPill.className}`}
             >
-              {isLeader && <Crown className="h-2.5 w-2.5 text-slate-100" />}
+              <MemberRankIcon
+                member={member}
+                className="h-2.5 w-2.5 shrink-0"
+              />
               {tierPill.label}
             </span>
             <span
@@ -213,7 +220,7 @@ function DivisionHeaderStrip({
       className={`mirror-card overflow-hidden rounded-2xl bg-gradient-to-r ${accent.panelGlow} p-5 sm:p-6`}
     >
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="max-w-2xl">
+        <div className="max-w-4xl">
           <div className="flex flex-wrap items-center gap-2.5">
             <span
               className={`rounded-lg border px-2.5 py-1 font-mono text-xs font-bold ${accent.badge}`}
@@ -450,16 +457,16 @@ export function DivisionsShowcase() {
         </div>
       </div>
 
-      {/* VIEW 1: ALL 7 DIVISIONS — SMART HIERARCHICAL ARCHITECTURE */}
+      {/* VIEW 1: ALL 7 DIVISIONS - SMART HIERARCHICAL ARCHITECTURE */}
       {activeView === "ALL" && (
         <div className="mt-10 space-y-12">
-          {/* 1. PM — Executive Spotlight */}
+          {/* 1. PM - Executive Spotlight */}
           <div className="space-y-6">
             <DivisionHeaderStrip
               division={divisionByCode.PM}
               memberCountLabel={`${pmMembers.length} Ban Chủ Nhiệm`}
             />
-            <div className="mx-auto grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
+            <div className="mx-auto grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-2 lg:gap-8">
               {pmMembers.map((member) => (
                 <PosterMirrorCard
                   key={member.id}
@@ -467,13 +474,13 @@ export function DivisionsShowcase() {
                   accent={divisionByCode.PM.accent}
                   onSelect={setSelectedMember}
                   showFloorReflection
-                  sizes="(max-width: 640px) 92vw, 320px"
+                  sizes="(max-width: 640px) 92vw, 380px"
                 />
               ))}
             </div>
           </div>
 
-          {/* 2. DOT — 1 Dossier + 7 Members = 8 tiles (4x2 symmetry) */}
+          {/* 2. DOT - 1 Dossier + 7 Members = 8 tiles (4x2 symmetry) */}
           <div className="space-y-5">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
               <DivisionDossierCard
@@ -491,7 +498,7 @@ export function DivisionsShowcase() {
             </div>
           </div>
 
-          {/* 3. PR — Header Strip + 8 Members (4x2 symmetry) */}
+          {/* 3. PR - Header Strip + 8 Members (4x2 symmetry) */}
           <div className="space-y-5">
             <DivisionHeaderStrip
               division={divisionByCode.PR}
@@ -509,26 +516,44 @@ export function DivisionsShowcase() {
             </div>
           </div>
 
-          {/* 4. LOG — Header Strip + 6 Members (3x2 symmetry) */}
+          {/* 4. LOG - Header Strip + 6 Members */}
           <div className="space-y-5">
             <DivisionHeaderStrip
               division={divisionByCode.LOG}
               memberCountLabel="2 Đồng điều hành • 4 Thành viên"
             />
-            <div className="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-3">
+            <div className="grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 xl:grid-cols-6">
               {logMembers.map((member) => (
                 <PosterMirrorCard
                   key={member.id}
                   member={member}
                   accent={divisionByCode.LOG.accent}
                   onSelect={setSelectedMember}
-                  sizes="(max-width: 640px) 46vw, (max-width: 1024px) 45vw, 350px"
+                  sizes="(max-width: 640px) 46vw, (max-width: 1280px) 30vw, 240px"
                 />
               ))}
             </div>
           </div>
 
-          {/* 5. ER — Split Dossier + 2 Portraits */}
+          {/* 5. HR - Header Strip + 4 Members (1x4 full row symmetry) */}
+          <div className="space-y-5">
+            <DivisionHeaderStrip
+              division={divisionByCode.HR}
+              memberCountLabel="1 Trưởng ban • 1 Phó ban • 2 Thành viên"
+            />
+            <div className="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
+              {hrMembers.map((member) => (
+                <PosterMirrorCard
+                  key={member.id}
+                  member={member}
+                  accent={divisionByCode.HR.accent}
+                  onSelect={setSelectedMember}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* 6. ER - Split Dossier + 2 Portraits */}
           <div className="grid grid-cols-1 items-stretch gap-4 sm:gap-5 lg:grid-cols-12">
             <div className="lg:col-span-4">
               <DivisionDossierCard
@@ -543,35 +568,16 @@ export function DivisionsShowcase() {
                   member={member}
                   accent={divisionByCode.ER.accent}
                   onSelect={setSelectedMember}
-                  sizes="(max-width: 640px) 46vw, 360px"
+                  sizes="(max-width: 640px) 46vw, 420px"
                 />
               ))}
             </div>
           </div>
 
-          {/* 6 & 7. HR & PH — Twin Dedicated Division Studios */}
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            {/* HR */}
-            <div className="mirror-card rounded-3xl p-4 sm:p-5">
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <DivisionDossierCard
-                  division={divisionByCode.HR}
-                  memberCountLabel="1 Trưởng ban điều phối"
-                />
-                {hrMembers.map((member) => (
-                  <PosterMirrorCard
-                    key={member.id}
-                    member={member}
-                    accent={divisionByCode.HR.accent}
-                    onSelect={setSelectedMember}
-                  />
-                ))}
-              </div>
-            </div>
-
-            {/* PH */}
-            <div className="mirror-card rounded-3xl p-4 sm:p-5">
-              <div className="grid h-full grid-cols-1 gap-4 sm:grid-cols-2">
+          {/* 7. PH - Dedicated Brand & Visual Identity Studio */}
+          <div className="mirror-card rounded-3xl p-4 sm:p-6">
+            <div className="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-12">
+              <div className="lg:col-span-5">
                 <DivisionDossierCard
                   division={divisionByCode.PH}
                   memberCountLabel="Liên kết PR × PH"
@@ -580,33 +586,41 @@ export function DivisionsShowcase() {
                     onClick: () => setActiveView("PH"),
                   }}
                 />
-                <div className="mirror-card flex flex-col justify-between overflow-hidden rounded-2xl border-cyan-300/25 bg-gradient-to-b from-cyan-500/12 via-slate-900/80 to-indigo-950/90 p-5">
+              </div>
+              <div className="mirror-card flex flex-col justify-between overflow-hidden rounded-2xl border-cyan-300/25 bg-gradient-to-br from-cyan-500/12 via-slate-900/80 to-indigo-950/90 p-6 lg:col-span-7">
+                <div>
+                  <div className="inline-flex items-center gap-2 rounded-full border border-cyan-300/30 bg-cyan-400/15 px-3 py-1 font-mono text-[10px] font-bold tracking-wider text-cyan-100">
+                    <Palette className="h-3.5 w-3.5" />
+                    STUDIO NHẬN DIỆN
+                  </div>
+                  <h4 className="mt-4 font-[family-name:var(--font-space-grotesk)] text-xl font-bold text-white sm:text-2xl">
+                    Hệ sinh thái Ấn phẩm GEN 1.0
+                  </h4>
+                  <p className="mt-2.5 text-sm leading-relaxed text-slate-300">
+                    Chịu trách nhiệm toàn bộ ngôn ngữ thị giác kim loại bạc - kính
+                    khói cho bộ {TEAM_MEMBERS.length} chân dung thành viên, khung sự
+                    kiện VGP2026 và bộ AI Learning Toolkit.
+                  </p>
+                </div>
+
+                <div className="mt-6 grid grid-cols-1 gap-4 border-t border-white/10 pt-4 sm:grid-cols-3">
                   <div>
-                    <div className="inline-flex items-center gap-2 rounded-full border border-cyan-300/30 bg-cyan-400/15 px-3 py-1 font-mono text-[10px] font-bold tracking-wider text-cyan-100">
-                      <Palette className="h-3.5 w-3.5" />
-                      STUDIO NHẬN DIỆN
-                    </div>
-                    <h4 className="mt-4 font-[family-name:var(--font-space-grotesk)] text-lg font-bold text-white">
-                      Hệ sinh thái Ấn phẩm GEN 1.0
-                    </h4>
-                    <p className="mt-2 text-xs leading-relaxed text-slate-300">
-                      Chịu trách nhiệm toàn bộ ngôn ngữ thị giác kim loại bạc — kính
-                      khói cho bộ 26 chân dung thành viên, khung sự kiện VGP2026
-                      và bộ AI Learning Toolkit.
+                    <p className="text-xs text-slate-400">Phối hợp trực tiếp</p>
+                    <p className="mt-1 text-sm font-semibold text-cyan-200">
+                      Ban Truyền Thông (PR)
                     </p>
                   </div>
-
-                  <div className="mt-5 space-y-2.5 border-t border-white/10 pt-4">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-slate-400">Phối hợp trực tiếp</span>
-                      <span className="font-semibold text-cyan-200">Ban PR</span>
-                    </div>
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-slate-400">Hạng mục chủ lực</span>
-                      <span className="font-semibold text-white">
-                        Poster &amp; Identity
-                      </span>
-                    </div>
+                  <div>
+                    <p className="text-xs text-slate-400">Hạng mục chủ lực</p>
+                    <p className="mt-1 text-sm font-semibold text-white">
+                      Poster &amp; Identity
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-400">Bộ ấn phẩm</p>
+                    <p className="mt-1 text-sm font-semibold text-white">
+                      {TEAM_MEMBERS.length} Chân dung Gen 1.0
+                    </p>
                   </div>
                 </div>
               </div>
@@ -615,7 +629,7 @@ export function DivisionsShowcase() {
         </div>
       )}
 
-      {/* VIEW 2: EXECUTIVE + HEADS COUNCIL (9 LEADERS) */}
+      {/* VIEW 2: EXECUTIVE + HEADS COUNCIL (10 LEADERS) */}
       {activeView === "LEADERS" && (
         <div className="mt-10 space-y-8">
           <div className="mirror-card rounded-2xl bg-gradient-to-r from-indigo-500/15 via-slate-200/8 to-fuchsia-500/15 p-5 sm:p-6">
@@ -628,8 +642,8 @@ export function DivisionsShowcase() {
                   Ban Chủ Nhiệm &amp; Trưởng / Phó Các Ban Chuyên Trách
                 </h3>
                 <p className="mt-1 text-sm text-slate-300">
-                  9 gương mặt dẫn dắt điều phối chuyên môn, truyền thông, đối ngoại,
-                  hậu cần và nhân sự toàn câu lạc bộ.
+                  {leaderMembers.length} gương mặt dẫn dắt điều phối chuyên môn,
+                  truyền thông, đối ngoại, hậu cần và nhân sự toàn câu lạc bộ.
                 </p>
               </div>
               <span className="inline-flex items-center gap-2 rounded-full border border-slate-200/30 bg-white/10 px-4 py-1.5 font-mono text-xs font-bold text-white">
@@ -639,7 +653,7 @@ export function DivisionsShowcase() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-3 lg:gap-7">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5 lg:gap-5">
             {leaderMembers.map((member) => (
               <PosterMirrorCard
                 key={member.id}
@@ -647,7 +661,7 @@ export function DivisionsShowcase() {
                 accent={divisionByCode[member.divisionCode].accent}
                 onSelect={setSelectedMember}
                 showFloorReflection
-                sizes="(max-width: 640px) 46vw, (max-width: 1024px) 30vw, 340px"
+                sizes="(max-width: 640px) 46vw, (max-width: 1024px) 30vw, 280px"
               />
             ))}
           </div>
@@ -680,9 +694,9 @@ export function DivisionsShowcase() {
               const members = getMembersByDivision(activeView);
               const gridClass =
                 members.length <= 2
-                  ? "mx-auto grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2"
+                  ? "mx-auto grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-2"
                   : members.length === 6
-                    ? "grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-3"
+                    ? "grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 xl:grid-cols-6"
                     : "grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4";
 
               return (
@@ -693,7 +707,7 @@ export function DivisionsShowcase() {
                   />
 
                   {members.length === 1 ? (
-                    <div className="mx-auto grid max-w-2xl grid-cols-1 items-stretch gap-6 sm:grid-cols-2">
+                    <div className="mx-auto grid max-w-4xl grid-cols-1 items-stretch gap-6 sm:grid-cols-2">
                       <DivisionDossierCard
                         division={currentDiv}
                         memberCountLabel="1 Trưởng ban điều phối"
@@ -742,8 +756,8 @@ export function DivisionsShowcase() {
         <div className="inline-flex items-center gap-2">
           <Users className="h-4 w-4 text-blue-300" />
           <span>
-            26 chân dung thành viên Gen 1.0 • Nhấn vào từng khung gương để xem khổ
-            lớn và điều hướng bằng phím mũi tên.
+            {TEAM_MEMBERS.length} chân dung thành viên Gen 1.0 • Nhấn vào từng
+            khung gương để xem khổ lớn và điều hướng bằng phím mũi tên.
           </span>
         </div>
         <span className="font-mono text-[11px] uppercase tracking-wider text-slate-500">

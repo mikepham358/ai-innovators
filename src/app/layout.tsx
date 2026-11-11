@@ -27,11 +27,11 @@ export const metadata: Metadata = {
       ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
       : "https://ai-innovators-vgp.vercel.app"
   ),
-  title: "AI INNOVATORS — Safe AI, Stronger Minds | Vinschool Grand Park",
+  title: "AI INNOVATORS - Safe AI, Stronger Minds | Vinschool Grand Park",
   description:
-    "Câu lạc bộ Học sinh AI INNOVATORS (Gen 1.0 • VGP2026) — Dự án VIN BEYOND AI: Phổ cập AI Literacy, Prompt Engineering PARTS, AI Safety & AI Learning Hackathon.",
+    "Câu lạc bộ Học sinh AI INNOVATORS (Gen 1.0 • VGP2026) - Dự án VIN BEYOND AI: Phổ cập AI Literacy, Prompt Engineering PARTS, AI Safety & AI Learning Hackathon.",
   openGraph: {
-    title: "AI INNOVATORS — Safe AI, Stronger Minds",
+    title: "AI INNOVATORS - Safe AI, Stronger Minds",
     description:
       "Cộng đồng học sinh tiên phong về AI có trách nhiệm, tư duy Socratic và Zero PII tại Vinschool Grand Park.",
     images: ["/images/hero-banner.png"],

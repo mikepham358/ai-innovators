@@ -44,7 +44,7 @@ async function PortalContent() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-8 px-4 py-10 sm:px-6 sm:py-12">
+    <div className="w-full space-y-8 px-4 py-10 sm:px-8 sm:py-12 lg:px-12 xl:px-16">
       {!configured ? (
         <div className="rounded-2xl border border-amber-400/35 bg-amber-500/10 p-4 text-xs leading-relaxed text-amber-100 sm:text-sm">
           <strong>Chế độ xem trước Portal:</strong> Dự án chưa gắn{" "}
@@ -170,7 +170,7 @@ export default function PortalPage() {
       <main className="flex-1">
         <Suspense
           fallback={
-            <div className="mx-auto max-w-6xl px-4 py-16 text-center text-sm text-slate-300">
+            <div className="w-full px-4 py-16 text-center text-sm text-slate-300 sm:px-8 lg:px-12 xl:px-16">
               Đang tải Cổng Thành Viên AI INNOVATORS...
             </div>
           }

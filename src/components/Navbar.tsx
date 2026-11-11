@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { Code2, LogIn } from "lucide-react";
 import { AuthNavStatus } from "./AuthNavStatus";
+import { InstagramButton } from "./InstagramButton";
 
 const NAV_LINKS = [
   { href: "/#mission", label: "Sứ mệnh" },
@@ -26,7 +27,7 @@ function AuthNavFallback() {
 export function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#050718]/80 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3.5 sm:px-6">
+      <div className="mx-auto flex w-full items-center justify-between gap-4 px-4 py-3.5 sm:px-8 lg:px-12 xl:px-16">
         <Link href="/" className="group flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-blue-400/40 bg-gradient-to-br from-blue-600/30 via-violet-600/30 to-fuchsia-600/30 text-white shadow-inner transition group-hover:scale-105">
             <Code2 className="h-5 w-5 text-blue-200" />
@@ -41,7 +42,7 @@ export function Navbar() {
               </span>
             </div>
             <p className="text-[11px] font-medium tracking-wider text-blue-200/80">
-              SAFE AI — STRONGER MINDS
+              SAFE AI - STRONGER MINDS
             </p>
           </div>
         </Link>
@@ -59,6 +60,7 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <InstagramButton variant="navbar" />
           <Suspense fallback={<AuthNavFallback />}>
             <AuthNavStatus />
           </Suspense>

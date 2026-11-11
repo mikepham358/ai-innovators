@@ -3,6 +3,11 @@
 import Image from "next/image";
 import { useEffect } from "react";
 import { ChevronLeft, ChevronRight, Sparkles, X } from "lucide-react";
+import {
+  getMemberRankLabel,
+  MEMBER_RANK_PILL_CLASSES,
+  MemberRankIcon,
+} from "@/components/MemberRankBadge";
 import type {
   DivisionAccent,
   DivisionItem,
@@ -75,6 +80,9 @@ export function MemberSpotlightModal({
   const badgeClass = division
     ? DIVISION_BADGE_CLASSES[division.accent]
     : DIVISION_BADGE_CLASSES.violet;
+  const rankBadgeClass = division
+    ? MEMBER_RANK_PILL_CLASSES[division.accent]
+    : MEMBER_RANK_PILL_CLASSES.violet;
 
   const handleStep = (delta: number) => {
     if (membersList.length === 0) return;
@@ -111,7 +119,7 @@ export function MemberSpotlightModal({
           <div className="relative aspect-[1587/2245] h-[54vh] max-h-[640px] w-auto overflow-hidden rounded-2xl border border-white/20 shadow-[0_25px_70px_rgba(0,0,0,0.85)]">
             <Image
               src={member.imageSrc}
-              alt={`${member.name} — ${member.role}`}
+              alt={`${member.name} - ${member.role}`}
               fill
               sizes="(max-width: 1024px) 80vw, 460px"
               className="object-cover"
@@ -125,9 +133,16 @@ export function MemberSpotlightModal({
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <span
-                className={`rounded-lg border px-2.5 py-1 font-mono text-xs font-bold ${badgeClass}`}
+                className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 font-mono text-xs font-bold ${badgeClass}`}
               >
+                <MemberRankIcon member={member} className="h-3.5 w-3.5 shrink-0" />
                 BAN {member.divisionCode}
+              </span>
+              <span
+                className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 font-mono text-[10px] font-bold tracking-wider ${rankBadgeClass}`}
+              >
+                <MemberRankIcon member={member} className="h-3 w-3 shrink-0" />
+                {getMemberRankLabel(member)}
               </span>
               <span className="rounded-full border border-white/15 bg-white/5 px-2.5 py-0.5 font-mono text-[11px] text-slate-300">
                 {currentIndex + 1} / {membersList.length}

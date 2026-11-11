@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { ShieldCheck } from "lucide-react";
 import { CLUB_META } from "@/data/club-data";
+import { InstagramButton } from "./InstagramButton";
 
 export function Footer() {
   return (
     <footer className="mt-auto border-t border-white/10 bg-[#040614]/90">
-      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+      <div className="mx-auto flex w-full flex-col gap-6 px-4 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-12 xl:px-16">
         <div>
           <div className="flex items-center gap-2">
             <span className="font-[family-name:var(--font-space-grotesk)] text-base font-bold text-white">
@@ -27,6 +28,7 @@ export function Footer() {
         </div>
 
         <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-slate-300">
+          <InstagramButton variant="footer" />
           <Link href="/#workshops" className="hover:text-white">
             4 Workshop
           </Link>

@@ -3,12 +3,23 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { CSSProperties } from "react";
-import { useMemo, useState } from "react";
-import { ArrowDownRight, Crown, Pause, Play } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  ArrowDownRight,
+  Crown,
+  Pause,
+  Play,
+  Volume2,
+  VolumeX,
+} from "lucide-react";
 import {
   DIVISION_BADGE_CLASSES,
   MemberSpotlightModal,
 } from "@/components/MemberSpotlightModal";
+import {
+  getMemberRankLabel,
+  MemberRankIcon,
+} from "@/components/MemberRankBadge";
 import {
   CLUB_DIVISIONS,
   TEAM_MEMBERS,
@@ -16,6 +27,7 @@ import {
   type DivisionCode,
   type TeamMember,
 } from "@/data/club-data";
+import { HallSynthEngine } from "@/lib/audio/hall-synth";
 
 const TIER_PRIORITY: Record<TeamMember["tier"], number> = {
   executive: 0,
@@ -27,6 +39,8 @@ const TIER_PRIORITY: Record<TeamMember["tier"], number> = {
 const ORDERED_HERO_MEMBERS: TeamMember[] = [...TEAM_MEMBERS].sort(
   (a, b) => TIER_PRIORITY[a.tier] - TIER_PRIORITY[b.tier],
 );
+
+const EQUALIZER_WEIGHTS = [0.55, 0.95, 0.72, 1.0, 0.64];
 
 interface CarouselTrackGroupProps {
   members: TeamMember[];
@@ -60,7 +74,7 @@ function CarouselTrackGroup({
             aria-label={
               isDuplicate
                 ? undefined
-                : `Xem hồ sơ ${member.name} — ${member.role}`
+                : `Xem hồ sơ ${member.name} - ${member.role}`
             }
             className={`group mirror-card ${
               isLeader ? "mirror-card-executive" : ""
@@ -69,7 +83,7 @@ function CarouselTrackGroup({
             <div className="relative aspect-[1587/2245] w-full overflow-hidden bg-[#06091e]">
               <Image
                 src={member.imageSrc}
-                alt={isDuplicate ? "" : `${member.name} — ${member.role}`}
+                alt={isDuplicate ? "" : `${member.name} - ${member.role}`}
                 fill
                 sizes="(max-width: 640px) 150px, 190px"
                 loading="eager"
@@ -88,15 +102,14 @@ function CarouselTrackGroup({
                 <span
                   className={`inline-flex items-center gap-1 rounded-md border px-1.5 py-0.5 font-mono text-[9px] font-bold tracking-wider ${badgeStyle}`}
                 >
-                  {isLeader && <Crown className="h-2.5 w-2.5" />}
+                  <MemberRankIcon
+                    member={member}
+                    className="h-2.5 w-2.5 shrink-0"
+                  />
                   {member.divisionCode}
                 </span>
-                <span className="truncate font-mono text-[9px] font-semibold uppercase tracking-wider text-slate-300/80">
-                  {member.tier === "executive"
-                    ? "CHỦ NHIỆM"
-                    : member.tier === "head"
-                      ? "TRƯỞNG BAN"
-                      : "GEN 1.0"}
+                <span className="truncate font-mono text-[9px] font-semibold uppercase tracking-wider text-slate-200/85">
+                  {getMemberRankLabel(member)}
                 </span>
               </div>
 
@@ -119,7 +132,14 @@ function CarouselTrackGroup({
 export function HeroMemberCarousel() {
   const [isPaused, setIsPaused] = useState(false);
   const [slowMode, setSlowMode] = useState(false);
+  const [musicPlaying, setMusicPlaying] = useState(false);
+  const [userMuted, setUserMuted] = useState(false);
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
+
+  const engineRef = useRef<HallSynthEngine | null>(null);
+  const stageRef = useRef<HTMLDivElement | null>(null);
+  const barRefs = useRef<Array<HTMLSpanElement | null>>([]);
+  const decayTimerRef = useRef<number | null>(null);
 
   const { divisionByCode, accentByCode } = useMemo(() => {
     const divMap = {} as Record<DivisionCode, (typeof CLUB_DIVISIONS)[number]>;
@@ -131,22 +151,163 @@ export function HeroMemberCarousel() {
     return { divisionByCode: divMap, accentByCode: accMap };
   }, []);
 
+  const resetVisualBars = useCallback(() => {
+    if (stageRef.current) {
+      stageRef.current.style.setProperty("--beat-energy", "0");
+    }
+    for (const bar of barRefs.current) {
+      if (bar) {
+        bar.style.transform = "scaleY(0.28)";
+      }
+    }
+  }, []);
+
+  const ensureEngine = useCallback(() => {
+    if (!engineRef.current) {
+      const engine = new HallSynthEngine();
+      engine.onBeat(({ step, intensity }) => {
+        if (stageRef.current) {
+          stageRef.current.style.setProperty(
+            "--beat-energy",
+            intensity.toFixed(2),
+          );
+        }
+
+        barRefs.current.forEach((bar, index) => {
+          if (!bar) return;
+          const phaseOffset = ((step + index * 3) % 5) / 4;
+          const level = Math.min(
+            1,
+            Math.max(
+              0.24,
+              0.25 + intensity * EQUALIZER_WEIGHTS[index] * (0.65 + phaseOffset * 0.45),
+            ),
+          );
+          bar.style.transform = `scaleY(${level.toFixed(2)})`;
+        });
+
+        if (decayTimerRef.current !== null) {
+          window.clearTimeout(decayTimerRef.current);
+        }
+        decayTimerRef.current = window.setTimeout(() => {
+          if (stageRef.current) {
+            stageRef.current.style.setProperty("--beat-energy", "0.18");
+          }
+          for (const bar of barRefs.current) {
+            if (bar) {
+              bar.style.transform = "scaleY(0.32)";
+            }
+          }
+        }, 145);
+      });
+      engineRef.current = engine;
+    }
+    return engineRef.current;
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (decayTimerRef.current !== null) {
+        window.clearTimeout(decayTimerRef.current);
+      }
+      engineRef.current?.dispose();
+      engineRef.current = null;
+    };
+  }, []);
+
+  async function startMusicIfAllowed(bpm: number, forceUnmute = false) {
+    if (!forceUnmute && userMuted) return;
+    const engine = ensureEngine();
+    engine.setBpm(bpm);
+    const started = await engine.startOrResume();
+    if (started) {
+      setMusicPlaying(true);
+    }
+  }
+
+  function stopMusic() {
+    engineRef.current?.pause();
+    setMusicPlaying(false);
+    resetVisualBars();
+  }
+
+  function handleToggleMusic() {
+    if (musicPlaying) {
+      setUserMuted(true);
+      stopMusic();
+      return;
+    }
+
+    setUserMuted(false);
+    if (isPaused) {
+      setIsPaused(false);
+    }
+    const bpm = slowMode ? 84 : 108;
+    void startMusicIfAllowed(bpm, true);
+  }
+
+  function handleToggleTempo() {
+    const nextSlow = !slowMode;
+    setSlowMode(nextSlow);
+    const nextBpm = nextSlow ? 84 : 108;
+    engineRef.current?.setBpm(nextBpm);
+    if (!isPaused && !userMuted) {
+      void startMusicIfAllowed(nextBpm);
+    }
+  }
+
+  function handleTogglePlayPause() {
+    if (isPaused) {
+      // Resume carousel & music smoothly on beat
+      setIsPaused(false);
+      if (!userMuted) {
+        void startMusicIfAllowed(slowMode ? 84 : 108);
+      }
+    } else {
+      // Pause carousel & fade/pause beat cleanly
+      setIsPaused(true);
+      stopMusic();
+    }
+  }
+
+  function handleSelectMember(member: TeamMember) {
+    setSelectedMember(member);
+    if (!isPaused && !userMuted && !musicPlaying) {
+      void startMusicIfAllowed(slowMode ? 84 : 108);
+    }
+  }
+
+  const currentBpm = slowMode ? 84 : 108;
   const trackStyle = {
     "--marquee-duration": slowMode ? "84s" : "56s",
   } as CSSProperties;
 
   return (
-    <div className="relative border-t border-white/10 bg-gradient-to-b from-indigo-950/30 via-[#050718]/80 to-[#050718] pb-8 pt-6 sm:pb-10 sm:pt-7">
-      {/* Subtle Ambient Spotlight Behind Runway */}
+    <div
+      ref={stageRef}
+      style={{ "--beat-energy": "0" } as CSSProperties}
+      className="relative border-t border-white/10 bg-gradient-to-b from-indigo-950/30 via-[#050718]/80 to-[#050718] pb-6 pt-5 sm:pb-8 sm:pt-6"
+    >
+      {/* Beat-Synced Ambient Runway Spotlight */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(ellipse_60%_100%_at_50%_0%,rgba(129,140,248,0.16),transparent_72%)]"
+        style={{
+          opacity: "calc(0.45 + var(--beat-energy, 0) * 0.55)",
+          transform: "scaleY(calc(1 + var(--beat-energy, 0) * 0.16))",
+        }}
+        className="pointer-events-none absolute inset-x-0 top-0 h-44 origin-top bg-[radial-gradient(ellipse_62%_100%_at_50%_0%,rgba(129,140,248,0.22),transparent_72%)] transition-[opacity,transform] duration-150 ease-out"
       />
 
       {/* Editorial Hall of Innovators Header Bar */}
-      <div className="relative mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 pb-5 sm:px-6">
+      <div className="relative flex w-full flex-wrap items-center justify-between gap-3 px-4 pb-4 sm:px-8 lg:px-12 xl:px-16">
         <div className="flex flex-wrap items-center gap-2.5">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200/30 bg-gradient-to-r from-slate-200/15 via-indigo-400/20 to-fuchsia-400/15 px-3 py-1 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-white shadow-[0_0_24px_rgba(129,140,248,0.22)]">
+          <span
+            style={{
+              boxShadow:
+                "0 0 calc(20px + var(--beat-energy, 0) * 18px) rgba(129, 140, 248, calc(0.2 + var(--beat-energy, 0) * 0.35))",
+            }}
+            className="inline-flex items-center gap-1.5 rounded-full border border-slate-200/30 bg-gradient-to-r from-slate-200/15 via-indigo-400/20 to-fuchsia-400/15 px-3 py-1 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-white transition-shadow duration-150"
+          >
             <Crown className="h-3.5 w-3.5 text-indigo-200" />
             HALL OF INNOVATORS • GEN 1.0
           </span>
@@ -157,19 +318,72 @@ export function HeroMemberCarousel() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Interactive Runway Synth Beat Control + Live Equalizer */}
           <button
             type="button"
-            onClick={() => setSlowMode((prev) => !prev)}
-            className="hidden rounded-lg border border-white/12 bg-white/[0.04] px-2.5 py-1.5 font-mono text-[11px] text-slate-300 transition hover:border-white/30 hover:text-white sm:inline-flex"
+            onClick={handleToggleMusic}
+            aria-label={
+              musicPlaying
+                ? "Tạm tắt nhạc nền theo nhịp Hall of Innovators"
+                : "Bật nhạc nền theo nhịp Hall of Innovators"
+            }
+            className={`group inline-flex items-center gap-2 rounded-lg border px-2.5 py-1.5 font-mono text-[11px] font-semibold transition ${
+              musicPlaying
+                ? "border-cyan-300/45 bg-gradient-to-r from-cyan-500/20 via-blue-500/20 to-fuchsia-500/20 text-cyan-100 shadow-[0_0_18px_rgba(34,211,238,0.22)]"
+                : "border-white/15 bg-white/[0.05] text-slate-200 hover:border-cyan-300/40 hover:bg-white/10 hover:text-white"
+            }`}
           >
-            {slowMode ? "Nhịp: Thư thái" : "Nhịp: Tiêu chuẩn"}
+            {musicPlaying ? (
+              <Volume2 className="h-3.5 w-3.5 text-cyan-300" />
+            ) : (
+              <VolumeX className="h-3.5 w-3.5 text-slate-400 group-hover:text-cyan-200" />
+            )}
+
+            {/* 5-Bar Live Equalizer Synced to Web Audio Beat */}
+            <span
+              aria-hidden="true"
+              className="flex h-3.5 items-end gap-[2px]"
+            >
+              {EQUALIZER_WEIGHTS.map((_, index) => (
+                <span
+                  key={index}
+                  ref={(el) => {
+                    barRefs.current[index] = el;
+                  }}
+                  style={{ transform: "scaleY(0.28)" }}
+                  className={`h-full w-[2.5px] origin-bottom rounded-full transition-transform duration-100 ${
+                    musicPlaying
+                      ? index % 2 === 0
+                        ? "bg-cyan-300"
+                        : "bg-fuchsia-300"
+                      : "bg-slate-500"
+                  }`}
+                />
+              ))}
+            </span>
+
+            <span>
+              {musicPlaying
+                ? `Beat ${currentBpm} BPM`
+                : userMuted
+                  ? "Đã tắt nhạc"
+                  : "Nhấn bật beat"}
+            </span>
           </button>
 
           <button
             type="button"
-            onClick={() => setIsPaused((prev) => !prev)}
-            aria-label={isPaused ? "Tiếp tục chạy carousel" : "Tạm dừng carousel"}
+            onClick={handleToggleTempo}
+            className="hidden rounded-lg border border-white/12 bg-white/[0.04] px-2.5 py-1.5 font-mono text-[11px] text-slate-300 transition hover:border-white/30 hover:text-white sm:inline-flex"
+          >
+            {slowMode ? "Nhịp: Thư thái (84 BPM)" : "Nhịp: Tiêu chuẩn (108 BPM)"}
+          </button>
+
+          <button
+            type="button"
+            onClick={handleTogglePlayPause}
+            aria-label={isPaused ? "Chạy tiếp carousel và nhạc" : "Tạm dừng carousel và nhạc"}
             className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 bg-white/[0.06] px-2.5 py-1.5 text-xs font-semibold text-white transition hover:border-white/35 hover:bg-white/10"
           >
             {isPaused ? (
@@ -195,10 +409,13 @@ export function HeroMemberCarousel() {
         </div>
       </div>
 
-      {/* Top Titanium Hairline */}
+      {/* Beat-Reactive Top Titanium Hairline */}
       <div
         aria-hidden="true"
-        className="mx-auto mb-4 h-px max-w-6xl bg-gradient-to-r from-transparent via-slate-200/35 to-transparent"
+        style={{
+          opacity: "calc(0.45 + var(--beat-energy, 0) * 0.55)",
+        }}
+        className="mb-4 h-px w-full bg-gradient-to-r from-transparent via-cyan-200/55 to-transparent transition-opacity duration-150"
       />
 
       {/* Panoramic Obsidian Mirror Runway */}
@@ -211,25 +428,31 @@ export function HeroMemberCarousel() {
           <CarouselTrackGroup
             members={ORDERED_HERO_MEMBERS}
             accentByCode={accentByCode}
-            onSelect={setSelectedMember}
+            onSelect={handleSelectMember}
           />
           <CarouselTrackGroup
             members={ORDERED_HERO_MEMBERS}
             accentByCode={accentByCode}
-            onSelect={setSelectedMember}
+            onSelect={handleSelectMember}
             isDuplicate
           />
         </div>
       </div>
 
-      {/* Mirrored Floor Ambient Glow */}
+      {/* Beat-Reactive Mirrored Floor Ambient Glow */}
       <div
         aria-hidden="true"
-        className="mx-auto mt-3 h-px max-w-6xl bg-gradient-to-r from-transparent via-indigo-200/30 to-transparent"
+        style={{
+          opacity: "calc(0.4 + var(--beat-energy, 0) * 0.6)",
+        }}
+        className="mt-3 h-px w-full bg-gradient-to-r from-transparent via-indigo-200/45 to-transparent transition-opacity duration-150"
       />
       <div
         aria-hidden="true"
-        className="mx-auto h-4 max-w-5xl bg-gradient-to-b from-indigo-400/12 to-transparent blur-sm"
+        style={{
+          opacity: "calc(0.3 + var(--beat-energy, 0) * 0.7)",
+        }}
+        className="h-4 w-full bg-gradient-to-b from-indigo-400/18 to-transparent blur-sm transition-opacity duration-150"
       />
 
       <MemberSpotlightModal

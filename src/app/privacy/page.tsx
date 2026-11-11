@@ -8,7 +8,7 @@ export default function PrivacyPage() {
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
-      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-12 sm:px-6">
+      <main className="w-full flex-1 px-4 py-12 sm:px-8 lg:px-12 xl:px-16">
         <div className="glass-card rounded-3xl p-7 sm:p-10">
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/35 bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-200">
             <ShieldCheck className="h-3.5 w-3.5" />
@@ -16,7 +16,7 @@ export default function PrivacyPage() {
           </div>
 
           <h1 className="mt-4 font-[family-name:var(--font-space-grotesk)] text-2xl font-bold text-white sm:text-3xl">
-            Chính sách Bảo mật — {CLUB_META.name}
+            Chính sách Bảo mật - {CLUB_META.name}
           </h1>
           <p className="mt-2 text-xs text-slate-400">
             Cập nhật: 11/11/2026 • Áp dụng cho {CLUB_META.school} ({CLUB_META.flagship})

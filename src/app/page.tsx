@@ -13,9 +13,11 @@ import {
   ShieldCheck,
   Sparkles,
 } from "lucide-react";
+import AdvisorSpotlight from "@/components/AdvisorSpotlight";
 import { DivisionsShowcase } from "@/components/DivisionsShowcase";
 import { Footer } from "@/components/Footer";
 import { HeroMemberCarousel } from "@/components/HeroMemberCarousel";
+import { InstagramButton } from "@/components/InstagramButton";
 import { Navbar } from "@/components/Navbar";
 import { PrototypeShowcase } from "@/components/PrototypeShowcase";
 import {
@@ -35,8 +37,8 @@ export default function HomePage() {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="relative overflow-hidden border-b border-white/10">
-          <div className="mx-auto max-w-6xl px-4 pb-10 pt-8 sm:px-6 sm:pb-12 sm:pt-12">
-            <div className="grid items-center gap-10 lg:grid-cols-12">
+          <div className="w-full px-4 pb-6 pt-6 sm:px-8 sm:pb-8 sm:pt-8 lg:px-12 xl:px-16">
+            <div className="grid items-center gap-8 lg:grid-cols-12 xl:gap-12">
               <div className="lg:col-span-6">
                 <div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-blue-400/35 bg-blue-500/15 px-3.5 py-1.5 text-xs font-semibold text-blue-100">
                   <Sparkles className="h-3.5 w-3.5 text-fuchsia-300" />
@@ -47,11 +49,11 @@ export default function HomePage() {
                   </span>
                 </div>
 
-                <h1 className="metallic-title mt-5 font-[family-name:var(--font-space-grotesk)] text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-[3.4rem] lg:leading-[1.08]">
+                <h1 className="metallic-title mt-5 font-[family-name:var(--font-space-grotesk)] text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-[3.4rem] xl:text-[3.85rem] lg:leading-[1.06]">
                   AI INNOVATORS
                 </h1>
                 <p className="mt-2 font-mono text-sm font-semibold tracking-[0.22em] text-fuchsia-300 sm:text-base">
-                  {CLUB_META.flagship} — {CLUB_META.slogan}
+                  {CLUB_META.flagship} - {CLUB_META.slogan}
                 </p>
 
                 <p className="mt-5 text-base leading-relaxed text-slate-200 sm:text-lg">
@@ -81,6 +83,7 @@ export default function HomePage() {
                     <span>Khám phá 4 Workshop</span>
                     <ArrowRight className="h-4 w-4" />
                   </Link>
+                  <InstagramButton variant="hero" />
                 </div>
 
                 <div className="mt-7 flex flex-wrap gap-2">
@@ -98,10 +101,10 @@ export default function HomePage() {
 
               <div className="lg:col-span-6">
                 <div className="neon-border glass-card overflow-hidden rounded-3xl p-2.5">
-                  <div className="relative aspect-[16/9.5] w-full overflow-hidden rounded-2xl bg-[#070a24]">
+                  <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl bg-[#070a24]">
                     <Image
                       src="/images/hero-banner.png"
-                      alt="AI INNOVATORS — Safe AI, Stronger Minds Banner"
+                      alt="AI INNOVATORS - Safe AI, Stronger Minds Banner"
                       fill
                       priority
                       sizes="(max-width: 1024px) 100vw, 50vw"
@@ -126,14 +129,17 @@ export default function HomePage() {
         </section>
 
         {/* Core Pillars + Official Club Poster */}
-        <section id="mission" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-          <div className="grid items-center gap-10 lg:grid-cols-12">
+        <section
+          id="mission"
+          className="w-full px-4 py-16 sm:px-8 sm:py-20 lg:px-12 xl:px-16"
+        >
+          <div className="grid items-center gap-10 lg:grid-cols-12 xl:gap-12">
             <div className="lg:col-span-5">
-              <div className="neon-border glass-card mx-auto max-w-sm overflow-hidden rounded-3xl p-2.5 lg:max-w-none">
+              <div className="neon-border glass-card mx-auto max-w-sm overflow-hidden rounded-3xl p-2.5 lg:max-w-xl">
                 <div className="relative aspect-[1587/2245] w-full overflow-hidden rounded-2xl bg-[#070a24]">
                   <Image
                     src="/images/club-poster.png"
-                    alt="Poster chính thức CLB AI INNOVATORS — Safe AI, Stronger Minds"
+                    alt="Poster chính thức CLB AI INNOVATORS - Safe AI, Stronger Minds"
                     fill
                     sizes="(max-width: 1024px) 90vw, 38vw"
                     className="object-cover"
@@ -190,8 +196,8 @@ export default function HomePage() {
 
         {/* 4-Step Bloom Progression */}
         <section className="border-y border-white/10 bg-slate-950/45 py-16 sm:py-20">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <div className="max-w-2xl">
+          <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16">
+            <div className="max-w-4xl">
               <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-blue-300">
                 Tiến trình phát triển năng lực (Bloom’s Taxonomy)
               </p>
@@ -229,9 +235,12 @@ export default function HomePage() {
         </section>
 
         {/* 4 Pre-Hackathon Workshops */}
-        <section id="workshops" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+        <section
+          id="workshops"
+          className="w-full px-4 py-16 sm:px-8 sm:py-20 lg:px-12 xl:px-16"
+        >
           <div className="flex flex-wrap items-end justify-between gap-4">
-            <div className="max-w-2xl">
+            <div className="max-w-4xl">
               <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-fuchsia-300">
                 Chương trình đào tạo Pre-Hackathon
               </p>
@@ -304,7 +313,7 @@ export default function HomePage() {
           id="hackathon"
           className="border-y border-white/10 bg-slate-950/50 py-16 sm:py-20"
         >
-          <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16">
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <div>
                 <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-blue-300">
@@ -404,8 +413,8 @@ export default function HomePage() {
           id="prototypes"
           className="border-y border-white/10 bg-white/[0.02] py-16 sm:py-20"
         >
-          <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <div className="max-w-3xl">
+          <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16">
+            <div className="max-w-4xl">
               <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">
                 Sản Phẩm Mẫu • Minh Chứng Năng Lực Thực Thi
               </p>
@@ -414,7 +423,7 @@ export default function HomePage() {
               </h2>
               <p className="mt-2 text-sm text-slate-300 sm:text-base">
                 Danh mục các sản phẩm và nguyên mẫu thực tế mà thành viên câu lạc
-                bộ đã ứng dụng AI để sáng tạo trong các môn học trước đó — chạm vào
+                bộ đã ứng dụng AI để sáng tạo trong các môn học trước đó - chạm vào
                 từng thẻ bài để mở Web Preview tương tác của sản phẩm gốc.
               </p>
             </div>
@@ -424,8 +433,11 @@ export default function HomePage() {
         </section>
 
         {/* 7 Divisions */}
-        <section id="divisions" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-          <div className="max-w-3xl">
+        <section
+          id="divisions"
+          className="w-full px-4 py-16 sm:px-8 sm:py-20 lg:px-12 xl:px-16"
+        >
+          <div className="max-w-4xl">
             <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-fuchsia-300">
               Mô hình Classroom as a Career Lab • Zero PII
             </p>
@@ -434,17 +446,21 @@ export default function HomePage() {
             </h2>
             <p className="mt-2 text-sm text-slate-300 sm:text-base">
               Đội ngũ Ban Chủ Nhiệm, Trưởng ban và thành viên nòng cốt vận hành theo
-              chuẩn tổ chức chuyên nghiệp — trưng bày theo từng ban trong không gian
+              chuẩn tổ chức chuyên nghiệp - trưng bày theo từng ban trong không gian
               gương kính khói sang trọng, bảo lưu tuyệt đối thông tin định danh cá nhân.
             </p>
           </div>
 
           <DivisionsShowcase />
 
-          {/* Member Portal CTA */}
-          <div className="neon-border glass-card mt-14 rounded-3xl p-8 sm:p-10">
+          <AdvisorSpotlight />
+        </section>
+
+        {/* Member Portal CTA */}
+        <section className="w-full px-4 pb-16 sm:px-8 sm:pb-20 lg:px-12 xl:px-16">
+          <div className="neon-border glass-card rounded-3xl p-8 sm:p-10">
             <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
-              <div className="max-w-2xl">
+              <div className="max-w-4xl">
                 <span className="font-mono text-xs font-semibold uppercase tracking-widest text-emerald-300">
                   Cổng Thành Viên & Học Sinh
                 </span>

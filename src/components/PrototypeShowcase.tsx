@@ -328,7 +328,7 @@ export function PrototypeShowcase() {
           onClick={() => setOpenModelId(null)}
         >
           <div
-            className="mirror-card mirror-card-executive flex max-h-[94vh] w-full max-w-6xl flex-col overflow-hidden rounded-3xl"
+            className="mirror-card mirror-card-executive flex max-h-[94vh] w-full max-w-[94vw] flex-col overflow-hidden rounded-3xl"
             onClick={(event) => event.stopPropagation()}
           >
             {/* Top Switcher Tabs Bar Across All 4 Cards */}
@@ -519,7 +519,7 @@ export function PrototypeShowcase() {
                           <p className="mt-1 text-xs leading-relaxed text-slate-300">
                             Trang {activeModel.platform} bảo vệ phiên Google bằng
                             chính sách trình duyệt không cho nhúng iframe ngoài
-                            miền — nhấn{" "}
+                            miền - nhấn{" "}
                             <strong className="text-white">
                               Mở trang gốc ngay
                             </strong>{" "}

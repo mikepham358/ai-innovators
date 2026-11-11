@@ -64,7 +64,7 @@ export function PartsPromptBuilder() {
             Trình thiết kế câu lệnh Socratic (Chuẩn PARTS)
           </h2>
           <p className="mt-1 text-sm text-slate-300">
-            Thực hành viết prompt cho Chatbot học tập an toàn — tự động kiểm tra
+            Thực hành viết prompt cho Chatbot học tập an toàn - tự động kiểm tra
             dữ liệu cá nhân (Zero PII) trước khi sao chép sang Gemini / NotebookLM.
           </p>
         </div>
@@ -84,27 +84,27 @@ export function PartsPromptBuilder() {
         <div className="space-y-4">
           {[
             {
-              label: "P — Persona (Vai trò AI)",
+              label: "P - Persona (Vai trò AI)",
               value: persona,
               onChange: setPersona,
             },
             {
-              label: "A — Aim (Mục tiêu sư phạm)",
+              label: "A - Aim (Mục tiêu sư phạm)",
               value: aim,
               onChange: setAim,
             },
             {
-              label: "R — Recipients (Đối tượng người học)",
+              label: "R - Recipients (Đối tượng người học)",
               value: recipients,
               onChange: setRecipients,
             },
             {
-              label: "T — Theme (Bối cảnh & giới hạn)",
+              label: "T - Theme (Bối cảnh & giới hạn)",
               value: theme,
               onChange: setTheme,
             },
             {
-              label: "S — Structure (Định dạng phản hồi)",
+              label: "S - Structure (Định dạng phản hồi)",
               value: structure,
               onChange: setStructure,
             },
