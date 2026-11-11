@@ -12,13 +12,12 @@ import {
   MapPin,
   ShieldCheck,
   Sparkles,
-  Users,
 } from "lucide-react";
+import { DivisionsShowcase } from "@/components/DivisionsShowcase";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import {
   BLOOM_STAGES,
-  CLUB_DIVISIONS,
   CLUB_META,
   CLUB_PILLARS,
   HACKATHON_AGENDA,
@@ -398,7 +397,7 @@ export default function HomePage() {
 
         {/* 7 Divisions */}
         <section id="divisions" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-          <div className="max-w-2xl">
+          <div className="max-w-3xl">
             <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-fuchsia-300">
               Mô hình Classroom as a Career Lab • Zero PII
             </p>
@@ -406,43 +405,13 @@ export default function HomePage() {
               7 Ban Chuyên Trách (Gen 1.0)
             </h2>
             <p className="mt-2 text-sm text-slate-300 sm:text-base">
-              28 thành viên nòng cốt vận hành theo chuẩn tổ chức chuyên nghiệp,
-              bảo lưu tuyệt đối thông tin định danh cá nhân của học sinh.
+              Đội ngũ Ban Chủ Nhiệm, Trưởng ban và thành viên nòng cốt vận hành theo
+              chuẩn tổ chức chuyên nghiệp — trưng bày theo từng ban trong không gian
+              gương kính khói sang trọng, bảo lưu tuyệt đối thông tin định danh cá nhân.
             </p>
           </div>
 
-          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {CLUB_DIVISIONS.map((div) => (
-              <div
-                key={div.code}
-                className="glass-card rounded-2xl p-6 transition hover:border-blue-400/40"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="rounded-lg bg-gradient-to-r from-blue-600/30 to-violet-600/30 px-3 py-1 font-mono text-xs font-bold text-blue-200">
-                    BAN {div.code}
-                  </span>
-                  <Users className="h-4 w-4 text-slate-400" />
-                </div>
-                <h3 className="mt-3.5 font-[family-name:var(--font-space-grotesk)] text-lg font-bold text-white">
-                  {div.name}
-                </h3>
-                <p className="mt-1 text-xs leading-relaxed text-slate-300">
-                  {div.role}
-                </p>
-                <ul className="mt-4 space-y-1.5 border-t border-white/10 pt-3.5">
-                  {div.highlights.map((hl) => (
-                    <li
-                      key={hl}
-                      className="flex items-center gap-2 text-xs text-slate-200"
-                    >
-                      <span className="h-1.5 w-1.5 rounded-full bg-fuchsia-400" />
-                      <span>{hl}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+          <DivisionsShowcase />
 
           {/* Member Portal CTA */}
           <div className="neon-border glass-card mt-14 rounded-3xl p-8 sm:p-10">

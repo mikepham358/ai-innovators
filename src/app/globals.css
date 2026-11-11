@@ -77,3 +77,86 @@ body {
   background-clip: text;
   color: transparent;
 }
+
+.mirror-card {
+  position: relative;
+  background: linear-gradient(
+    155deg,
+    rgba(24, 31, 68, 0.78) 0%,
+    rgba(8, 11, 30, 0.94) 55%,
+    rgba(20, 26, 62, 0.82) 100%
+  );
+  border: 1px solid rgba(226, 232, 240, 0.16);
+  box-shadow:
+    0 24px 48px -18px rgba(2, 6, 23, 0.92),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    inset 0 -1px 0 rgba(165, 180, 252, 0.12);
+  backdrop-filter: blur(16px);
+  transition:
+    transform 380ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 320ms ease,
+    box-shadow 380ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.mirror-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(226, 232, 240, 0.38);
+  box-shadow:
+    0 30px 60px -16px rgba(59, 130, 246, 0.24),
+    0 18px 36px -14px rgba(217, 70, 239, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    inset 0 -1px 0 rgba(196, 181, 253, 0.22);
+}
+
+.mirror-card-executive {
+  border-color: rgba(224, 231, 255, 0.28);
+  box-shadow:
+    0 28px 60px -16px rgba(79, 70, 229, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.38),
+    inset 0 -1px 0 rgba(216, 180, 254, 0.22);
+}
+
+.mirror-glint {
+  background: linear-gradient(
+    132deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.05) 22%,
+    transparent 42%,
+    transparent 76%,
+    rgba(199, 210, 254, 0.07) 100%
+  );
+  pointer-events: none;
+}
+
+.mirror-sweep {
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.04) 36%,
+    rgba(255, 255, 255, 0.36) 50%,
+    rgba(219, 234, 254, 0.08) 64%,
+    transparent 100%
+  );
+  transform: translateX(-145%) skewX(-20deg);
+  transition: transform 850ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.group:hover .mirror-sweep {
+  transform: translateX(255%) skewX(-20deg);
+}
+
+.mirror-floor-reflection {
+  transform: scaleY(-1);
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.52) 0%, transparent 88%);
+  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.52) 0%, transparent 88%);
+  filter: blur(1.2px) brightness(0.82);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mirror-card,
+  .mirror-sweep {
+    transition: none;
+  }
+}
