@@ -860,7 +860,7 @@ export const ADVISOR_PROFILE: AdvisorProfileData = {
   ],
   highlights: [
     "Google Certified Innovator (#MEL26)",
-    "Nghiên cứu Scopus Q1 • IEEE iSTEM-Ed 2026",
-    "Khung An toàn AI do Học sinh Dẫn dắt (MIT)",
+    "Nghiên cứu Scopus • IEEE iSTEM-Ed 2026",
+    "Sáng lập Mô hình Bảo An AI (MIT License)",
   ],
 };
