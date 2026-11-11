@@ -46,7 +46,7 @@ async function PortalContent() {
   return (
     <div className="w-full space-y-8 px-4 py-10 sm:px-8 sm:py-12 lg:px-12 xl:px-16">
       {!configured ? (
-        <div className="rounded-2xl border border-amber-400/35 bg-amber-500/10 p-4 text-xs leading-relaxed text-amber-100 sm:text-sm">
+        <div className="mirror-subbox rounded-2xl border-amber-300/40 bg-amber-500/10 p-4 text-xs leading-relaxed text-amber-100 sm:text-sm">
           <strong>Chế độ xem trước Portal:</strong> Dự án chưa gắn{" "}
           <code>NEXT_PUBLIC_SUPABASE_URL</code> và{" "}
           <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code>. Sau khi kết nối Supabase
@@ -60,16 +60,20 @@ async function PortalContent() {
         <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-center">
           <div className="flex items-center gap-4">
             {avatarUrl ? (
-              <Image
-                src={avatarUrl}
-                alt={userName}
-                width={64}
-                height={64}
-                className="h-16 w-16 rounded-2xl border border-blue-400/40 object-cover"
-              />
+              <div className="mirror-frame relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border-blue-300/45">
+                <Image
+                  src={avatarUrl}
+                  alt={userName}
+                  width={64}
+                  height={64}
+                  className="h-full w-full object-cover"
+                />
+                <div aria-hidden="true" className="mirror-glint absolute inset-0" />
+              </div>
             ) : (
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-blue-400/40 bg-gradient-to-br from-blue-600/40 to-fuchsia-600/40 font-[family-name:var(--font-space-grotesk)] text-2xl font-bold text-white">
-                {userName.charAt(0).toUpperCase()}
+              <div className="mirror-frame flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border-blue-300/45 bg-gradient-to-br from-blue-600/45 to-fuchsia-600/45 font-[family-name:var(--font-space-grotesk)] text-2xl font-bold text-white">
+                <div aria-hidden="true" className="mirror-glint absolute inset-0" />
+                <span className="relative z-10">{userName.charAt(0).toUpperCase()}</span>
               </div>
             )}
 
@@ -138,7 +142,7 @@ async function PortalContent() {
           {WORKSHOPS.map((ws) => (
             <div
               key={ws.number}
-              className="rounded-xl border border-white/10 bg-slate-950/60 p-4"
+              className="mirror-subbox rounded-xl p-4"
             >
               <span className="font-mono text-xs font-semibold text-fuchsia-300">
                 {ws.number}

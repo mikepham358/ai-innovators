@@ -139,7 +139,7 @@ function PosterMirrorCard({
         } ${accentStyle.ring} flex w-full flex-col overflow-hidden rounded-2xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300`}
       >
         {/* Obsidian Mirror Poster Viewport */}
-        <div className="relative aspect-[1587/2245] w-full overflow-hidden bg-[#06091e]">
+        <div className="mirror-frame relative aspect-[1587/2245] w-full overflow-hidden rounded-t-[15px] border-x-0 border-t-0 bg-[#06091e]">
           <Image
             src={member.imageSrc}
             alt={`${member.name} - ${member.role}`}
@@ -217,9 +217,14 @@ function DivisionHeaderStrip({
 
   return (
     <div
-      className={`mirror-card overflow-hidden rounded-2xl bg-gradient-to-r ${accent.panelGlow} p-5 sm:p-6`}
+      className={`group mirror-card relative overflow-hidden rounded-2xl bg-gradient-to-r ${accent.panelGlow} p-5 sm:p-6`}
     >
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div aria-hidden="true" className="mirror-glint absolute inset-0" />
+      <div
+        aria-hidden="true"
+        className="mirror-sweep absolute inset-y-0 -left-1/2 w-1/2"
+      />
+      <div className="relative z-10 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="max-w-4xl">
           <div className="flex flex-wrap items-center gap-2.5">
             <span
@@ -281,9 +286,14 @@ function DivisionDossierCard({
 
   return (
     <div
-      className={`mirror-card flex h-full flex-col justify-between overflow-hidden rounded-2xl bg-gradient-to-br ${accent.panelGlow} p-5 sm:p-6`}
+      className={`group mirror-card relative flex h-full flex-col justify-between overflow-hidden rounded-2xl bg-gradient-to-br ${accent.panelGlow} p-5 sm:p-6`}
     >
-      <div>
+      <div aria-hidden="true" className="mirror-glint absolute inset-0" />
+      <div
+        aria-hidden="true"
+        className="mirror-sweep absolute inset-y-0 -left-1/2 w-1/2"
+      />
+      <div className="relative z-10">
         <div className="flex items-center justify-between gap-2">
           <span
             className={`rounded-lg border px-2.5 py-1 font-mono text-xs font-bold ${accent.badge}`}
@@ -306,7 +316,7 @@ function DivisionDossierCard({
           {division.role}
         </p>
         {division.partnerNote && (
-          <p className="mt-2.5 rounded-xl border border-cyan-300/20 bg-cyan-500/10 p-3 text-xs leading-relaxed text-cyan-100">
+          <p className="mirror-subbox mt-2.5 rounded-xl border-cyan-300/25 p-3 text-xs leading-relaxed text-cyan-100">
             {division.partnerNote}
           </p>
         )}
@@ -575,7 +585,7 @@ export function DivisionsShowcase() {
           </div>
 
           {/* 7. PH - Dedicated Brand & Visual Identity Studio */}
-          <div className="mirror-card rounded-3xl p-4 sm:p-6">
+          <div className="mirror-card overflow-hidden rounded-3xl p-4 sm:p-6">
             <div className="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-12">
               <div className="lg:col-span-5">
                 <DivisionDossierCard
@@ -587,8 +597,13 @@ export function DivisionsShowcase() {
                   }}
                 />
               </div>
-              <div className="mirror-card flex flex-col justify-between overflow-hidden rounded-2xl border-cyan-300/25 bg-gradient-to-br from-cyan-500/12 via-slate-900/80 to-indigo-950/90 p-6 lg:col-span-7">
-                <div>
+              <div className="group mirror-card relative flex flex-col justify-between overflow-hidden rounded-2xl border-cyan-300/25 bg-gradient-to-br from-cyan-500/12 via-slate-900/80 to-indigo-950/90 p-6 lg:col-span-7">
+                <div aria-hidden="true" className="mirror-glint absolute inset-0" />
+                <div
+                  aria-hidden="true"
+                  className="mirror-sweep absolute inset-y-0 -left-1/2 w-1/2"
+                />
+                <div className="relative z-10">
                   <div className="inline-flex items-center gap-2 rounded-full border border-cyan-300/30 bg-cyan-400/15 px-3 py-1 font-mono text-[10px] font-bold tracking-wider text-cyan-100">
                     <Palette className="h-3.5 w-3.5" />
                     STUDIO NHẬN DIỆN
@@ -632,8 +647,13 @@ export function DivisionsShowcase() {
       {/* VIEW 2: EXECUTIVE + HEADS COUNCIL (10 LEADERS) */}
       {activeView === "LEADERS" && (
         <div className="mt-10 space-y-8">
-          <div className="mirror-card rounded-2xl bg-gradient-to-r from-indigo-500/15 via-slate-200/8 to-fuchsia-500/15 p-5 sm:p-6">
-            <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="group mirror-card relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-500/15 via-slate-200/8 to-fuchsia-500/15 p-5 sm:p-6">
+            <div aria-hidden="true" className="mirror-glint absolute inset-0" />
+            <div
+              aria-hidden="true"
+              className="mirror-sweep absolute inset-y-0 -left-1/2 w-1/2"
+            />
+            <div className="relative z-10 flex flex-wrap items-center justify-between gap-4">
               <div>
                 <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-indigo-200">
                   Hội Đồng Lãnh Đạo Gen 1.0

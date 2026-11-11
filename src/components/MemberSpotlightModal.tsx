@@ -116,15 +116,19 @@ export function MemberSpotlightModal({
 
         {/* Poster Mirror Stage */}
         <div className="relative flex min-h-[380px] flex-1 items-center justify-center bg-[#05081d] p-4 sm:min-h-[520px] sm:p-6">
-          <div className="relative aspect-[1587/2245] h-[54vh] max-h-[640px] w-auto overflow-hidden rounded-2xl border border-white/20 shadow-[0_25px_70px_rgba(0,0,0,0.85)]">
+          <div className="group mirror-frame relative aspect-[1587/2245] h-[54vh] max-h-[640px] w-auto overflow-hidden rounded-2xl">
             <Image
               src={member.imageSrc}
               alt={`${member.name} - ${member.role}`}
               fill
               sizes="(max-width: 1024px) 80vw, 460px"
-              className="object-cover"
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
             />
             <div aria-hidden="true" className="mirror-glint absolute inset-0" />
+            <div
+              aria-hidden="true"
+              className="mirror-sweep absolute inset-y-0 -left-1/2 w-1/2"
+            />
           </div>
         </div>
 
@@ -158,7 +162,7 @@ export function MemberSpotlightModal({
             <p className="mt-1 text-sm text-slate-300">{member.roleVi}</p>
 
             {division && (
-              <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+              <div className="mirror-subbox mt-6 rounded-2xl p-4">
                 <div className="flex items-center gap-2 text-xs font-semibold text-white">
                   <Sparkles className="h-3.5 w-3.5 text-fuchsia-300" />
                   <span>{division.name}</span>

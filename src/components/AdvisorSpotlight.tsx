@@ -123,7 +123,7 @@ function GoogleEduDirectoryCanvas({
       </div>
 
       {/* Full-Width Official Classroom Banner */}
-      <div className="relative aspect-[3694/600] w-full overflow-hidden bg-[#e8eaed]">
+      <div className="mirror-frame relative aspect-[3694/600] w-full overflow-hidden bg-[#e8eaed]">
         <Image
           src={profile.bannerImage}
           alt={`Google for Education Directory Banner - ${profile.name}`}
@@ -131,6 +131,7 @@ function GoogleEduDirectoryCanvas({
           sizes="(max-width: 768px) 100vw, 92vw"
           className="object-cover object-center"
         />
+        <div aria-hidden="true" className="mirror-glint absolute inset-0 opacity-50" />
       </div>
 
       {/* Two-Column Directory Content */}
@@ -138,7 +139,7 @@ function GoogleEduDirectoryCanvas({
         {/* Left Identity & Badge Column */}
         <div className="shrink-0 sm:w-[27%] lg:w-[235px]">
           <div className="flex items-end gap-3 sm:block">
-            <div className="relative -mt-6 h-14 w-14 shrink-0 overflow-hidden rounded-full border-[3px] border-white bg-white shadow-md sm:-mt-12 sm:h-24 sm:w-24 sm:border-4 lg:-mt-16 lg:h-32 lg:w-32">
+            <div className="mirror-frame relative -mt-6 h-14 w-14 shrink-0 overflow-hidden rounded-full border-[3px] border-white bg-white ring-2 ring-cyan-200/50 sm:-mt-12 sm:h-24 sm:w-24 sm:border-4 lg:-mt-16 lg:h-32 lg:w-32">
               <Image
                 src={profile.portraitImage}
                 alt={profile.name}
@@ -146,6 +147,7 @@ function GoogleEduDirectoryCanvas({
                 sizes="128px"
                 className="object-cover"
               />
+              <div aria-hidden="true" className="mirror-glint absolute inset-0 opacity-60" />
             </div>
 
             <div className="pt-1 sm:pt-3">
@@ -367,7 +369,7 @@ export default function AdvisorSpotlight() {
           {profile.highlights.map((item) => (
             <span
               key={item}
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-200"
+              className="mirror-subbox inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium text-slate-200"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
               {item}
@@ -377,7 +379,7 @@ export default function AdvisorSpotlight() {
       </div>
 
       {/* 2.35 : 1 Google Directory Cinema Preview Window */}
-      <div className="mirror-card mirror-card-executive relative mt-8 overflow-hidden rounded-3xl shadow-[0_24px_80px_-24px_rgba(37,99,235,0.4)]">
+      <div className="group mirror-card mirror-card-executive relative mt-8 overflow-hidden rounded-3xl shadow-[0_24px_80px_-24px_rgba(37,99,235,0.4)]">
         {/* Luxury Browser Chrome Bar */}
         <div className="flex flex-wrap items-center justify-between gap-2.5 border-b border-white/12 bg-[#06091e]/95 px-3.5 py-2.5 sm:px-5 sm:py-3">
           <div className="flex items-center gap-2">
@@ -486,6 +488,12 @@ export default function AdvisorSpotlight() {
             <ExternalLink className="h-3 w-3" />
           </a>
         </div>
+      </div>
+
+      {/* Luxury Floor Mirror Horizon Under Cinema Frame */}
+      <div aria-hidden="true" className="px-6 sm:px-10">
+        <div className="mt-2 h-px bg-gradient-to-r from-transparent via-cyan-200/45 to-transparent" />
+        <div className="mirror-floor-reflection mx-2 h-5 overflow-hidden rounded-b-2xl bg-gradient-to-b from-slate-200/20 via-indigo-400/10 to-transparent" />
       </div>
 
       {/* Optional Full-Screen Cinema Modal */}

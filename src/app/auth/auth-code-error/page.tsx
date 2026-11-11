@@ -3,9 +3,9 @@ import { AlertTriangle, ArrowLeft, RotateCcw } from "lucide-react";
 
 export default function AuthCodeErrorPage() {
   return (
-    <main className="cyber-bg flex min-h-screen items-center justify-center px-4 py-16">
-      <div className="glass-card max-w-lg rounded-2xl p-8 text-center">
-        <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-fuchsia-500/30 bg-fuchsia-500/10 text-fuchsia-300">
+    <main className="flex min-h-screen items-center justify-center px-4 py-16">
+      <div className="glass-card neon-border max-w-lg rounded-2xl p-8 text-center">
+        <div className="mirror-subbox mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border-fuchsia-400/35 bg-fuchsia-500/15 text-fuchsia-300">
           <AlertTriangle className="h-7 w-7" />
         </div>
         <h1 className="text-2xl font-bold text-white">
@@ -15,7 +15,7 @@ export default function AuthCodeErrorPage() {
           Phiên xác thực OAuth đã hết hạn hoặc đường dẫn Redirect URL trên
           Supabase / Google Cloud Console chưa khớp với tên miền hiện tại.
         </p>
-        <div className="mt-6 rounded-xl border border-white/10 bg-slate-950/60 p-4 text-left text-xs text-slate-300">
+        <div className="mirror-subbox mt-6 rounded-xl p-4 text-left text-xs text-slate-300">
           <p className="font-semibold text-blue-300">Gợi ý kiểm tra nhanh:</p>
           <ul className="mt-2 list-disc space-y-1 pl-4">
             <li>

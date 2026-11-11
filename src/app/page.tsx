@@ -64,7 +64,7 @@ export default function HomePage() {
                   <strong className="text-emerald-300">Zero PII</strong>.
                 </p>
 
-                <blockquote className="mt-5 rounded-2xl border border-violet-400/25 bg-violet-950/30 p-4 text-sm italic leading-relaxed text-blue-100">
+                <blockquote className="mirror-subbox mt-5 rounded-2xl border-violet-300/30 p-4 text-sm italic leading-relaxed text-blue-100">
                   “{CLUB_META.coreQuestion}”
                 </blockquote>
 
@@ -90,7 +90,7 @@ export default function HomePage() {
                   {CLUB_META.standards.map((badge) => (
                     <span
                       key={badge}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-slate-900/70 px-3 py-1.5 text-xs font-medium text-slate-200"
+                      className="mirror-subbox inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-slate-200"
                     >
                       <ShieldCheck className="h-3.5 w-3.5 text-blue-300" />
                       {badge}
@@ -100,18 +100,23 @@ export default function HomePage() {
               </div>
 
               <div className="lg:col-span-6">
-                <div className="neon-border glass-card overflow-hidden rounded-3xl p-2.5">
-                  <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl bg-[#070a24]">
+                <div className="group mirror-card mirror-card-executive neon-border overflow-hidden rounded-3xl p-2.5">
+                  <div className="mirror-frame relative aspect-[16/9] w-full overflow-hidden rounded-2xl bg-[#070a24]">
                     <Image
                       src="/images/hero-banner.png"
                       alt="AI INNOVATORS - Safe AI, Stronger Minds Banner"
                       fill
                       priority
                       sizes="(max-width: 1024px) 100vw, 50vw"
-                      className="object-cover"
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                    />
+                    <div aria-hidden="true" className="mirror-glint absolute inset-0" />
+                    <div
+                      aria-hidden="true"
+                      className="mirror-sweep absolute inset-y-0 -left-1/2 w-1/2"
                     />
                   </div>
-                  <div className="flex flex-wrap items-center justify-between gap-2 px-3 pb-1.5 pt-3 text-xs text-slate-300">
+                  <div className="relative z-10 flex flex-wrap items-center justify-between gap-2 px-3 pb-1.5 pt-3 text-xs text-slate-300">
                     <span className="inline-flex items-center gap-1.5 font-medium text-blue-200">
                       <Calendar className="h-3.5 w-3.5 text-fuchsia-300" />
                       AI Learning Hackathon: {CLUB_META.hackathonDate}
@@ -120,6 +125,10 @@ export default function HomePage() {
                       80–100 Học sinh • 20 Đội thi
                     </span>
                   </div>
+                </div>
+                <div aria-hidden="true" className="px-6">
+                  <div className="mt-1.5 h-px bg-gradient-to-r from-transparent via-slate-200/40 to-transparent" />
+                  <div className="mirror-floor-reflection mx-2 h-4 overflow-hidden rounded-b-xl bg-gradient-to-b from-slate-200/18 via-indigo-400/10 to-transparent" />
                 </div>
               </div>
             </div>
@@ -135,16 +144,25 @@ export default function HomePage() {
         >
           <div className="grid items-center gap-10 lg:grid-cols-12 xl:gap-12">
             <div className="lg:col-span-5">
-              <div className="neon-border glass-card mx-auto max-w-sm overflow-hidden rounded-3xl p-2.5 lg:max-w-xl">
-                <div className="relative aspect-[1587/2245] w-full overflow-hidden rounded-2xl bg-[#070a24]">
+              <div className="group mirror-card mirror-card-executive neon-border mx-auto max-w-sm overflow-hidden rounded-3xl p-2.5 lg:max-w-xl">
+                <div className="mirror-frame relative aspect-[1587/2245] w-full overflow-hidden rounded-2xl bg-[#070a24]">
                   <Image
                     src="/images/club-poster.png"
                     alt="Poster chính thức CLB AI INNOVATORS - Safe AI, Stronger Minds"
                     fill
                     sizes="(max-width: 1024px) 90vw, 38vw"
-                    className="object-cover"
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                  />
+                  <div aria-hidden="true" className="mirror-glint absolute inset-0" />
+                  <div
+                    aria-hidden="true"
+                    className="mirror-sweep absolute inset-y-0 -left-1/2 w-1/2"
                   />
                 </div>
+              </div>
+              <div aria-hidden="true" className="mx-auto max-w-sm px-6 lg:max-w-xl">
+                <div className="mt-1.5 h-px bg-gradient-to-r from-transparent via-slate-200/40 to-transparent" />
+                <div className="mirror-floor-reflection mx-2 h-4 overflow-hidden rounded-b-xl bg-gradient-to-b from-slate-200/18 via-indigo-400/10 to-transparent" />
               </div>
             </div>
 
@@ -324,11 +342,11 @@ export default function HomePage() {
                 </h2>
               </div>
               <div className="flex flex-wrap gap-3 text-xs font-medium text-slate-200 sm:text-sm">
-                <span className="inline-flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/5 px-3.5 py-2">
+                <span className="mirror-subbox inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2">
                   <Calendar className="h-4 w-4 text-fuchsia-300" />
                   {CLUB_META.hackathonDate} ({CLUB_META.hackathonTime})
                 </span>
-                <span className="inline-flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/5 px-3.5 py-2">
+                <span className="mirror-subbox inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2">
                   <MapPin className="h-4 w-4 text-blue-300" />
                   {CLUB_META.hackathonLocation}
                 </span>
@@ -352,7 +370,7 @@ export default function HomePage() {
                   {HACKATHON_SCORECARD.map((item) => (
                     <div
                       key={item.label}
-                      className="rounded-xl border border-white/10 bg-slate-950/60 p-3.5"
+                      className="mirror-subbox rounded-xl p-3.5"
                     >
                       <div className="flex items-center justify-between gap-2">
                         <span className="text-sm font-semibold text-white">
@@ -382,7 +400,7 @@ export default function HomePage() {
                   {HACKATHON_AGENDA.map((slot) => (
                     <div
                       key={slot.time}
-                      className="flex flex-col gap-2 rounded-xl border border-white/10 bg-slate-950/60 p-4 sm:flex-row sm:items-start sm:gap-5"
+                      className="mirror-subbox flex flex-col gap-2 rounded-xl p-4 sm:flex-row sm:items-start sm:gap-5"
                     >
                       <div className="shrink-0 font-mono text-xs font-bold text-fuchsia-300 sm:w-32 sm:pt-0.5">
                         {slot.time}

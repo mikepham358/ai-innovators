@@ -69,7 +69,7 @@ export function PartsPromptBuilder() {
           </p>
         </div>
 
-        <label className="inline-flex cursor-pointer items-center gap-2.5 rounded-xl border border-violet-400/30 bg-violet-500/10 px-4 py-2.5 text-xs font-semibold text-violet-100">
+        <label className="mirror-subbox inline-flex cursor-pointer items-center gap-2.5 rounded-xl border-violet-300/35 px-4 py-2.5 text-xs font-semibold text-violet-100">
           <input
             type="checkbox"
             checked={socraticLock}
@@ -123,7 +123,7 @@ export function PartsPromptBuilder() {
           ))}
         </div>
 
-        <div className="flex flex-col justify-between rounded-2xl border border-white/10 bg-slate-950/75 p-5">
+        <div className="mirror-subbox flex flex-col justify-between rounded-2xl p-5">
           <div>
             <div className="flex items-center justify-between gap-2">
               <span className="font-mono text-xs font-semibold text-fuchsia-300">
@@ -142,12 +142,12 @@ export function PartsPromptBuilder() {
               )}
             </div>
 
-            <pre className="mt-4 whitespace-pre-wrap rounded-xl border border-white/10 bg-[#040613] p-4 font-mono text-xs leading-relaxed text-slate-200">
+            <pre className="mirror-frame mt-4 whitespace-pre-wrap rounded-xl bg-[#040613]/90 p-4 font-mono text-xs leading-relaxed text-slate-200">
               {generatedPrompt}
             </pre>
 
             {piiWarnings.length > 0 ? (
-              <div className="mt-3 rounded-xl border border-amber-400/30 bg-amber-500/10 p-3 text-xs text-amber-200">
+              <div className="mirror-subbox mt-3 rounded-xl border-amber-300/35 bg-amber-500/10 p-3 text-xs text-amber-200">
                 <p className="font-semibold">
                   Hãy gỡ thông tin định danh trước khi đưa vào AI:
                 </p>

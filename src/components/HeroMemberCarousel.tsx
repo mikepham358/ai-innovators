@@ -73,7 +73,7 @@ function CarouselTrackGroup({
               isLeader ? "mirror-card-executive" : ""
             } flex w-[148px] shrink-0 flex-col overflow-hidden rounded-2xl text-left transition duration-300 hover:-translate-y-1.5 sm:w-[168px] md:w-[186px]`}
           >
-            <div className="relative aspect-[1587/2245] w-full overflow-hidden bg-[#06091e]">
+            <div className="mirror-frame relative aspect-[1587/2245] w-full overflow-hidden rounded-t-[15px] border-x-0 border-t-0 bg-[#06091e]">
               <Image
                 src={member.imageSrc}
                 alt={isDuplicate ? "" : `${member.name} - ${member.role}`}

@@ -99,8 +99,9 @@ function CardMiniWireframe({ item }: { item: PrototypeItem }) {
 
   return (
     <div
-      className={`relative flex h-36 w-full flex-col justify-between overflow-hidden rounded-xl border border-white/15 bg-gradient-to-br ${theme.medallionGlow} p-3 shadow-inner`}
+      className={`mirror-frame relative flex h-36 w-full flex-col justify-between overflow-hidden rounded-xl bg-gradient-to-br ${theme.medallionGlow} p-3 shadow-inner`}
     >
+      <div aria-hidden="true" className="mirror-glint absolute inset-0 opacity-75" />
       {/* Mini browser top dots + live pill */}
       <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-2">
         <div className="flex items-center gap-1" aria-hidden="true">
@@ -284,7 +285,7 @@ export function PrototypeShowcase() {
 
                 {/* Card Bottom Action Seal + Inverted Corner Pip */}
                 <div className="relative z-10 mt-5 border-t border-white/12 pt-3.5">
-                  <div className="rounded-xl border border-white/10 bg-white/[0.04] p-2.5">
+                  <div className="mirror-subbox rounded-xl p-2.5">
                     <p className="font-mono text-[9px] font-bold uppercase tracking-widest text-blue-200">
                       {item.outcomeLabel}
                     </p>
@@ -457,7 +458,7 @@ export function PrototypeShowcase() {
             {/* Browser Stage Viewport */}
             <div className="flex-1 overflow-y-auto bg-[#030616] p-3 sm:p-4">
               <div
-                className={`mx-auto overflow-hidden rounded-2xl border border-white/15 bg-[#070b22] transition-all duration-300 ${
+                className={`mirror-frame mx-auto overflow-hidden rounded-2xl bg-[#070b22] transition-all duration-300 ${
                   viewportMode === "mobile" ? "max-w-[400px]" : "w-full"
                 }`}
               >
@@ -499,7 +500,7 @@ export function PrototypeShowcase() {
                     <div aria-hidden="true" className="mirror-glint absolute inset-0" />
 
                     <div className="relative z-10 space-y-5">
-                      <div className="flex flex-col justify-between gap-3 rounded-2xl border border-white/15 bg-slate-950/70 p-4 backdrop-blur-md sm:flex-row sm:items-center">
+                      <div className="mirror-subbox flex flex-col justify-between gap-3 rounded-2xl p-4 sm:flex-row sm:items-center">
                         <div>
                           <div className="flex flex-wrap items-center gap-2">
                             <span
@@ -562,7 +563,7 @@ export function PrototypeShowcase() {
                             </div>
 
                             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                              <div className="rounded-2xl border border-white/12 bg-slate-950/65 p-4 sm:p-5">
+                              <div className="mirror-subbox rounded-2xl p-4 sm:p-5">
                                 <div className="flex items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-wider text-blue-300">
                                   <Terminal className="h-3.5 w-3.5" />
                                   <span>Lệnh &amp; Ngữ cảnh Học sinh</span>
@@ -572,7 +573,7 @@ export function PrototypeShowcase() {
                                 </p>
                               </div>
 
-                              <div className="rounded-2xl border border-white/12 bg-white/[0.05] p-4 sm:p-5">
+                              <div className="mirror-subbox rounded-2xl p-4 sm:p-5">
                                 <div className="flex items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-wider text-fuchsia-300">
                                   <BookOpen className="h-3.5 w-3.5" />
                                   <span>Phản hồi Socratic của Mô hình</span>
@@ -597,7 +598,7 @@ export function PrototypeShowcase() {
                         {activeModel.highlights.map((hl) => (
                           <div
                             key={hl}
-                            className="rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-3 text-xs text-slate-200"
+                            className="mirror-subbox rounded-xl px-3.5 py-3 text-xs text-slate-200"
                           >
                             <span
                               className={`mr-2 inline-block h-1.5 w-1.5 rounded-full ${
@@ -610,7 +611,7 @@ export function PrototypeShowcase() {
                       </div>
                     </div>
 
-                    <div className="relative z-10 mt-6 rounded-2xl border border-white/15 bg-slate-950/75 p-4 backdrop-blur-md">
+                    <div className="mirror-subbox relative z-10 mt-6 rounded-2xl p-4">
                       <p className="font-mono text-[10px] font-semibold uppercase tracking-widest text-emerald-300">
                         {activeModel.outcomeLabel}
                       </p>

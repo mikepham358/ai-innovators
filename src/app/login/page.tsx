@@ -49,7 +49,7 @@ async function LoginCardContent({ searchParams }: LoginPageProps) {
       </p>
 
       {params.error ? (
-        <div className="mt-4 rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-200">
+        <div className="mirror-subbox mt-4 rounded-xl border-rose-400/40 bg-rose-500/15 p-3 text-xs text-rose-200">
           {params.error}
         </div>
       ) : null}
@@ -59,7 +59,7 @@ async function LoginCardContent({ searchParams }: LoginPageProps) {
       </div>
 
       {!configured ? (
-        <div className="mt-5 rounded-2xl border border-amber-400/30 bg-amber-500/10 p-4 text-xs leading-relaxed text-amber-100">
+        <div className="mirror-subbox mt-5 rounded-2xl border-amber-300/35 bg-amber-500/10 p-4 text-xs leading-relaxed text-amber-100">
           <div className="flex items-center gap-2 font-bold text-amber-200">
             <Info className="h-4 w-4 shrink-0" />
             <span>Chưa kích hoạt biến môi trường Supabase</span>
@@ -80,7 +80,7 @@ async function LoginCardContent({ searchParams }: LoginPageProps) {
         </div>
       ) : null}
 
-      <div className="mt-6 rounded-2xl border border-emerald-400/20 bg-emerald-500/5 p-4 text-xs leading-relaxed text-slate-300">
+      <div className="mirror-subbox mt-6 rounded-2xl border-emerald-300/30 bg-emerald-500/10 p-4 text-xs leading-relaxed text-slate-300">
         <div className="flex items-center gap-2 font-semibold text-emerald-300">
           <ShieldCheck className="h-4 w-4" />
           <span>Cam kết bảo mật Zero PII</span>

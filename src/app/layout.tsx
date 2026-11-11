@@ -4,6 +4,7 @@ import {
   Plus_Jakarta_Sans,
   Space_Grotesk,
 } from "next/font/google";
+import { CosmicGalaxyCanvas } from "@/components/CosmicGalaxyCanvas";
 import "./globals.css";
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -42,8 +43,6 @@ export const metadata: Metadata = {
       "_KlO4IuAnf87EFkL-OW67DCPfaTfglvNSdjtrH5rIq8",
   },
 };
-
-import { CosmicGalaxyCanvas } from "@/components/CosmicGalaxyCanvas";
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
