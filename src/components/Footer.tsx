@@ -39,6 +39,12 @@ export function Footer() {
           <Link href="/portal" className="hover:text-white">
             Cổng Thành Viên
           </Link>
+          <Link href="/privacy" className="hover:text-white">
+            Bảo mật
+          </Link>
+          <Link href="/terms" className="hover:text-white">
+            Điều khoản
+          </Link>
         </div>
       </div>
     </footer>
