@@ -83,13 +83,17 @@ function renderOverviewParagraph(
 
 function GoogleEduDirectoryCanvas({
   profile,
+  constrainedWidth = false,
 }: {
   profile: AdvisorProfileData;
+  constrainedWidth?: boolean;
 }) {
   return (
     <div
       style={{ aspectRatio: "2.35 / 1" }}
-      className="@container w-full overflow-y-auto overflow-x-hidden bg-white text-[#202124] shadow-inner"
+      className={`@container w-full overflow-y-auto overflow-x-hidden bg-white text-[#202124] shadow-inner ${
+        constrainedWidth ? "mx-auto max-w-[716px]" : ""
+      }`}
     >
       {/* Authentic Google for Education Directory Top Navigation */}
       <div className="sticky top-0 z-20 flex items-center justify-between gap-2 border-b border-[#dadce0] bg-white/98 px-3 py-2 backdrop-blur-sm @2xl:px-6 @2xl:py-2.5">
@@ -154,7 +158,7 @@ function GoogleEduDirectoryCanvas({
             </div>
 
             <div className="pt-1 @md:pt-2 @2xl:pt-3">
-              <h3 className="font-[family-name:var(--font-space-grotesk)] text-sm font-semibold leading-tight text-[#202124] @md:text-[15px] @2xl:text-[21px]">
+              <h3 className="font-[family-name:var(--font-space-grotesk)] text-sm font-semibold leading-tight text-[#202124] @md:text-[15px] @3xl:text-[21px]">
                 {profile.name}
               </h3>
               <p className="mt-0.5 inline-flex items-center gap-1 text-[11px] text-[#5f6368] @2xl:mt-1 @2xl:text-sm">
@@ -359,32 +363,32 @@ export default function AdvisorSpotlight() {
   return (
     <div id="advisor" className="mt-14 scroll-mt-24 border-t border-white/10 pt-12">
       {/* Split-Screen Showcase: Left Smart Info Panel / Right 2.35:1 Google Preview */}
-      <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-2 lg:items-center xl:gap-8">
+      <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-2 xl:gap-8">
         {/* Left Half: Smartly Structured Advisor Overview */}
-        <div className="mirror-card mirror-card-executive flex flex-col justify-between gap-4 rounded-3xl p-5 sm:p-6 xl:p-7">
+        <div className="mirror-card mirror-card-executive flex flex-col justify-between gap-3 rounded-3xl p-5 sm:p-6">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/35 bg-emerald-500/12 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-emerald-200">
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/35 bg-emerald-500/12 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-emerald-200">
               <Sparkles className="h-3.5 w-3.5 shrink-0 text-emerald-300" />
               <span>{profile.roleBadge}</span>
             </div>
 
-            <h3 className="mt-3.5 font-[family-name:var(--font-space-grotesk)] text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            <h3 className="mt-2.5 font-[family-name:var(--font-space-grotesk)] text-2xl font-bold tracking-tight text-white sm:text-3xl xl:text-[2rem]">
               <span className="bg-gradient-to-r from-cyan-200 via-blue-100 to-fuchsia-200 bg-clip-text text-transparent">
                 {profile.vietnameseName}
               </span>
             </h3>
 
-            <p className="mt-1 font-[family-name:var(--font-space-grotesk)] text-base font-semibold text-emerald-300 sm:text-lg">
+            <p className="mt-1 font-[family-name:var(--font-space-grotesk)] text-sm font-semibold text-emerald-300 sm:text-base">
               {profile.vietnameseTitle}
             </p>
 
-            <p className="mt-3 border-l-2 border-cyan-400/45 pl-3.5 text-sm leading-relaxed text-slate-300 sm:text-[15px]">
+            <p className="mt-2.5 border-l-2 border-cyan-400/45 pl-3 text-sm leading-relaxed text-slate-300">
               Đồng hành cố vấn học thuật và định hướng AI an toàn chuẩn quốc tế cho
               hệ sinh thái AI INNOVATORS Vinschool Grand Park.
             </p>
           </div>
 
-          <div className="space-y-2 border-t border-white/12 pt-3.5">
+          <div className="space-y-1.5 border-t border-white/12 pt-3">
             {profile.highlights.map((item, idx) => {
               const style =
                 HIGHLIGHT_STYLES[idx] ?? HIGHLIGHT_STYLES[HIGHLIGHT_STYLES.length - 1];
@@ -392,15 +396,15 @@ export default function AdvisorSpotlight() {
               return (
                 <div
                   key={item}
-                  className="mirror-subbox flex items-center gap-3 rounded-2xl px-3.5 py-2.5"
+                  className="mirror-subbox flex items-center gap-2.5 rounded-xl px-3 py-2"
                 >
                   <span
                     aria-hidden="true"
-                    className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border ${style.iconClasses}`}
+                    className={`inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border ${style.iconClasses}`}
                   >
-                    <Icon className="h-4 w-4" />
+                    <Icon className="h-3.5 w-3.5" />
                   </span>
-                  <span className="text-xs font-semibold leading-snug text-slate-100 sm:text-[13.5px]">
+                  <span className="text-xs font-semibold leading-snug text-slate-100 sm:text-[13px]">
                     {item}
                   </span>
                 </div>
@@ -410,71 +414,35 @@ export default function AdvisorSpotlight() {
         </div>
 
         {/* Right Half: Parallel 2.35 : 1 Google Directory Cinema Preview */}
-        <div className="flex flex-col justify-center">
-          <div className="group mirror-card mirror-card-executive relative overflow-hidden rounded-3xl shadow-[0_24px_80px_-24px_rgba(37,99,235,0.4)]">
-            {/* Compact Two-Tier Luxury Browser Chrome Bar */}
-            <div className="border-b border-white/12 bg-[#06091e]/95 px-3.5 py-2.5 sm:px-4">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <div className="hidden items-center gap-1.5 sm:flex" aria-hidden="true">
-                    <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
-                  </div>
-
-                  <div className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-500/12 px-2.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-emerald-200">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                    <span>
-                      {syncSource === "live" ? "Google Live Sync" : "Verified Official"}
-                    </span>
-                  </div>
-
-                  <span className="rounded-full border border-cyan-300/30 bg-cyan-500/12 px-2.5 py-0.5 font-mono text-[10px] font-semibold text-cyan-200">
-                    2.35 : 1
-                  </span>
+        <div className="relative flex flex-col">
+          <div className="group mirror-card mirror-card-executive relative flex h-full flex-col justify-between overflow-hidden rounded-3xl shadow-[0_24px_80px_-24px_rgba(37,99,235,0.4)]">
+            {/* Compact Single-Row Luxury Browser Chrome Bar */}
+            <div className="flex flex-wrap items-center gap-2 border-b border-white/12 bg-[#06091e]/95 px-3 py-2 xl:flex-nowrap">
+              <div className="flex items-center gap-1.5">
+                <div className="hidden items-center gap-1 2xl:flex" aria-hidden="true">
+                  <span className="h-2 w-2 rounded-full bg-[#ff5f57]" />
+                  <span className="h-2 w-2 rounded-full bg-[#febc2e]" />
+                  <span className="h-2 w-2 rounded-full bg-[#28c840]" />
                 </div>
 
-                <div className="flex items-center gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => void syncFromGoogleDirectory()}
-                    aria-label="Đồng bộ lại dữ liệu từ Google Edu Directory"
-                    className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/12 bg-white/[0.04] text-slate-300 transition hover:border-white/25 hover:text-white"
-                  >
-                    <RotateCw
-                      className={`h-3.5 w-3.5 ${isSyncing ? "animate-spin text-cyan-300" : ""}`}
-                    />
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setIsModalOpen(true)}
-                    aria-label="Phóng to cửa sổ xem trước 2.35:1"
-                    className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/12 bg-white/[0.04] text-slate-300 transition hover:border-white/25 hover:text-white"
-                  >
-                    <Maximize2 className="h-3.5 w-3.5" />
-                  </button>
-
-                  <a
-                    href={profile.profileUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-xl border border-blue-300/45 bg-gradient-to-r from-[#1a73e8] to-indigo-600 px-3 py-1.5 text-xs font-bold text-white shadow-sm transition hover:brightness-110"
-                  >
-                    <span>Mở trang gốc</span>
-                    <ExternalLink className="h-3.5 w-3.5" />
-                  </a>
+                <div className="inline-flex items-center gap-1 rounded-full border border-emerald-400/30 bg-emerald-500/12 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-emerald-200">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                  <span>{syncSource === "live" ? "Live" : "Official"}</span>
                 </div>
+
+                <span className="hidden rounded-full border border-cyan-300/30 bg-cyan-500/12 px-2 py-0.5 font-mono text-[10px] font-semibold text-cyan-200 sm:inline-block">
+                  2.35:1
+                </span>
               </div>
 
               {/* Live Google Directory Address Pill */}
-              <div className="mt-2 flex min-w-0 items-center gap-2 rounded-xl border border-white/12 bg-slate-900/90 px-3 py-1.5">
-                <Lock className="h-3.5 w-3.5 shrink-0 text-emerald-400" />
+              <div className="flex min-w-0 flex-1 items-center gap-1.5 rounded-lg border border-white/12 bg-slate-900/90 px-2.5 py-1">
+                <Lock className="h-3 w-3 shrink-0 text-emerald-400" />
                 <a
                   href={profile.profileUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="truncate font-mono text-[11px] text-slate-200 transition hover:text-white"
+                  className="truncate font-mono text-[10.5px] text-slate-200 transition hover:text-white"
                 >
                   {profile.profileUrl}
                 </a>
@@ -482,28 +450,62 @@ export default function AdvisorSpotlight() {
                   type="button"
                   onClick={handleCopyUrl}
                   aria-label="Sao chép liên kết Google Edu Directory"
-                  className="ml-auto inline-flex shrink-0 items-center gap-1 rounded-md border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+                  className="ml-auto inline-flex shrink-0 items-center gap-1 rounded border border-white/10 bg-white/5 px-1.5 py-0.5 text-[10px] font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
                 >
                   {copiedUrl ? (
                     <>
-                      <Check className="h-3 w-3 text-emerald-400" />
-                      <span className="text-emerald-300">Đã chép</span>
+                      <Check className="h-2.5 w-2.5 text-emerald-400" />
+                      <span className="text-emerald-300">Chép</span>
                     </>
                   ) : (
                     <>
-                      <Copy className="h-3 w-3" />
+                      <Copy className="h-2.5 w-2.5" />
                       <span>Chép</span>
                     </>
                   )}
                 </button>
               </div>
+
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => void syncFromGoogleDirectory()}
+                  aria-label="Đồng bộ lại dữ liệu từ Google Edu Directory"
+                  className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-white/12 bg-white/[0.04] text-slate-300 transition hover:border-white/25 hover:text-white"
+                >
+                  <RotateCw
+                    className={`h-3 w-3 ${isSyncing ? "animate-spin text-cyan-300" : ""}`}
+                  />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(true)}
+                  aria-label="Phóng to cửa sổ xem trước 2.35:1"
+                  className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-white/12 bg-white/[0.04] text-slate-300 transition hover:border-white/25 hover:text-white"
+                >
+                  <Maximize2 className="h-3 w-3" />
+                </button>
+
+                <a
+                  href={profile.profileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 rounded-lg border border-blue-300/45 bg-gradient-to-r from-[#1a73e8] to-indigo-600 px-2.5 py-1 text-[11px] font-bold whitespace-nowrap text-white shadow-sm transition hover:brightness-110"
+                >
+                  <span>Mở gốc</span>
+                  <ExternalLink className="h-3 w-3" />
+                </a>
+              </div>
             </div>
 
             {/* Strict 2.35 : 1 CinemaScope Google Website Preview Canvas */}
-            <GoogleEduDirectoryCanvas profile={profile} />
+            <div className="flex flex-1 items-center justify-center bg-[#06091e]">
+              <GoogleEduDirectoryCanvas profile={profile} constrainedWidth />
+            </div>
 
-            {/* Subtle Interactive Footnote Bar */}
-            <div className="flex flex-wrap items-center justify-between gap-2 border-t border-white/10 bg-[#050819]/95 px-4 py-2 text-[11px] text-slate-400">
+            {/* Compact Single-Line Footnote Bar */}
+            <div className="flex flex-wrap items-center justify-between gap-2 border-t border-white/10 bg-[#050819]/95 px-3.5 py-1.5 text-[10.5px] text-slate-400">
               <span>
                 Cuộn khung 2.35 : 1 •{" "}
                 <strong className="text-slate-200">{profile.name}</strong> (
@@ -524,10 +526,13 @@ export default function AdvisorSpotlight() {
             </div>
           </div>
 
-          {/* Luxury Floor Mirror Horizon Under Cinema Frame */}
-          <div aria-hidden="true" className="px-4 sm:px-8">
+          {/* Non-layout-shifting Floor Mirror Horizon */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none px-4 sm:px-8 lg:absolute lg:inset-x-0 lg:-bottom-5"
+          >
             <div className="mt-2 h-px bg-gradient-to-r from-transparent via-cyan-200/45 to-transparent" />
-            <div className="mirror-floor-reflection mx-2 h-4 overflow-hidden rounded-b-2xl bg-gradient-to-b from-slate-200/20 via-indigo-400/10 to-transparent" />
+            <div className="mirror-floor-reflection mx-2 h-3.5 overflow-hidden rounded-b-2xl bg-gradient-to-b from-slate-200/20 via-indigo-400/10 to-transparent" />
           </div>
         </div>
       </div>
