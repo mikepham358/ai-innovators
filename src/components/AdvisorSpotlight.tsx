@@ -359,9 +359,7 @@ export default function AdvisorSpotlight() {
 
           <p className="mt-2 text-sm leading-relaxed text-slate-300 sm:text-base">
             Đồng hành cố vấn học thuật và định hướng AI an toàn chuẩn quốc tế cho
-            hệ sinh thái AI INNOVATORS Vinschool Grand Park - hiển thị trực tiếp
-            bản xem trước tỉ lệ khung ảnh điện ảnh <strong className="text-white">2.35 : 1</strong>{" "}
-            từ hồ sơ chính thức trên Google for Education Directory.
+            hệ sinh thái AI INNOVATORS Vinschool Grand Park.
           </p>
         </div>
 
