@@ -36,9 +36,11 @@ export const metadata: Metadata = {
       "Cộng đồng học sinh tiên phong về AI có trách nhiệm, tư duy Socratic và Zero PII tại Vinschool Grand Park.",
     images: ["/images/hero-banner.png"],
   },
-  verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
-    ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
-    : undefined,
+  verification: {
+    google:
+      process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ||
+      "_KlO4IuAnf87EFkL-OW67DCPfaTfglvNSdjtrH5rIq8",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
