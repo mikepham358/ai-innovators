@@ -21,8 +21,10 @@ function InstagramGlyph({ className }: { className?: string }) {
 
 export function InstagramButton({
   variant = "hero",
+  className = "",
 }: {
   variant?: "navbar" | "hero" | "footer";
+  className?: string;
 }) {
   if (variant === "navbar") {
     return (
@@ -58,10 +60,12 @@ export function InstagramButton({
       href={CLUB_META.instagramUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="group inline-flex items-center gap-2 rounded-xl border border-fuchsia-400/35 bg-gradient-to-r from-[#f58529]/15 via-[#dd2a7b]/18 to-[#8134af]/20 px-5 py-3.5 text-sm font-semibold text-white shadow-lg shadow-fuchsia-900/20 transition hover:border-pink-300/65 hover:from-[#f58529]/25 hover:via-[#dd2a7b]/28 hover:to-[#8134af]/30"
+      className={`group inline-flex items-center gap-1.5 rounded-xl border border-fuchsia-400/35 bg-gradient-to-r from-[#f58529]/15 via-[#dd2a7b]/18 to-[#8134af]/20 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-fuchsia-900/20 transition hover:border-pink-300/65 hover:from-[#f58529]/25 hover:via-[#dd2a7b]/28 hover:to-[#8134af]/30 ${className}`}
     >
-      <InstagramGlyph className="h-4 w-4 text-pink-300 transition group-hover:scale-110 group-hover:text-pink-200" />
-      <span>Instagram {CLUB_META.instagramHandle}</span>
+      <InstagramGlyph className="h-3.5 w-3.5 shrink-0 text-pink-300 transition group-hover:scale-110 group-hover:text-pink-200 min-[1400px]:h-4 min-[1400px]:w-4" />
+      <span className="text-center leading-tight">
+        Instagram {CLUB_META.instagramHandle}
+      </span>
     </a>
   );
 }

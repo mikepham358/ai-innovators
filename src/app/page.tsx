@@ -64,38 +64,45 @@ export default function HomePage() {
                   <strong className="text-emerald-300">Zero PII</strong>.
                 </p>
 
-                <blockquote className="mirror-subbox mt-5 rounded-2xl border-violet-300/30 p-4 text-sm italic leading-relaxed text-blue-100">
-                  “{CLUB_META.coreQuestion}”
-                </blockquote>
+                <div className="mt-5 flex w-full flex-col gap-2.5">
+                  <blockquote className="mirror-subbox w-full rounded-xl border-violet-300/30 px-4 py-3.5 text-sm italic leading-relaxed text-blue-100">
+                    “{CLUB_META.coreQuestion}”
+                  </blockquote>
 
-                <div className="mt-7 flex flex-wrap items-center gap-3.5">
-                  <Link
-                    href="/login"
-                    className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 via-violet-600 to-fuchsia-600 px-6 py-3.5 text-sm font-semibold text-white shadow-xl shadow-violet-700/30 transition hover:brightness-110"
-                  >
-                    <LogIn className="h-4 w-4" />
-                    <span>Đăng nhập Thành viên (Gmail)</span>
-                  </Link>
-                  <Link
-                    href="#workshops"
-                    className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10"
-                  >
-                    <span>Khám phá 4 Workshop</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                  <InstagramButton variant="hero" />
-                </div>
-
-                <div className="mt-7 flex flex-wrap gap-2">
-                  {CLUB_META.standards.map((badge) => (
-                    <span
-                      key={badge}
-                      className="mirror-subbox inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-slate-200"
+                  {/* 3 aligned action boxes spanning 100% row width */}
+                  <div className="flex w-full flex-col gap-2 lg:grid lg:grid-cols-3 xl:flex xl:flex-row xl:items-stretch xl:gap-2">
+                    <Link
+                      href="/login"
+                      className="inline-flex w-full items-center justify-center gap-1 rounded-xl bg-gradient-to-r from-blue-600 via-violet-600 to-fuchsia-600 px-2.5 py-2.5 text-center text-[11px] font-semibold leading-tight text-white shadow-xl shadow-violet-700/30 transition hover:brightness-110 xl:w-auto xl:flex-auto xl:whitespace-nowrap xl:px-2 min-[1400px]:gap-1.5 min-[1400px]:px-3 min-[1400px]:py-3 min-[1400px]:text-xs"
                     >
-                      <ShieldCheck className="h-3.5 w-3.5 text-blue-300" />
-                      {badge}
-                    </span>
-                  ))}
+                      <LogIn className="h-3.5 w-3.5 shrink-0 min-[1400px]:h-4 min-[1400px]:w-4" />
+                      <span>Đăng nhập Thành viên (Gmail)</span>
+                    </Link>
+                    <Link
+                      href="#workshops"
+                      className="inline-flex w-full items-center justify-center gap-1 rounded-xl border border-white/20 bg-white/5 px-2.5 py-2.5 text-center text-[11px] font-semibold leading-tight text-white transition hover:bg-white/10 xl:w-auto xl:flex-auto xl:whitespace-nowrap xl:px-2 min-[1400px]:gap-1.5 min-[1400px]:px-3 min-[1400px]:py-3 min-[1400px]:text-xs"
+                    >
+                      <span>Khám phá 4 Workshop</span>
+                      <ArrowRight className="h-3.5 w-3.5 shrink-0 min-[1400px]:h-4 min-[1400px]:w-4" />
+                    </Link>
+                    <InstagramButton
+                      variant="hero"
+                      className="w-full justify-center gap-1 px-2.5 py-2.5 text-[11px] xl:w-auto xl:flex-auto xl:whitespace-nowrap xl:px-2 min-[1400px]:gap-1.5 min-[1400px]:px-3 min-[1400px]:py-3 min-[1400px]:text-xs"
+                    />
+                  </div>
+
+                  {/* 4 aligned standard boxes spanning 100% row width */}
+                  <div className="grid w-full grid-cols-2 items-stretch gap-2 xl:flex xl:flex-row xl:gap-1.5 min-[1400px]:gap-2">
+                    {CLUB_META.standards.map((badge) => (
+                      <span
+                        key={badge}
+                        className="mirror-subbox inline-flex h-full w-full items-center justify-center gap-1 rounded-xl px-2 py-2.5 text-center text-[10px] font-medium leading-tight text-slate-200 xl:w-auto xl:flex-auto xl:whitespace-nowrap xl:px-1.5 min-[1400px]:gap-1.5 min-[1400px]:px-2.5 min-[1400px]:text-[11px]"
+                      >
+                        <ShieldCheck className="h-3 w-3 shrink-0 text-blue-300 min-[1400px]:h-3.5 min-[1400px]:w-3.5" />
+                        <span>{badge}</span>
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
 
