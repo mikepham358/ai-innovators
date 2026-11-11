@@ -140,7 +140,6 @@ export function HeroMemberCarousel() {
   const userMutedRef = useRef(false);
   const isPausedRef = useRef(false);
   const hasCrescendoStartedRef = useRef(false);
-  const isStartingAudioRef = useRef(false);
 
   const { divisionByCode, accentByCode } = useMemo(() => {
     const divMap = {} as Record<DivisionCode, (typeof CLUB_DIVISIONS)[number]>;
@@ -207,10 +206,18 @@ export function HeroMemberCarousel() {
   }, []);
 
   // Default beat ON when opening the web, ramping cleanly 20% -> 80% over 10s
-  // (unlocks immediately on first interaction if browser autoplay policy holds AudioContext)
+  // Works synchronously on mount AND catches late AudioContext wakeup + every valid user gesture
   useEffect(() => {
     let active = true;
-    const unlockEvents = ["pointerdown", "touchstart", "keydown", "click"] as const;
+    const unlockEvents = [
+      "pointerdown",
+      "mousedown",
+      "pointerup",
+      "mouseup",
+      "touchend",
+      "click",
+      "keydown",
+    ] as const;
 
     const detachUnlock = () => {
       for (const evt of unlockEvents) {
@@ -218,36 +225,21 @@ export function HeroMemberCarousel() {
       }
     };
 
-    async function launchInitialBeat() {
-      if (
-        userMutedRef.current ||
-        isPausedRef.current ||
-        hasCrescendoStartedRef.current ||
-        isStartingAudioRef.current
-      ) {
-        return false;
+    const engine = ensureEngine();
+    engine.setBpm(108);
+
+    engine.onPlayStateChange((playing) => {
+      if (!active) return;
+      if (playing) {
+        hasCrescendoStartedRef.current = true;
+        setMusicPlaying(true);
+        setPendingAutoBeat(false);
+        setVolumePct(engine.getVolumePercent() || 20);
+        detachUnlock();
+      } else {
+        setMusicPlaying(false);
       }
-      isStartingAudioRef.current = true;
-      try {
-        const engine = ensureEngine();
-        engine.setBpm(108);
-        const started = await engine.startOrResume({
-          startLevel: 0.2,
-          targetLevel: 0.8,
-          rampSeconds: 10,
-        });
-        if (started && active) {
-          hasCrescendoStartedRef.current = true;
-          setMusicPlaying(true);
-          setPendingAutoBeat(false);
-          setVolumePct(20);
-          detachUnlock();
-        }
-        return started;
-      } finally {
-        isStartingAudioRef.current = false;
-      }
-    }
+    });
 
     function handleFirstGesture(event: Event) {
       if (userMutedRef.current || isPausedRef.current || hasCrescendoStartedRef.current) {
@@ -263,26 +255,45 @@ export function HeroMemberCarousel() {
         // Explicit button clicks handle toggle directly without double-firing
         return;
       }
-      void launchInitialBeat();
+      engine.nudgeResume();
     }
 
-    void launchInitialBeat().then((started) => {
-      if (!started && active && !userMutedRef.current) {
-        for (const evt of unlockEvents) {
-          window.addEventListener(evt, handleFirstGesture, {
-            capture: true,
-            passive: true,
-          });
-        }
+    function handleVisibilityOrPageShow() {
+      if (
+        document.visibilityState === "visible" &&
+        !userMutedRef.current &&
+        !isPausedRef.current &&
+        !engine.getIsPlaying()
+      ) {
+        engine.nudgeResume();
       }
+    }
+
+    for (const evt of unlockEvents) {
+      window.addEventListener(evt, handleFirstGesture, {
+        capture: true,
+        passive: true,
+      });
+    }
+    document.addEventListener("visibilitychange", handleVisibilityOrPageShow);
+    window.addEventListener("pageshow", handleVisibilityOrPageShow);
+
+    // Arm and start right on page mount (never aborts on slow hardware wakeup)
+    void engine.startOrResume({
+      startLevel: 0.2,
+      targetLevel: 0.8,
+      rampSeconds: 10,
     });
 
     return () => {
       active = false;
       detachUnlock();
+      document.removeEventListener("visibilitychange", handleVisibilityOrPageShow);
+      window.removeEventListener("pageshow", handleVisibilityOrPageShow);
       if (decayTimerRef.current !== null) {
         window.clearTimeout(decayTimerRef.current);
       }
+      engineRef.current?.onPlayStateChange(null);
       engineRef.current?.dispose();
       engineRef.current = null;
     };
@@ -302,27 +313,21 @@ export function HeroMemberCarousel() {
 
   async function startMusicIfAllowed(bpm: number, forceUnmute = false) {
     if (!forceUnmute && userMutedRef.current) return;
-    if (isStartingAudioRef.current) return;
-    isStartingAudioRef.current = true;
-    try {
-      const engine = ensureEngine();
-      engine.setBpm(bpm);
-      const isInitial = !hasCrescendoStartedRef.current;
-      const started = await engine.startOrResume(
-        isInitial
-          ? { startLevel: 0.2, targetLevel: 0.8, rampSeconds: 10 }
-          : { startLevel: 0.28, targetLevel: 0.8, rampSeconds: 0.45 },
-      );
-      if (started) {
-        if (isInitial) {
-          hasCrescendoStartedRef.current = true;
-        }
-        setMusicPlaying(true);
-        setPendingAutoBeat(false);
-        setVolumePct(engine.getVolumePercent() || 20);
+    const engine = ensureEngine();
+    engine.setBpm(bpm);
+    const isInitial = !hasCrescendoStartedRef.current;
+    const started = await engine.startOrResume(
+      isInitial
+        ? { startLevel: 0.2, targetLevel: 0.8, rampSeconds: 10 }
+        : { startLevel: 0.28, targetLevel: 0.8, rampSeconds: 0.45 },
+    );
+    if (started) {
+      if (isInitial) {
+        hasCrescendoStartedRef.current = true;
       }
-    } finally {
-      isStartingAudioRef.current = false;
+      setMusicPlaying(true);
+      setPendingAutoBeat(false);
+      setVolumePct(engine.getVolumePercent() || 20);
     }
   }
 
@@ -437,11 +442,9 @@ export function HeroMemberCarousel() {
                 : "Bật nhạc nền theo nhịp Hall of Innovators"
             }
             className={`group inline-flex items-center gap-2 rounded-lg border px-2.5 py-1.5 font-mono text-[11px] font-semibold transition ${
-              musicPlaying
-                ? "border-cyan-300/45 bg-gradient-to-r from-cyan-500/20 via-blue-500/20 to-fuchsia-500/20 text-cyan-100 shadow-[0_0_18px_rgba(34,211,238,0.22)]"
-                : pendingAutoBeat && !userMuted
-                  ? "border-cyan-300/35 bg-cyan-500/10 text-cyan-100 hover:border-cyan-300/60 hover:bg-cyan-500/20"
-                  : "border-white/15 bg-white/[0.05] text-slate-200 hover:border-cyan-300/40 hover:bg-white/10 hover:text-white"
+              musicPlaying || (pendingAutoBeat && !userMuted)
+                ? "border-cyan-300/45 bg-gradient-to-r from-cyan-500/20 via-blue-500/20 to-fuchsia-500/20 text-cyan-100 shadow-[0_0_18px_rgba(34,211,238,0.22)] hover:brightness-110"
+                : "border-white/15 bg-white/[0.05] text-slate-200 hover:border-cyan-300/40 hover:bg-white/10 hover:text-white"
             }`}
           >
             {musicPlaying ? (
@@ -470,7 +473,7 @@ export function HeroMemberCarousel() {
                         ? "bg-cyan-300"
                         : "bg-fuchsia-300"
                       : pendingAutoBeat && !userMuted
-                        ? "bg-cyan-400/50"
+                        ? "animate-pulse bg-cyan-300/80"
                         : "bg-slate-500"
                   }`}
                 />
@@ -482,7 +485,7 @@ export function HeroMemberCarousel() {
                 ? `Beat ${currentBpm} BPM • ${volumePct}%`
                 : userMuted
                   ? "Đã tắt nhạc"
-                  : "Auto Beat 20→80%"}
+                  : `Beat ${currentBpm} BPM • 20→80%`}
             </span>
           </button>
 

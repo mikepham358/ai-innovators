@@ -69,11 +69,17 @@ export class HallSynthEngine {
   private pauseTimeoutId: number | null = null;
 
   private isPlayingState = false;
+  private isArmed = false;
   private bpm = 108;
   private currentStep = 0;
   private barIndex = 0;
   private nextNoteTime = 0;
   private listener: BeatPulseListener | null = null;
+  private playStateListener: ((playing: boolean) => void) | null = null;
+
+  private pendingStartLevel = 0.2;
+  private pendingTargetLevel = 0.8;
+  private pendingRampSeconds = 10;
 
   private rampStartVal = 0.2;
   private rampTargetVal = 0.8;
@@ -82,6 +88,10 @@ export class HallSynthEngine {
 
   public onBeat(listener: BeatPulseListener | null) {
     this.listener = listener;
+  }
+
+  public onPlayStateChange(listener: ((playing: boolean) => void) | null) {
+    this.playStateListener = listener;
   }
 
   public setBpm(nextBpm: number) {
@@ -160,46 +170,38 @@ export class HallSynthEngine {
       this.masterGain = master;
       this.delaySend = delaySend;
       this.noiseBuffer = buffer;
+
+      // Start immediately whenever the browser hardware stream finishes waking up to "running"
+      ctx.addEventListener("statechange", () => {
+        if (
+          (ctx.state as AudioContextState) === "running" &&
+          this.isArmed &&
+          !this.isPlayingState
+        ) {
+          this.beginPlaybackNow();
+        }
+      });
     }
 
     return this.ctx;
   }
 
-  public async startOrResume(
-    options: SynthStartOptions = {},
-  ): Promise<boolean> {
-    const {
-      startLevel = 0.2,
-      targetLevel = 0.8,
-      rampSeconds = 10,
-    } = options;
-
-    const ctx = this.ensureContext();
-    if (!ctx || !this.masterGain) return false;
-
-    if (this.pauseTimeoutId !== null) {
-      window.clearTimeout(this.pauseTimeoutId);
-      this.pauseTimeoutId = null;
+  private beginPlaybackNow() {
+    if (
+      !this.ctx ||
+      !this.masterGain ||
+      (this.ctx.state as AudioContextState) !== "running" ||
+      !this.isArmed ||
+      this.isPlayingState
+    ) {
+      return;
     }
 
-    // Invoke resume synchronously within the current call stack (important for Safari/iOS gestures)
-    if (ctx.state === "suspended") {
-      const resumeAttempt = ctx.resume().catch(() => undefined);
-      await Promise.race([
-        resumeAttempt,
-        new Promise<void>((resolve) => window.setTimeout(resolve, 140)),
-      ]);
-    }
+    const clampedStart = Math.max(0.0001, Math.min(1, this.pendingStartLevel));
+    const clampedTarget = Math.max(0.0001, Math.min(1, this.pendingTargetLevel));
+    const safeRamp = Math.max(0, this.pendingRampSeconds);
 
-    if ((ctx.state as AudioContextState) !== "running") {
-      return false;
-    }
-
-    const clampedStart = Math.max(0.0001, Math.min(1, startLevel));
-    const clampedTarget = Math.max(0.0001, Math.min(1, targetLevel));
-    const safeRamp = Math.max(0, rampSeconds);
-
-    const now = ctx.currentTime;
+    const now = this.ctx.currentTime;
     this.masterGain.gain.cancelScheduledValues(now);
     this.masterGain.gain.setValueAtTime(clampedStart, now);
     if (safeRamp > 0.02) {
@@ -216,18 +218,117 @@ export class HallSynthEngine {
     this.rampDurationSec = safeRamp;
     this.rampStartTime = now;
 
-    if (!this.isPlayingState) {
-      this.isPlayingState = true;
-      this.nextNoteTime = now + 0.04;
-      this.timerId = window.setInterval(() => this.scheduler(), 25);
+    this.isPlayingState = true;
+    this.nextNoteTime = now + 0.04;
+    this.timerId = window.setInterval(() => this.scheduler(), 25);
+
+    const cb = this.playStateListener;
+    if (cb) {
+      queueMicrotask(() => {
+        if (this.isPlayingState) {
+          cb(true);
+        }
+      });
+    }
+  }
+
+  public nudgeResume(): boolean {
+    if (!this.isArmed) return false;
+    const ctx = this.ensureContext();
+    if (!ctx) return false;
+
+    if ((ctx.state as AudioContextState) === "running") {
+      this.beginPlaybackNow();
+      return this.isPlayingState;
     }
 
-    return true;
+    if (ctx.state === "suspended") {
+      void ctx
+        .resume()
+        .then(() => {
+          if (
+            (ctx.state as AudioContextState) === "running" &&
+            this.isArmed &&
+            !this.isPlayingState
+          ) {
+            this.beginPlaybackNow();
+          }
+        })
+        .catch(() => undefined);
+    }
+
+    return false;
+  }
+
+  public async startOrResume(
+    options: SynthStartOptions = {},
+  ): Promise<boolean> {
+    const {
+      startLevel = 0.2,
+      targetLevel = 0.8,
+      rampSeconds = 10,
+    } = options;
+
+    this.pendingStartLevel = startLevel;
+    this.pendingTargetLevel = targetLevel;
+    this.pendingRampSeconds = rampSeconds;
+    this.isArmed = true;
+
+    const ctx = this.ensureContext();
+    if (!ctx || !this.masterGain) return false;
+
+    if (this.pauseTimeoutId !== null) {
+      window.clearTimeout(this.pauseTimeoutId);
+      this.pauseTimeoutId = null;
+    }
+
+    if ((ctx.state as AudioContextState) === "running") {
+      if (this.isPlayingState) {
+        // Re-apply ramp cleanly if already running (e.g. unpausing)
+        const now = ctx.currentTime;
+        const clampedStart = Math.max(0.0001, Math.min(1, startLevel));
+        const clampedTarget = Math.max(0.0001, Math.min(1, targetLevel));
+        const safeRamp = Math.max(0, rampSeconds);
+        this.masterGain.gain.cancelScheduledValues(now);
+        this.masterGain.gain.setValueAtTime(clampedStart, now);
+        if (safeRamp > 0.02) {
+          this.masterGain.gain.linearRampToValueAtTime(
+            clampedTarget,
+            now + safeRamp,
+          );
+        } else {
+          this.masterGain.gain.setValueAtTime(clampedTarget, now);
+        }
+        this.rampStartVal = clampedStart;
+        this.rampTargetVal = clampedTarget;
+        this.rampDurationSec = safeRamp;
+        this.rampStartTime = now;
+        return true;
+      }
+      this.beginPlaybackNow();
+      return true;
+    }
+
+    // Resume without arbitrary timeout: statechange + .then() start audio the instant hardware wakes up
+    try {
+      await ctx.resume();
+    } catch {
+      return false;
+    }
+
+    if ((ctx.state as AudioContextState) === "running" && this.isArmed) {
+      this.beginPlaybackNow();
+      return true;
+    }
+
+    return false;
   }
 
   public pause() {
+    this.isArmed = false;
     if (!this.isPlayingState) return;
     this.isPlayingState = false;
+    this.playStateListener?.(false);
 
     if (this.timerId !== null) {
       window.clearInterval(this.timerId);
