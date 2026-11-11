@@ -67,6 +67,32 @@ export interface TeamMember {
   isFeaturedVisualLead?: boolean;
 }
 
+export interface PrototypeWorkflowStep {
+  id: string;
+  tabLabel: string;
+  promptExample: string;
+  assistantBehavior: string;
+  pedagogyFocus: string;
+}
+
+export interface PrototypeItem {
+  id: string;
+  number: string;
+  title: string;
+  shortTitle: string;
+  subject: string;
+  platform: string;
+  platformBadge: string;
+  description: string;
+  url: string;
+  outcomeLabel: "Kết quả đạt được" | "Giá trị thực tiễn";
+  outcome: string;
+  accent: "violet" | "blue" | "emerald" | "fuchsia";
+  embedMode: "iframe" | "google-protected";
+  highlights: string[];
+  workflowSteps?: PrototypeWorkflowStep[];
+}
+
 export const CLUB_META = {
   name: "AI INNOVATORS",
   school: "Trường PTLC Vinschool Grand Park",
@@ -554,5 +580,183 @@ export const TEAM_MEMBERS: TeamMember[] = [
     divisionCode: "HR",
     tier: "head",
     imageSrc: "/images/team/hr-01-tran-thi-khanh-ngoc.jpg",
+  },
+];
+
+export const SAMPLE_PROTOTYPES: PrototypeItem[] = [
+  {
+    id: "model-1",
+    number: "01",
+    title: "Trợ lý Học tập & Phân tích Tài liệu môn Ngữ văn trên NotebookLM",
+    shortTitle: "NotebookLM Ngữ văn",
+    subject: "Ngữ văn",
+    platform: "Google NotebookLM",
+    platformBadge: "Walled-Garden Sources",
+    description:
+      "Sử dụng NotebookLM để tổng hợp tài liệu, trích dẫn nguồn chính xác, hỗ trợ tóm tắt kiến thức và tạo câu hỏi phản biện tự động mà không làm suy giảm khả năng tự tư duy.",
+    url: "https://notebook.google.com/notebook/98fb439e-528f-4ec4-ac05-d01731f71c9d",
+    outcomeLabel: "Kết quả đạt được",
+    outcome:
+      "Tăng khả năng tự học cá nhân hóa, giúp học sinh chủ động kiểm chứng thông tin thay vì tiếp nhận thụ động.",
+    accent: "violet",
+    embedMode: "google-protected",
+    highlights: [
+      "Tổng hợp tài liệu theo kho nguồn khép kín",
+      "Trích dẫn nguồn chính xác từng đoạn văn bản",
+      "Tạo câu hỏi phản biện Socratic tự động",
+    ],
+    workflowSteps: [
+      {
+        id: "sources",
+        tabLabel: "1. Khóa nguồn học liệu",
+        promptExample:
+          "Tổng hợp hệ thống luận điểm chính từ bộ ngữ liệu Ngữ văn đã nạp và gắn số trích dẫn cho từng ý.",
+        assistantBehavior:
+          "Hệ thống chỉ truy xuất từ nguồn tài liệu do học sinh tải lên (Walled-Garden), trả lời kèm số trích dẫn để đối chiếu trực tiếp đoạn gốc.",
+        pedagogyFocus: "Chủ động kiểm chứng nguồn (Groundedness)",
+      },
+      {
+        id: "summary",
+        tabLabel: "2. Tóm tắt có cấu trúc",
+        promptExample:
+          "Hệ thống hóa bố cục, nghệ thuật tu từ và mạch cảm xúc cốt lõi của văn bản thành dàn ý ghi nhớ.",
+        assistantBehavior:
+          "Chuyển hóa tài liệu dài thành bản đồ kiến thức súc tích theo từng tầng phân tích, tránh viết hộ bài văn hoàn chỉnh.",
+        pedagogyFocus: "Nâng cao khả năng tổng hợp kiến thức",
+      },
+      {
+        id: "socratic",
+        tabLabel: "3. Câu hỏi phản biện",
+        promptExample:
+          "Đặt 3 câu hỏi mở yêu cầu học sinh tự bảo vệ quan điểm cá nhân trước khi chốt nhận định văn học.",
+        assistantBehavior:
+          "Tự động sinh bộ câu hỏi gợi mở và phản biện đa chiều, giúp học sinh tự rèn lập luận thay vì phụ thuộc đáp án mẫu.",
+        pedagogyFocus: "Bảo vệ tư duy độc lập — Safe AI",
+      },
+    ],
+  },
+  {
+    id: "model-2",
+    number: "02",
+    title: "Trợ lý Ôn luyện SAT & Tiếng Anh trên Gemini Canvas",
+    shortTitle: "Gemini Canvas SAT",
+    subject: "SAT",
+    platform: "Google Gemini Canvas",
+    platformBadge: "Prompt Engineering Canvas",
+    description:
+      "Thiết kế các quy trình prompt (Prompt Engineering) hỗ trợ phân tích cấu trúc bài tập SAT, giải thích ngữ cảnh từ vựng và chấm chữa bài viết theo tiêu chí rõ ràng.",
+    url: "https://gemini.google.com/share/d/1rpz01le249eJlWnDOM_Upcjlnpvarn_U?usp=sharing",
+    outcomeLabel: "Kết quả đạt được",
+    outcome:
+      "Giúp học sinh làm chủ kỹ năng ra lệnh cho AI và tự định hình tiến trình học tập.",
+    accent: "blue",
+    embedMode: "google-protected",
+    highlights: [
+      "Quy trình Prompt Engineering cấu trúc rõ ràng",
+      "Phân tích cấu trúc bài tập & bẫy câu hỏi SAT",
+      "Chấm chữa bài viết & giải thích ngữ cảnh từ vựng",
+    ],
+    workflowSteps: [
+      {
+        id: "structure",
+        tabLabel: "1. Phân tích cấu trúc SAT",
+        promptExample:
+          "Xác định dạng câu hỏi SAT Reading & Writing, bóc tách thành phần ngữ pháp và cấu trúc logic của câu.",
+        assistantBehavior:
+          "Canvas chia khung soạn thảo thành vùng đề bài và vùng phân tích từng mệnh đề, chỉ rõ vai trò liên kết trước khi gợi ý hướng chọn.",
+        pedagogyFocus: "Làm chủ kỹ thuật thiết kế câu lệnh",
+      },
+      {
+        id: "vocab",
+        tabLabel: "2. Ngữ cảnh từ vựng",
+        promptExample:
+          "Giải thích sắc thái nghĩa của từ học thuật ngay trong ngữ cảnh đoạn văn và phân biệt các phương án gây nhiễu.",
+        assistantBehavior:
+          "Đối chiếu sắc thái từ vựng theo văn cảnh thực tế thay vì dịch máy từng từ đơn lẻ, giúp nhớ sâu và vận dụng chính xác.",
+        pedagogyFocus: "Hiểu bản chất ngôn ngữ học thuật",
+      },
+      {
+        id: "rubric",
+        tabLabel: "3. Chấm chữa theo tiêu chí",
+        promptExample:
+          "Đánh giá đoạn viết tiếng Anh theo rubric 4 tiêu chí (lập luận, liên kết, từ vựng, ngữ pháp) và gợi ý chỉnh sửa.",
+        assistantBehavior:
+          "Hiển thị nhận xét cụ thể bên cạnh bản nháp trong Gemini Canvas để học sinh tự biên tập và nâng cấp bài viết của chính mình.",
+        pedagogyFocus: "Tự định hình tiến trình ôn luyện",
+      },
+    ],
+  },
+  {
+    id: "model-3",
+    number: "03",
+    title: "Hệ thống Luyện tập & Ngân hàng Bài tập SAT Tương tác (SAT Practice Platform)",
+    shortTitle: "SAT Practice Web App",
+    subject: "Ôn luyện SAT / Tiếng Anh",
+    platform: "Web Application",
+    platformBadge: "Live Interactive Embed",
+    description:
+      "Mô hình hỗ trợ học sinh tự ôn luyện SAT cá nhân hóa, cho phép người học lựa chọn môn học, chủ đề trọng tâm (focus skills), thiết lập độ khó (difficulty) và số lượng câu hỏi luyện tập theo mục tiêu riêng.",
+    url: "https://sat-pratice.vercel.app/practice.html",
+    outcomeLabel: "Giá trị thực tiễn",
+    outcome:
+      "Giúp học sinh chủ động kiểm soát lộ trình ôn thi, tự đo lường mức độ tiến bộ mà không rơi vào trạng thái thụ động hay phụ thuộc vào đáp án có sẵn.",
+    accent: "emerald",
+    embedMode: "iframe",
+    highlights: [
+      "Tùy chỉnh môn học & chủ đề trọng tâm (Focus Skills)",
+      "Thiết lập mức độ khó (Difficulty) & số lượng câu hỏi",
+      "Chạy tương tác trực tiếp ngay trong trình duyệt web",
+    ],
+  },
+  {
+    id: "model-4",
+    number: "04",
+    title: "Trợ lý Sáng tạo & Hướng dẫn Giải đề SAT Thông minh trên Gemini (Gemini AI Learning Partner)",
+    shortTitle: "Gemini Learning Partner",
+    subject: "SAT / Ngôn ngữ",
+    platform: "Google Gemini AI",
+    platformBadge: "Socratic Learning Partner",
+    description:
+      "Mô hình trợ lý tích hợp trên nền tảng Google Gemini, áp dụng kỹ thuật Prompting (Prompt Engineering) để hỗ trợ học sinh phân tích ngữ cảnh bài đọc SAT, giải thích logic đáp án và định hướng tư duy phân tích ngôn ngữ.",
+    url: "https://gemini.google.com/u/5/share/d/1I-kTWNS0iCyn1NAMjgg2aHLUBpU72jfa",
+    outcomeLabel: "Giá trị thực tiễn",
+    outcome:
+      "Minh chứng khả năng làm chủ công cụ AI thế hệ mới, biến AI từ công cụ cho đáp án thụ động thành một “đối tác tư duy” (learning partner) giúp học sinh phản biện và đào sâu kiến thức.",
+    accent: "fuchsia",
+    embedMode: "google-protected",
+    highlights: [
+      "Phân tích ngữ cảnh bài đọc SAT chuyên sâu",
+      "Giải thích logic loại trừ & lập luận đáp án",
+      "Đóng vai đối tác tư duy (Learning Partner) Socratic",
+    ],
+    workflowSteps: [
+      {
+        id: "context",
+        tabLabel: "1. Đọc ngữ cảnh & Luận điểm",
+        promptExample:
+          "Đóng vai Learning Partner, hướng dẫn mình xác định câu chủ đề và ý đồ tác giả trước khi nhìn vào 4 lựa chọn.",
+        assistantBehavior:
+          "Gemini dẫn dắt học sinh tự tóm tắt câu hỏi trọng tâm của đoạn đọc và khoanh vùng từ khóa chứng cứ trong văn bản.",
+        pedagogyFocus: "Chống lệ thuộc đáp án thụ động",
+      },
+      {
+        id: "logic",
+        tabLabel: "2. Phân tích logic đáp án",
+        promptExample:
+          "Đưa gợi ý lập luận giúp mình tự chỉ ra điểm sai logic của các phương án gây nhiễu thay vì nói ngay đáp án đúng.",
+        assistantBehavior:
+          "Giải thích cơ chế bẫy thường gặp (suy diễn quá đà, sai phạm vi, đảo ngược nhân quả) để học sinh tự loại trừ phương án nhiễu.",
+        pedagogyFocus: "Tư duy phản biện & loại trừ chính xác",
+      },
+      {
+        id: "reflect",
+        tabLabel: "3. Đào sâu ngôn ngữ",
+        promptExample:
+          "Gợi mở 1 câu hỏi kiểm tra lại cách hiểu của mình để đảm bảo mình giải thích được vì sao chọn phương án này.",
+        assistantBehavior:
+          "Khép lại phiên ôn bằng bước tự kiểm nghiệm (metacognition), củng cố khả năng tự giải thích trước dạng bài tương tự.",
+        pedagogyFocus: "Biến AI thành đối tác tư duy",
+      },
+    ],
   },
 ];

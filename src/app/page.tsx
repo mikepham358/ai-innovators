@@ -16,6 +16,7 @@ import {
 import { DivisionsShowcase } from "@/components/DivisionsShowcase";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
+import { PrototypeShowcase } from "@/components/PrototypeShowcase";
 import {
   BLOOM_STAGES,
   CLUB_META,
@@ -392,6 +393,30 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Sample Prototypes & Live Showcase */}
+        <section
+          id="prototypes"
+          className="border-y border-white/10 bg-white/[0.02] py-16 sm:py-20"
+        >
+          <div className="mx-auto max-w-6xl px-4 sm:px-6">
+            <div className="max-w-3xl">
+              <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">
+                Sản Phẩm Mẫu • Minh Chứng Năng Lực Thực Thi
+              </p>
+              <h2 className="mt-2 font-[family-name:var(--font-space-grotesk)] text-3xl font-bold text-white sm:text-4xl">
+                Các Mô Hình &amp; Sản Phẩm AI Đã Triển Khai
+              </h2>
+              <p className="mt-2 text-sm text-slate-300 sm:text-base">
+                Danh mục các sản phẩm và nguyên mẫu thực tế mà thành viên câu lạc
+                bộ đã ứng dụng AI để sáng tạo trong các môn học trước đó — chọn từng
+                mô hình để xem bản preview web tích hợp ngay bên cạnh.
+              </p>
+            </div>
+
+            <PrototypeShowcase />
           </div>
         </section>
 

@@ -7,6 +7,7 @@ const NAV_LINKS = [
   { href: "/#mission", label: "Sứ mệnh" },
   { href: "/#workshops", label: "4 Workshop" },
   { href: "/#hackathon", label: "Hackathon 28/11" },
+  { href: "/#prototypes", label: "Sản phẩm mẫu" },
   { href: "/#divisions", label: "7 Chuyên ban" },
 ];
 
