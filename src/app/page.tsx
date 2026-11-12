@@ -361,7 +361,7 @@ export default function HomePage() {
 
             <div className="mt-10 grid gap-8 lg:grid-cols-12">
               {/* Scorecard */}
-              <div className="glass-card flex flex-col justify-between rounded-2xl p-6 lg:col-span-5">
+              <div className="glass-card flex flex-col justify-between rounded-2xl p-6 lg:sticky lg:top-24 lg:col-span-5 lg:self-start">
                 <div>
                   <div className="flex items-center gap-2.5">
                     <Award className="h-5 w-5 text-fuchsia-300" />
