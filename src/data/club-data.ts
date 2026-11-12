@@ -558,13 +558,13 @@ export const TEAM_MEMBERS: TeamMember[] = [
     imageSrc: "/images/team/er-02-ta-quoc-duy-binh.jpg",
   },
   {
-    id: "log-01-vu-thanh-chuong",
-    name: "VU THANH CHUONG",
+    id: "log-01-vu-nguyen-thanh-chuong",
+    name: "VU NGUYEN THANH CHUONG",
     role: "HEAD OF LOG",
     roleVi: "Trưởng Ban Hậu Cần & Tài Chính",
     divisionCode: "LOG",
     tier: "head",
-    imageSrc: "/images/team/log-01-vu-thanh-chuong.jpg",
+    imageSrc: "/images/team/log-01-vu-nguyen-thanh-chuong-30a.jpg",
   },
   {
     id: "log-02-le-hoang-minh-quan",
