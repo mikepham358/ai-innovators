@@ -396,31 +396,37 @@ export default function HomePage() {
               </div>
 
               {/* Day Agenda */}
-              <div className="glass-card rounded-2xl p-6 lg:col-span-7">
-                <div className="flex items-center gap-2.5">
-                  <Layers className="h-5 w-5 text-blue-300" />
-                  <h3 className="font-[family-name:var(--font-space-grotesk)] text-xl font-bold text-white">
-                    Lịch trình Chính thức (23/01/2027)
-                  </h3>
+              <div className="glass-card flex flex-col justify-between rounded-2xl p-6 lg:col-span-7">
+                <div>
+                  <div className="flex items-center gap-2.5">
+                    <Layers className="h-5 w-5 text-blue-300" />
+                    <h3 className="font-[family-name:var(--font-space-grotesk)] text-xl font-bold text-white">
+                      Lịch trình Chính thức (23/01/2027)
+                    </h3>
+                  </div>
+                  <p className="mt-2 text-xs leading-relaxed text-slate-300">
+                    Timeline điều phối chi tiết từ lúc tập hợp Ekip (06:30) đến
+                    Lễ Bế mạc &amp; Trao giải (15:35).
+                  </p>
                 </div>
-                <div className="mt-5 space-y-3">
-                  {HACKATHON_AGENDA.map((slot) => (
+                <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                  {HACKATHON_AGENDA.map((slot, index) => (
                     <div
                       key={slot.time}
-                      className="mirror-subbox flex flex-col gap-2 rounded-xl p-3.5 sm:flex-row sm:items-start sm:gap-5"
+                      className="mirror-subbox flex flex-col justify-between gap-2 rounded-xl p-3.5"
                     >
-                      <div className="shrink-0 font-mono text-xs font-bold text-fuchsia-300 sm:w-32 sm:pt-0.5">
-                        {slot.time}
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex flex-wrap items-center justify-between gap-2">
-                          <h4 className="text-sm font-bold text-white">
-                            {slot.title}
-                          </h4>
-                          <span className="rounded-md border border-white/10 bg-white/5 px-2 py-0.5 text-[11px] text-blue-200">
+                      <div>
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="font-mono text-xs font-bold text-fuchsia-300">
+                            {String(index + 1).padStart(2, "0")} • {slot.time}
+                          </span>
+                          <span className="rounded-md border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] text-blue-200">
                             {slot.lead}
                           </span>
                         </div>
+                        <h4 className="mt-1.5 text-sm font-bold text-white">
+                          {slot.title}
+                        </h4>
                         <p className="mt-1 text-xs leading-relaxed text-slate-300">
                           {slot.detail}
                         </p>
