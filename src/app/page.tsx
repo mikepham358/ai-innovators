@@ -360,7 +360,10 @@ export default function HomePage() {
             </div>
 
             <div className="mt-10 grid gap-8 lg:grid-cols-12">
-              {/* Scorecard */}
+              {/* Dual-Audience Smart Agenda (Left) */}
+              <HackathonAgendaBoard />
+
+              {/* Scorecard (Right) */}
               <div className="glass-card flex flex-col justify-between rounded-2xl p-6 lg:sticky lg:top-24 lg:col-span-5 lg:self-start">
                 <div>
                   <div className="flex items-center gap-2.5">
@@ -453,9 +456,6 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
-
-              {/* Dual-Audience Smart Agenda */}
-              <HackathonAgendaBoard />
             </div>
           </div>
         </section>

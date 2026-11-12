@@ -71,7 +71,7 @@ const BTC_ROLE_STYLES: Record<
 const BTC_FILTER_ORDER: BtcRoleCode[] = ["CORE", "PR", "LOG", "DOT", "HR", "ER"];
 
 export function HackathonAgendaBoard() {
-  const [audience, setAudience] = useState<HackathonAudience>("btc");
+  const [audience, setAudience] = useState<HackathonAudience>("participant");
   const [btcFilter, setBtcFilter] = useState<BtcFilter>("ALL");
   const [expandedRoleCards, setExpandedRoleCards] = useState<Record<string, boolean>>({});
   const [expandAllRoles, setExpandAllRoles] = useState(false);
@@ -145,21 +145,6 @@ export function HackathonAgendaBoard() {
             <button
               type="button"
               role="tab"
-              aria-selected={audience === "btc"}
-              onClick={() => setAudience("btc")}
-              className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold transition ${
-                audience === "btc"
-                  ? "bg-gradient-to-r from-violet-600/80 via-indigo-600/80 to-blue-600/80 text-white shadow-[0_0_20px_rgba(99,102,241,0.35)]"
-                  : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
-              }`}
-            >
-              <ShieldCheck className="h-3.5 w-3.5 text-fuchsia-200" />
-              <span>Ban Tổ Chức (BTC)</span>
-            </button>
-
-            <button
-              type="button"
-              role="tab"
               aria-selected={audience === "participant"}
               onClick={() => setAudience("participant")}
               className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold transition ${
@@ -170,6 +155,21 @@ export function HackathonAgendaBoard() {
             >
               <GraduationCap className="h-3.5 w-3.5 text-cyan-200" />
               <span>Thí sinh tham gia</span>
+            </button>
+
+            <button
+              type="button"
+              role="tab"
+              aria-selected={audience === "btc"}
+              onClick={() => setAudience("btc")}
+              className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold transition ${
+                audience === "btc"
+                  ? "bg-gradient-to-r from-violet-600/80 via-indigo-600/80 to-blue-600/80 text-white shadow-[0_0_20px_rgba(99,102,241,0.35)]"
+                  : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
+              }`}
+            >
+              <ShieldCheck className="h-3.5 w-3.5 text-fuchsia-200" />
+              <span>Ban Tổ Chức (BTC)</span>
             </button>
           </div>
         </div>
