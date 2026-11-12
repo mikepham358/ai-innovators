@@ -7,7 +7,6 @@ import {
   Calendar,
   CheckCircle2,
   Cpu,
-  Layers,
   LogIn,
   MapPin,
   ShieldCheck,
@@ -16,6 +15,7 @@ import {
 import AdvisorSpotlight from "@/components/AdvisorSpotlight";
 import { DivisionsShowcase } from "@/components/DivisionsShowcase";
 import { Footer } from "@/components/Footer";
+import { HackathonAgendaBoard } from "@/components/HackathonAgendaBoard";
 import { HeroMemberCarousel } from "@/components/HeroMemberCarousel";
 import { InstagramButton } from "@/components/InstagramButton";
 import { Navbar } from "@/components/Navbar";
@@ -24,7 +24,6 @@ import {
   BLOOM_STAGES,
   CLUB_META,
   CLUB_PILLARS,
-  HACKATHON_AGENDA,
   HACKATHON_SCORECARD,
   WORKSHOPS,
 } from "@/data/club-data";
@@ -362,79 +361,101 @@ export default function HomePage() {
 
             <div className="mt-10 grid gap-8 lg:grid-cols-12">
               {/* Scorecard */}
-              <div className="glass-card rounded-2xl p-6 lg:col-span-5">
-                <div className="flex items-center gap-2.5">
-                  <Award className="h-5 w-5 text-fuchsia-300" />
-                  <h3 className="font-[family-name:var(--font-space-grotesk)] text-xl font-bold text-white">
-                    5 Tiêu chí Chấm điểm (Scorecard)
-                  </h3>
-                </div>
-                <p className="mt-2 text-xs leading-relaxed text-slate-300">
-                  Trợ lý AI được đánh giá không phải vì giải nhanh nhất, mà vì khả
-                  năng dẫn dắt học sinh tự suy nghĩ an toàn.
-                </p>
-                <div className="mt-5 space-y-3.5">
-                  {HACKATHON_SCORECARD.map((item) => (
-                    <div
-                      key={item.label}
-                      className="mirror-subbox rounded-xl p-3.5"
-                    >
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-sm font-semibold text-white">
-                          {item.label}
-                        </span>
-                        <span className="rounded-md bg-gradient-to-r from-blue-600/40 to-fuchsia-600/40 px-2.5 py-0.5 font-mono text-xs font-bold text-blue-100">
-                          {item.weight}
-                        </span>
-                      </div>
-                      <p className="mt-1 text-xs text-slate-300">
-                        {item.detail}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Day Agenda */}
-              <div className="glass-card flex flex-col justify-between rounded-2xl p-6 lg:col-span-7">
+              <div className="glass-card flex flex-col justify-between rounded-2xl p-6 lg:col-span-5">
                 <div>
                   <div className="flex items-center gap-2.5">
-                    <Layers className="h-5 w-5 text-blue-300" />
+                    <Award className="h-5 w-5 text-fuchsia-300" />
                     <h3 className="font-[family-name:var(--font-space-grotesk)] text-xl font-bold text-white">
-                      Lịch trình Chính thức (23/01/2027)
+                      5 Tiêu chí Chấm điểm (Scorecard)
                     </h3>
                   </div>
                   <p className="mt-2 text-xs leading-relaxed text-slate-300">
-                    Timeline điều phối chi tiết từ lúc tập hợp Ekip (06:30) đến
-                    Lễ Bế mạc &amp; Trao giải (15:35).
+                    Trợ lý AI được đánh giá không phải vì giải nhanh nhất, mà vì khả
+                    năng dẫn dắt học sinh tự suy nghĩ an toàn.
                   </p>
-                </div>
-                <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                  {HACKATHON_AGENDA.map((slot, index) => (
-                    <div
-                      key={slot.time}
-                      className="mirror-subbox flex flex-col justify-between gap-2 rounded-xl p-3.5"
-                    >
-                      <div>
+                  <div className="mt-5 space-y-3.5">
+                    {HACKATHON_SCORECARD.map((item) => (
+                      <div
+                        key={item.label}
+                        className="mirror-subbox rounded-xl p-3.5"
+                      >
                         <div className="flex items-center justify-between gap-2">
-                          <span className="font-mono text-xs font-bold text-fuchsia-300">
-                            {String(index + 1).padStart(2, "0")} • {slot.time}
+                          <span className="text-sm font-semibold text-white">
+                            {item.label}
                           </span>
-                          <span className="rounded-md border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] text-blue-200">
-                            {slot.lead}
+                          <span className="rounded-md bg-gradient-to-r from-blue-600/40 to-fuchsia-600/40 px-2.5 py-0.5 font-mono text-xs font-bold text-blue-100">
+                            {item.weight}
                           </span>
                         </div>
-                        <h4 className="mt-1.5 text-sm font-bold text-white">
-                          {slot.title}
-                        </h4>
-                        <p className="mt-1 text-xs leading-relaxed text-slate-300">
-                          {slot.detail}
+                        <p className="mt-1 text-xs text-slate-300">
+                          {item.detail}
                         </p>
                       </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Event Operations Summary */}
+                <div className="mt-6 border-t border-white/10 pt-5">
+                  <div className="mb-3 flex items-center justify-between gap-2">
+                    <span className="font-mono text-[11px] font-semibold uppercase tracking-wider text-blue-200">
+                      Thông số Vận hành • 23/01/2027
+                    </span>
+                    <span className="rounded-md border border-white/10 bg-white/5 px-2 py-0.5 font-mono text-[10px] text-slate-300">
+                      2 Chế độ • 10 Lượt Pitching
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2.5">
+                    <div className="mirror-subbox rounded-xl p-3">
+                      <p className="font-mono text-[10px] uppercase tracking-wider text-fuchsia-300">
+                        Khung giờ BTC
+                      </p>
+                      <p className="mt-1 text-xs font-bold text-white">
+                        06:30 - 16:00+
+                      </p>
+                      <p className="mt-0.5 text-[11px] text-slate-300">
+                        9 chặng • Ekip 5 ban
+                      </p>
                     </div>
-                  ))}
+                    <div className="mirror-subbox rounded-xl p-3">
+                      <p className="font-mono text-[10px] uppercase tracking-wider text-cyan-300">
+                        Khung giờ Thí sinh
+                      </p>
+                      <p className="mt-1 text-xs font-bold text-white">
+                        07:25 - 15:35
+                      </p>
+                      <p className="mt-0.5 text-[11px] text-slate-300">
+                        8 chặng • 150p thi đấu
+                      </p>
+                    </div>
+                    <div className="mirror-subbox rounded-xl p-3">
+                      <p className="font-mono text-[10px] uppercase tracking-wider text-blue-300">
+                        Không gian &amp; Pitching
+                      </p>
+                      <p className="mt-1 text-xs font-bold text-white">
+                        8 Phòng thi • 10 Lượt
+                      </p>
+                      <p className="mt-0.5 text-[11px] text-slate-300">
+                        Sảnh &amp; Hội trường
+                      </p>
+                    </div>
+                    <div className="mirror-subbox rounded-xl p-3">
+                      <p className="font-mono text-[10px] uppercase tracking-wider text-emerald-300">
+                        Điều phối &amp; Chấm điểm
+                      </p>
+                      <p className="mt-1 text-xs font-bold text-white">
+                        4 Giám khảo • 33 Ekip
+                      </p>
+                      <p className="mt-0.5 text-[11px] text-slate-300">
+                        36 vị trí vận hành BTC
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
+
+              {/* Dual-Audience Smart Agenda */}
+              <HackathonAgendaBoard />
             </div>
           </div>
         </section>

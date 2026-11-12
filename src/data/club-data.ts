@@ -26,11 +26,32 @@ export interface ScorecardCriterion {
   detail: string;
 }
 
+export type HackathonAudience = "btc" | "participant";
+
+export type BtcRoleCode = "CORE" | "PR" | "LOG" | "DOT" | "HR" | "ER";
+
+export interface BtcRoleTask {
+  role: BtcRoleCode;
+  label: string;
+  task: string;
+}
+
 export interface AgendaItem {
+  id: string;
   time: string;
+  phase: string;
   title: string;
+  location: string;
   detail: string;
   lead: string;
+  highlights: string[];
+  roleTasks?: BtcRoleTask[];
+}
+
+export interface PitchingShiftSlot {
+  pair: string;
+  setupTime: string;
+  pitchTime: string;
 }
 
 export type DivisionCode = "PM" | "PR" | "HR" | "LOG" | "DOT" | "ER";
@@ -252,64 +273,467 @@ export const HACKATHON_SCORECARD: ScorecardCriterion[] = [
   },
 ];
 
-export const HACKATHON_AGENDA: AgendaItem[] = [
+export const HACKATHON_PITCHING_SHIFTS: PitchingShiftSlot[] = [
+  { pair: "Lượt 1 & 2", setupTime: "12:30 - 12:35", pitchTime: "12:35 - 12:55" },
+  { pair: "Lượt 3 & 4", setupTime: "12:55 - 13:00", pitchTime: "13:00 - 13:20" },
+  { pair: "Lượt 5 & 6", setupTime: "13:20 - 13:25", pitchTime: "13:25 - 13:45" },
+  { pair: "Lượt 7 & 8", setupTime: "13:45 - 13:50", pitchTime: "13:50 - 14:10" },
+  { pair: "Lượt 9 & 10", setupTime: "14:10 - 14:15", pitchTime: "14:15 - 14:35" },
+];
+
+export const HACKATHON_BTC_AGENDA: AgendaItem[] = [
   {
+    id: "btc-01",
     time: "06:30 - 06:45",
+    phase: "Tiền sự kiện",
     title: "Điểm danh & Phổ biến Ekip",
+    location: "Hội trường tập trung BTC",
     detail:
-      "Điểm danh toàn bộ nhân sự; Trưởng BTC phổ biến timeline, mục tiêu, chốt vị trí trực và quy trình xử lý phát sinh.",
-    lead: "Trưởng BTC & Ekip",
+      "Tập hợp 33 thành viên Ekip (36 vị trí trực theo HR Structure), chốt timeline, trách nhiệm và quy trình báo sự cố.",
+    lead: "Trưởng BTC & HR",
+    highlights: [
+      "Điểm danh nhân sự đầu giờ, xác nhận quân số đủ ở mọi vị trí.",
+      "Trưởng BTC phổ biến timeline, mục tiêu và chốt trách nhiệm từng người.",
+      "Nhắc quy tắc vận hành: đúng giờ, đúng vị trí, giữ liên lạc, báo sự cố ngay.",
+    ],
+    roleTasks: [
+      {
+        role: "HR",
+        label: "HR",
+        task: "Điểm danh toàn bộ nhân sự đầu giờ và rà soát quân số dự phòng.",
+      },
+      {
+        role: "CORE",
+        label: "Core Team",
+        task: "Phổ biến timeline tổng, giải đáp thắc mắc và phát lệnh vào vị trí.",
+      },
+    ],
   },
   {
+    id: "btc-02",
     time: "06:45 - 07:20",
-    title: "Set-up & Kiểm tra",
+    phase: "Tiền sự kiện",
+    title: "Set-up & Kiểm tra Toàn diện",
+    location: "8 Phòng thi, Hội trường & Khu vực ngoài",
     detail:
-      "Kiểm tra, sắp xếp 8 phòng thi đấu, khu vực ngoài, thiết bị, hậu cần và nhân sự; đảm bảo mọi khu vực sẵn sàng hoạt động.",
-    lead: "LOG & Kỹ thuật",
+      "Kiểm tra tổng thể 10 phòng (điện, điều hòa, ánh sáng, máy chiếu, Wi-Fi), tài khoản Gemini, bàn check-in, Teabreak và đón BGK.",
+    lead: "Core & 5 Phân ban",
+    highlights: [
+      "Mở cửa và test cơ sở vật chất, bàn ghế, máy chiếu, micro tại toàn bộ 10 phòng.",
+      "Test PC, tốc độ Wi-Fi, tài khoản Gemini, đề thi/Dataset và phương án dự phòng.",
+      "Bố trí bàn check-in, Teabreak, chia nước 8 phòng thi, chốt đơn ăn trưa & phòng chờ BGK.",
+    ],
+    roleTasks: [
+      {
+        role: "CORE",
+        label: "Core Team",
+        task: "Mở cửa, bật điều hòa, kiểm tra điện, ánh sáng, máy chiếu, micro ở 10 phòng.",
+      },
+      {
+        role: "PR",
+        label: "PR",
+        task: "Check máy ảnh, pin, thẻ nhớ dự phòng; khảo sát góc chụp và phân công tác nghiệp.",
+      },
+      {
+        role: "LOG",
+        label: "LOG",
+        task: "Bố trí bàn check-in, Teabreak, chia nước 8 phòng thi & xác nhận đơn ăn trưa.",
+      },
+      {
+        role: "DOT",
+        label: "DOT",
+        task: "Kiểm tra Internet, đăng nhập tài khoản Gemini, đề thi, Dataset & bản dự phòng.",
+      },
+      {
+        role: "HR",
+        label: "HR",
+        task: "Phân công nhân sự từng khu vực, phổ biến nhiệm vụ & giữ đội hình dự phòng.",
+      },
+      {
+        role: "ER",
+        label: "ER",
+        task: "Đón tiếp 4 Giám khảo & khách mời tới phòng chờ, cấp rubric và tài liệu chấm.",
+      },
+    ],
   },
   {
+    id: "btc-03",
     time: "07:20 - 07:55",
-    title: "Sẵn sàng & Check-in Thí sinh",
+    phase: "Đón thí sinh",
+    title: "Vào vị trí trực & Check-in Thí sinh",
+    location: "Sảnh chính & Hội trường chính",
     detail:
-      "07:20 - 07:25: Nhân sự vào vị trí trực, chuẩn bị file check-in, giấy bút và thẻ đeo. 07:25 - 07:55: Đón thí sinh tại sảnh chính, phát số báo danh và ổn định chỗ ngồi.",
-    lead: "HR & Lễ tân",
+      "07:20 - 07:25: Chốt vị trí trực toàn Ekip. 07:25 - 07:55: Đón thí sinh tại sảnh chính, phát thẻ đeo/SBD và ổn định Hội trường.",
+    lead: "HR, LOG & PR",
+    highlights: [
+      "07:20 - 07:25 (Sẵn sàng): Hoàn tất file check-in, giấy bút, thẻ đeo; toàn Ekip đúng vị trí.",
+      "07:25 - 07:55 (Check-in): Đón thí sinh, xác nhận thông tin, phát thẻ đeo/số báo danh.",
+      "Điều phối thí sinh theo nhóm vào Hội trường; chuẩn bị sẵn MC, slide và kịch bản khai mạc.",
+    ],
+    roleTasks: [
+      {
+        role: "HR",
+        label: "HR",
+        task: "Xác nhận nhân sự vào vị trí (07:20), điều phối hàng check-in & trật tự hội trường.",
+      },
+      {
+        role: "LOG",
+        label: "LOG",
+        task: "Vận hành bàn check-in, cấp phát SBD, thẻ đeo và chuẩn bị hội trường khai mạc.",
+      },
+      {
+        role: "PR",
+        label: "PR",
+        task: "Chuẩn bị nội dung slide khai mạc và hỗ trợ MC khớp kịch bản mở màn.",
+      },
+    ],
   },
   {
+    id: "btc-04",
     time: "07:55 - 08:20",
-    title: "Khai mạc & Công bố Thể lệ",
+    phase: "Khai mạc",
+    title: "Khai mạc & Dẫn về 8 Phòng thi",
+    location: "Hội trường chính -> 8 Phòng thi đấu",
     detail:
-      "Tuyên bố lý do, giới thiệu 4 Giám khảo & BTC; phổ biến đề bài Hackathon, barem điểm, quy chế và phát lệnh di chuyển về 8 phòng thi đấu.",
-    lead: "MC, BTC & 4 Giám khảo",
+      "Tuyên bố lý do, giới thiệu 4 Giám khảo & BTC; phổ biến chủ đề Hackathon, barem điểm, quy chế và dẫn đội về 8 phòng thi.",
+    lead: "Core, PR, LOG & ER",
+    highlights: [
+      "07:55 - 08:05: Tuyên bố lý do, giới thiệu 4 Giám khảo, BTC & khởi động tinh thần.",
+      "08:05 - 08:10: Phổ biến chi tiết đề bài/chủ đề Hackathon, barem điểm & quy chế vi phạm.",
+      "08:10 - 08:20: Phát lệnh xuất phát; BTC điều phối thí sinh di chuyển về 8 phòng thi đấu.",
+    ],
+    roleTasks: [
+      {
+        role: "PR",
+        label: "PR",
+        task: "Điều khiển slide khai mạc/thể lệ, hỗ trợ MC và ghi hình phiên mở màn.",
+      },
+      {
+        role: "LOG",
+        label: "LOG",
+        task: "Điều phối luồng thí sinh di chuyển từ Hội trường về đúng 8 phòng thi đấu.",
+      },
+      {
+        role: "ER",
+        label: "ER",
+        task: "Đón tiếp, tháp tùng 4 Giám khảo & Giáo viên cố vấn trong phiên khai mạc.",
+      },
+    ],
   },
   {
+    id: "btc-05",
     time: "08:20 - 10:55",
-    title: "Thi đấu Chính thức",
+    phase: "Thi đấu",
+    title: "Giám sát & Hỗ trợ Thi đấu",
+    location: "8 Phòng thi đấu",
     detail:
-      "08:20 - 08:30: Công bố đề thi & làm quen máy tính. 08:30 - 10:55: Các đội thi đấu chế tác sản phẩm (nhắc mốc 5 phút cuối lúc 10:50 và nộp bài).",
-    lead: "Thí sinh & Giám sát phòng",
+      "08:20 - 08:30 công bố đề & làm quen máy tính; 08:30 - 10:55 giám sát thi đấu, trực hỗ trợ kỹ thuật, nhắc 5 phút cuối (10:50) & thu bài.",
+    lead: "DOT, HR, LOG & Core",
+    highlights: [
+      "08:20 - 08:30: Công bố đề thi, hỗ trợ thí sinh truy cập tài liệu và làm quen máy tính.",
+      "08:30 - 10:50: Giám sát phòng thi, xử lý kịp thời sự cố Wi-Fi, máy tính, tài khoản Gemini.",
+      "10:50 - 10:55: Nhắc mốc 5 phút cuối đồng loạt tại 8 phòng và xác nhận nộp bài.",
+    ],
+    roleTasks: [
+      {
+        role: "CORE",
+        label: "Core Team",
+        task: "Giám sát timeline chung, kết nối các ban và xử lý tình huống phát sinh.",
+      },
+      {
+        role: "DOT",
+        label: "DOT",
+        task: "Công bố đề, xử lý sự cố PC, Internet, tài khoản Gemini & dataset tại phòng thi.",
+      },
+      {
+        role: "HR",
+        label: "HR",
+        task: "8 Giám sát phòng thi theo dõi kỷ luật, nhắc giờ (10:50) và chốt nộp bài.",
+      },
+      {
+        role: "LOG",
+        label: "LOG",
+        task: "Bổ sung nước uống, văn phòng phẩm và phối hợp kỹ thuật điện/y tế cùng Nhà trường.",
+      },
+      {
+        role: "PR",
+        label: "PR",
+        task: "Chụp ảnh, quay video quá trình làm việc nhóm tại 8 phòng thi đấu.",
+      },
+    ],
   },
   {
+    id: "btc-06",
     time: "10:55 - 12:15",
-    title: "Nghỉ trưa & Ổn định phòng",
+    phase: "Nghỉ trưa",
+    title: "Ổn định Phòng & Bữa trưa",
+    location: "Phòng thi -> Khu vực phòng ăn",
     detail:
-      "10:55 - 11:05: Ổn định lại phòng thi. 11:05 - 12:15: Di chuyển tới phòng ăn và nghỉ ngơi chuẩn bị cho phiên Pitching buổi chiều.",
-    lead: "Ban Hậu cần (LOG)",
+      "Ổn định phòng thi sau giờ nộp bài, hướng dẫn di chuyển tới phòng ăn, phục vụ suất ăn trưa và tập hợp lại trước 12:15.",
+    lead: "LOG & HR",
+    highlights: [
+      "10:55 - 11:05: Ổn định lại phòng thi, bảo quản thiết bị và bài dự thi của các đội.",
+      "11:05 - 11:25: Điều phối thí sinh di chuyển theo nhóm tới phòng ăn.",
+      "11:25 - 12:15: Phục vụ ăn trưa, nghỉ ngơi & nhắc lịch di chuyển chuẩn bị Pitching.",
+    ],
+    roleTasks: [
+      {
+        role: "LOG",
+        label: "LOG",
+        task: "Sắp xếp khu vực ăn uống, phân phát suất ăn trưa và thu dọn gọn gàng.",
+      },
+      {
+        role: "HR",
+        label: "HR",
+        task: "Hướng dẫn thí sinh di chuyển phòng ăn, nghỉ ngơi và gọi tập trung lúc 12:15.",
+      },
+    ],
   },
   {
+    id: "btc-07",
     time: "12:15 - 14:55",
+    phase: "Pitching",
     title: "Vòng Pitching (10 Lượt) & Chấm điểm",
+    location: "Phòng Pitching & Phòng BGK",
     detail:
-      "12:15 - 12:30: Di chuyển vào phòng pitching. 12:30 - 14:35: Trình bày & phản biện lần lượt 10 lượt (Lượt 1 - 10). 14:35 - 14:55: Ban Giám khảo chấm điểm.",
-    lead: "Ban Giám khảo & ER",
+      "12:15 - 12:30 chuẩn bị phòng; 12:30 - 14:35 điều phối 10 lượt Pitching (5p set-up + 20p trình bày); 14:35 - 14:55 BGK chấm điểm.",
+    lead: "HR, DOT, ER & LOG",
+    highlights: [
+      "12:15 - 12:30: Đưa các đội vào phòng chờ/phòng pitching theo đúng thứ tự lượt.",
+      "12:30 - 14:35: Vận hành Lượt 1-2, 3-4, 5-6, 7-8, 9-10 (set-up slide/Wi-Fi 5p + pitch 20p).",
+      "14:35 - 14:55: BGK tổng hợp file chấm điểm kín; LOG chuẩn bị hội trường cho Lễ Bế mạc.",
+    ],
+    roleTasks: [
+      {
+        role: "HR",
+        label: "HR",
+        task: "Gọi lượt, hướng dẫn đúng phòng & đúng thứ tự 10 lượt pitching không trễ nhịp.",
+      },
+      {
+        role: "DOT",
+        label: "DOT",
+        task: "Kết nối máy tính, kiểm tra Wi-Fi, slide, demo và hỗ trợ Excel tổng hợp điểm BGK.",
+      },
+      {
+        role: "PR",
+        label: "PR",
+        task: "Ghi hình bài thuyết trình và sản phẩm demo của tất cả 10 lượt.",
+      },
+      {
+        role: "ER",
+        label: "ER",
+        task: "Phục vụ rubric và hỗ trợ 4 Giám khảo trong phiên đánh giá & thống nhất điểm.",
+      },
+      {
+        role: "LOG",
+        label: "LOG",
+        task: "Sắp xếp Hội trường chính, ghế ngồi và bàn giải thưởng chuẩn bị Bế mạc (14:35).",
+      },
+    ],
   },
   {
+    id: "btc-08",
     time: "15:00 - 15:35",
+    phase: "Bế mạc",
     title: "Lễ Bế mạc & Trao giải",
+    location: "Hội trường chính",
     detail:
-      "Đại diện BGK đánh giá chất lượng sản phẩm; trao Giải Khuyến khích, Ba, Nhì, Nhất; tri ân BGK, đối tác, Ekip BTC và chụp ảnh kỷ niệm.",
-    lead: "BTC, BGK & Toàn Ekip",
+      "Tập trung Hội trường, đại diện BGK nhận xét sản phẩm, trao Giải Khuyến khích, Ba, Nhì, Nhất, tri ân Ekip & chụp ảnh kỷ niệm.",
+    lead: "Core, ER, HR & PR",
+    highlights: [
+      "15:00 - 15:15: Tập trung Thí sinh, BGK, Khách mời; đại diện BGK nhận xét chất lượng sản phẩm.",
+      "15:15 - 15:25: MC công bố & trao Giải Khuyến khích, Giải Ba, Giải Nhì, Giải Nhất.",
+      "15:25 - 15:35: Tri ân BGK, đối tác, 33 Ekip BTC; tuyên bố bế mạc & chụp ảnh toàn cuộc thi.",
+    ],
+    roleTasks: [
+      {
+        role: "HR",
+        label: "HR",
+        task: "Điều động đội thi, BGK và toàn thể 33 Ekip tập trung đúng sơ đồ hội trường.",
+      },
+      {
+        role: "ER",
+        label: "ER",
+        task: "Đón tiếp khách mời, trao biểu trưng, chứng nhận, quà tặng & tri ân đối tác.",
+      },
+      {
+        role: "PR",
+        label: "PR",
+        task: "Ghi hình khoảnh khắc vinh danh trao giải, phát biểu & ảnh kỷ niệm tập thể.",
+      },
+    ],
+  },
+  {
+    id: "btc-09",
+    time: "15:35 - 16:00+",
+    phase: "Hậu sự kiện",
+    title: "Thu dọn, Bàn giao & Tổng kết",
+    location: "Toàn khu vực tổ chức",
+    detail:
+      "Checklist sau sự kiện: kiểm kê thiết bị, sao lưu dữ liệu, bàn giao phòng cho Nhà trường, quyết toán, họp rút kinh nghiệm & recap.",
+    lead: "Toàn bộ 5 Phân ban & Core",
+    highlights: [
+      "Thu dọn khu vực, kiểm kê thu hồi thiết bị & xác nhận bàn giao phòng với Nhà trường.",
+      "Sao lưu bài thi, sản phẩm, bảng điểm & điểm danh kết thúc, họp rút kinh nghiệm BTC.",
+      "Đăng bài recap, cảm ơn và gửi chứng nhận tới BGK, nhà tài trợ, cố vấn & thí sinh.",
+    ],
+    roleTasks: [
+      {
+        role: "CORE",
+        label: "Core Team",
+        task: "Tổng kết mục tiêu, chủ trì họp rút kinh nghiệm & hoàn thiện báo cáo lưu trữ.",
+      },
+      {
+        role: "LOG",
+        label: "LOG",
+        task: "Thu dọn vệ sinh, kiểm kê vật dụng, bàn giao phòng & tổng hợp quyết toán chi phí.",
+      },
+      {
+        role: "DOT",
+        label: "DOT",
+        task: "Thu thập, rà soát và sao lưu toàn bộ bài thi, sản phẩm, file điểm & tài khoản.",
+      },
+      {
+        role: "HR",
+        label: "HR",
+        task: "Điểm danh kết thúc ca trực, đánh giá nhân sự & tổng hợp phản hồi nội bộ.",
+      },
+      {
+        role: "PR",
+        label: "PR",
+        task: "Thiết kế đăng bài recap, album ảnh/video & thống kê hiệu quả truyền thông.",
+      },
+      {
+        role: "ER",
+        label: "ER",
+        task: "Gửi thư tri ân & chứng nhận tham gia cho BGK, nhà tài trợ, cố vấn và thí sinh.",
+      },
+    ],
   },
 ];
+
+export const HACKATHON_PARTICIPANT_AGENDA: AgendaItem[] = [
+  {
+    id: "pt-01",
+    time: "07:25 - 07:55",
+    phase: "Đón thí sinh",
+    title: "Check-in & Nhận Số báo danh",
+    location: "Sảnh chính -> Hội trường",
+    detail:
+      "Thí sinh có mặt tại sảnh chính để check-in, xác nhận thông tin, nhận thẻ đeo/SBD và di chuyển vào Hội trường ổn định chỗ ngồi.",
+    lead: "Tất cả Thí sinh",
+    highlights: [
+      "Đến bàn Check-in xác nhận thông tin đăng ký và nhận thẻ đeo/SBD.",
+      "Tập trung theo nhóm đội thi và theo sự điều phối vào Hội trường chính.",
+      "Ổn định chỗ ngồi trước 07:55 để sẵn sàng dự Lễ Khai mạc.",
+    ],
+  },
+  {
+    id: "pt-02",
+    time: "07:55 - 08:20",
+    phase: "Khai mạc",
+    title: "Khai mạc & Phổ biến Thể lệ",
+    location: "Hội trường -> 8 Phòng thi",
+    detail:
+      "Gặp gỡ 4 Giám khảo & BTC, nghe phổ biến chủ đề Hackathon, barem chấm điểm, quy chế thi và nhận lệnh về phòng thi đấu.",
+    lead: "BTC & 4 Giám khảo",
+    highlights: [
+      "07:55 - 08:05: Dự Lễ Khai mạc, gặp gỡ Hội đồng 4 Giám khảo & BTC.",
+      "08:05 - 08:10: Nắm rõ đề bài/chủ đề Hackathon, barem chấm điểm & quy chế vi phạm.",
+      "08:10 - 08:20: Theo hiệu lệnh xuất phát di chuyển nhanh về đúng phòng trong 8 phòng thi.",
+    ],
+  },
+  {
+    id: "pt-03",
+    time: "08:20 - 10:55",
+    phase: "Thi đấu",
+    title: "Thi đấu Chính thức & Nộp bài",
+    location: "8 Phòng thi đấu",
+    detail:
+      "Nhận đề chi tiết, làm quen máy tính (10 phút đầu) và chế tác sản phẩm trợ lý học tập cùng đồng đội trước khi nộp bài lúc 10:55.",
+    lead: "Các Đội thi",
+    highlights: [
+      "08:20 - 08:30: Nhận đề thi chi tiết, kiểm tra máy tính, Wi-Fi & tài khoản công cụ.",
+      "08:30 - 10:50: Phối hợp nhóm xây dựng giải pháp và bản demo sản phẩm thực tế.",
+      "10:50 - 10:55: Lưu ý thông báo còn 5 phút cuối và hoàn tất nộp bài đúng giờ.",
+    ],
+  },
+  {
+    id: "pt-04",
+    time: "10:55 - 12:15",
+    phase: "Nghỉ trưa",
+    title: "Nghỉ trưa & Nạp năng lượng",
+    location: "Phòng thi -> Phòng ăn",
+    detail:
+      "Thu xếp ổn định phòng thi sau khi nộp bài, di chuyển dùng bữa trưa theo hướng dẫn BTC và nghỉ ngơi chuẩn bị Pitching chiều.",
+    lead: "Tất cả Thí sinh",
+    highlights: [
+      "10:55 - 11:05: Ổn định lại phòng thi, bảo quản tư trang cá nhân trước giờ nghỉ.",
+      "11:05 - 11:25: Di chuyển cùng đội tới khu vực phòng ăn.",
+      "11:25 - 12:15: Ăn trưa, nghỉ ngơi tự do và chuẩn bị tinh thần cho phiên Pitching.",
+    ],
+  },
+  {
+    id: "pt-05",
+    time: "12:15 - 12:30",
+    phase: "Chuẩn bị",
+    title: "Tập trung Khu vực Pitching",
+    location: "Phòng chờ & Phòng Pitching",
+    detail:
+      "Di chuyển về khu vực phòng pitching trước giờ G, kiểm tra thứ tự lượt thi và sẵn sàng slide/sản phẩm demo.",
+    lead: "Các Đội thi",
+    highlights: [
+      "Có mặt tại khu vực phòng pitching trước 12:30 theo điều phối của HR.",
+      "Kiểm tra sẵn file thuyết trình, link demo và phân công vai trò thành viên.",
+    ],
+  },
+  {
+    id: "pt-06",
+    time: "12:30 - 14:35",
+    phase: "Pitching",
+    title: "Thuyết trình & Phản biện (10 Lượt)",
+    location: "Phòng Pitching (Lượt 1 - 10)",
+    detail:
+      "Trình bày sản phẩm và trả lời Q&A với Ban Giám khảo theo lịch chia cặp Lượt 1-10 (mỗi lượt gồm 5p set-up + 20p pitching).",
+    lead: "Các Đội & BGK",
+    highlights: [
+      "Mỗi lượt có 5 phút vào phòng kết nối máy, trình chiếu slide, test Wi-Fi & sản phẩm.",
+      "20 phút trình bày giải pháp, demo trực tiếp và phản biện cùng BGK.",
+      "Tra cứu khung giờ cụ thể của từng cặp Lượt 1 - 10 ngay ở thanh lịch trình phía trên.",
+    ],
+  },
+  {
+    id: "pt-07",
+    time: "14:35 - 15:00",
+    phase: "Chấm điểm",
+    title: "BGK Chấm điểm & Tập trung",
+    location: "Hội trường chính",
+    detail:
+      "Ban Giám khảo hoàn tất chấm điểm và thống nhất kết quả (14:35 - 14:55); thí sinh trở lại Hội trường chuẩn bị Bế mạc.",
+    lead: "BGK & Thí sinh",
+    highlights: [
+      "14:35 - 14:55: Hội đồng Giám khảo tổng hợp, đối chiếu rubric và chấm điểm chung kết.",
+      "14:55 - 15:00: Thí sinh tập trung đầy đủ tại Hội trường chính theo hướng dẫn MC.",
+    ],
+  },
+  {
+    id: "pt-08",
+    time: "15:00 - 15:35",
+    phase: "Bế mạc",
+    title: "Lễ Bế mạc & Trao giải",
+    location: "Sân khấu Hội trường chính",
+    detail:
+      "Nghe BGK đánh giá sản phẩm, nhận giải thưởng và chứng nhận (Khuyến khích, Ba, Nhì, Nhất) và chụp ảnh kỷ niệm.",
+    lead: "BGK, BTC & Thí sinh",
+    highlights: [
+      "15:05 - 15:15: Đại diện Ban Giám khảo phát biểu nhận xét tổng quan về các đội thi.",
+      "15:15 - 15:25: Vinh danh & trao Giải Khuyến khích, Ba, Nhì, Nhất kèm chứng nhận.",
+      "15:25 - 15:35: Tuyên bố bế mạc và toàn bộ thí sinh lên sân khấu chụp ảnh lưu niệm.",
+    ],
+  },
+];
+
+export const HACKATHON_AGENDA: AgendaItem[] = HACKATHON_BTC_AGENDA;
 
 export const EXECUTIVE_DIVISION: DivisionItem = {
   code: "PM",
