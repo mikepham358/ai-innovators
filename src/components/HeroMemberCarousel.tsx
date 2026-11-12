@@ -21,7 +21,7 @@ import {
   MemberRankIcon,
 } from "@/components/MemberRankBadge";
 import {
-  CLUB_DIVISIONS,
+  ALL_DIVISION_META,
   TEAM_MEMBERS,
   type DivisionAccent,
   type DivisionCode,
@@ -141,9 +141,9 @@ export function HeroMemberCarousel() {
   const hasAutoStartedRef = useRef(false);
 
   const { divisionByCode, accentByCode } = useMemo(() => {
-    const divMap = {} as Record<DivisionCode, (typeof CLUB_DIVISIONS)[number]>;
+    const divMap = {} as Record<DivisionCode, (typeof ALL_DIVISION_META)[number]>;
     const accMap = {} as Record<DivisionCode, DivisionAccent>;
-    for (const div of CLUB_DIVISIONS) {
+    for (const div of ALL_DIVISION_META) {
       divMap[div.code] = div;
       accMap[div.code] = div.accent;
     }
@@ -499,7 +499,7 @@ export function HeroMemberCarousel() {
             href="#divisions"
             className="inline-flex items-center gap-1 rounded-lg border border-fuchsia-300/30 bg-fuchsia-500/15 px-3 py-1.5 text-xs font-semibold text-fuchsia-100 transition hover:bg-fuchsia-500/25"
           >
-            <span>7 Chuyên Ban</span>
+            <span>5 Phân Ban</span>
             <ArrowDownRight className="h-3.5 w-3.5" />
           </Link>
         </div>

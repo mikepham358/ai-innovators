@@ -33,7 +33,7 @@ export function Footer() {
             4 Workshop
           </Link>
           <Link href="/#hackathon" className="hover:text-white">
-            Hackathon 28/11
+            Hackathon 23/01
           </Link>
           <Link href="/login" className="hover:text-white">
             Đăng nhập Gmail

@@ -7,7 +7,6 @@ import {
   Crown,
   Layers,
   Maximize2,
-  Palette,
   Users,
 } from "lucide-react";
 import { MemberSpotlightModal } from "@/components/MemberSpotlightModal";
@@ -17,7 +16,9 @@ import {
   MemberRankIcon,
 } from "@/components/MemberRankBadge";
 import {
+  ALL_DIVISION_META,
   CLUB_DIVISIONS,
+  EXECUTIVE_DIVISION,
   TEAM_MEMBERS,
   type DivisionAccent,
   type DivisionCode,
@@ -361,7 +362,7 @@ export function DivisionsShowcase() {
 
   const divisionByCode = useMemo(() => {
     const map = {} as Record<DivisionCode, DivisionItem>;
-    for (const div of CLUB_DIVISIONS) {
+    for (const div of ALL_DIVISION_META) {
       map[div.code] = div;
     }
     return map;
@@ -381,10 +382,9 @@ export function DivisionsShowcase() {
   // Ordered sequence used for Next/Prev inside the Lightbox
   const activeLightboxSequence = useMemo(() => {
     if (activeView === "LEADERS") return leaderMembers;
-    if (activeView === "PH") return prMembers;
     if (activeView !== "ALL") return getMembersByDivision(activeView);
     return TEAM_MEMBERS;
-  }, [activeView, leaderMembers, prMembers]);
+  }, [activeView, leaderMembers]);
 
   const lightboxList = useMemo(() => {
     if (!selectedMember) return TEAM_MEMBERS;
@@ -409,7 +409,7 @@ export function DivisionsShowcase() {
             }`}
           >
             <Layers className="h-3.5 w-3.5" />
-            <span>Toàn cảnh 7 Ban</span>
+            <span>Toàn cảnh 5 Phân ban</span>
             <span className="rounded-md bg-white/15 px-1.5 py-0.5 font-mono text-[11px]">
               {TEAM_MEMBERS.length}
             </span>
@@ -425,9 +425,28 @@ export function DivisionsShowcase() {
             }`}
           >
             <Crown className="h-3.5 w-3.5" />
-            <span>Ban Điều Hành &amp; Trưởng Ban</span>
+            <span>Ban Chủ Nhiệm &amp; Trưởng Ban</span>
             <span className="rounded-md bg-white/15 px-1.5 py-0.5 font-mono text-[11px]">
               {leaderMembers.length}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveView("PM")}
+            className={`inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-medium transition ${
+              activeView === "PM"
+                ? "border-slate-200/50 bg-white/[0.14] text-white shadow-[0_0_18px_rgba(255,255,255,0.12)]"
+                : "border-white/10 bg-white/[0.03] text-slate-300 hover:border-white/25 hover:bg-white/[0.07] hover:text-white"
+            }`}
+          >
+            <span
+              className={`h-2 w-2 rounded-full ${ACCENT_STYLES[EXECUTIVE_DIVISION.accent].dot}`}
+            />
+            <span className="font-mono font-bold">PM</span>
+            <span className="hidden md:inline">• Ban Chủ Nhiệm</span>
+            <span className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-[10px] text-slate-200">
+              {pmMembers.length}
             </span>
           </button>
 
@@ -437,10 +456,7 @@ export function DivisionsShowcase() {
           />
 
           {CLUB_DIVISIONS.map((div) => {
-            const count =
-              div.code === "PH"
-                ? "PR×PH"
-                : String(getMembersByDivision(div.code).length);
+            const count = String(getMembersByDivision(div.code).length);
             const isSelected = activeView === div.code;
             const accent = ACCENT_STYLES[div.accent];
 
@@ -467,10 +483,10 @@ export function DivisionsShowcase() {
         </div>
       </div>
 
-      {/* VIEW 1: ALL 7 DIVISIONS - SMART HIERARCHICAL ARCHITECTURE */}
+      {/* VIEW 1: EXECUTIVE BOARD + 5 DIVISIONS - SMART HIERARCHICAL ARCHITECTURE */}
       {activeView === "ALL" && (
         <div className="mt-10 space-y-12">
-          {/* 1. PM - Executive Spotlight */}
+          {/* Executive Board - Ban Chủ Nhiệm */}
           <div className="space-y-6">
             <DivisionHeaderStrip
               division={divisionByCode.PM}
@@ -490,25 +506,7 @@ export function DivisionsShowcase() {
             </div>
           </div>
 
-          {/* 2. DOT - 1 Dossier + 7 Members = 8 tiles (4x2 symmetry) */}
-          <div className="space-y-5">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
-              <DivisionDossierCard
-                division={divisionByCode.DOT}
-                memberCountLabel="1 Trưởng ban • 6 Thành viên"
-              />
-              {dotMembers.map((member) => (
-                <PosterMirrorCard
-                  key={member.id}
-                  member={member}
-                  accent={divisionByCode.DOT.accent}
-                  onSelect={setSelectedMember}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* 3. PR - Header Strip + 8 Members (4x2 symmetry) */}
+          {/* 1. PR - Header Strip + 8 Members (4x2 symmetry) */}
           <div className="space-y-5">
             <DivisionHeaderStrip
               division={divisionByCode.PR}
@@ -526,7 +524,25 @@ export function DivisionsShowcase() {
             </div>
           </div>
 
-          {/* 4. LOG - Header Strip + 6 Members */}
+          {/* 2. HR - Header Strip + 4 Members (1x4 full row symmetry) */}
+          <div className="space-y-5">
+            <DivisionHeaderStrip
+              division={divisionByCode.HR}
+              memberCountLabel="1 Trưởng ban • 1 Phó ban • 2 Thành viên"
+            />
+            <div className="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
+              {hrMembers.map((member) => (
+                <PosterMirrorCard
+                  key={member.id}
+                  member={member}
+                  accent={divisionByCode.HR.accent}
+                  onSelect={setSelectedMember}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* 3. LOG - Header Strip + 6 Members */}
           <div className="space-y-5">
             <DivisionHeaderStrip
               division={divisionByCode.LOG}
@@ -545,25 +561,25 @@ export function DivisionsShowcase() {
             </div>
           </div>
 
-          {/* 5. HR - Header Strip + 4 Members (1x4 full row symmetry) */}
+          {/* 4. DOT - 1 Dossier + 7 Members = 8 tiles (4x2 symmetry) */}
           <div className="space-y-5">
-            <DivisionHeaderStrip
-              division={divisionByCode.HR}
-              memberCountLabel="1 Trưởng ban • 1 Phó ban • 2 Thành viên"
-            />
-            <div className="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
-              {hrMembers.map((member) => (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
+              <DivisionDossierCard
+                division={divisionByCode.DOT}
+                memberCountLabel="1 Trưởng ban • 6 Thành viên"
+              />
+              {dotMembers.map((member) => (
                 <PosterMirrorCard
                   key={member.id}
                   member={member}
-                  accent={divisionByCode.HR.accent}
+                  accent={divisionByCode.DOT.accent}
                   onSelect={setSelectedMember}
                 />
               ))}
             </div>
           </div>
 
-          {/* 6. ER - Split Dossier + 2 Portraits */}
+          {/* 5. ER - Split Dossier + 2 Portraits */}
           <div className="grid grid-cols-1 items-stretch gap-4 sm:gap-5 lg:grid-cols-12">
             <div className="lg:col-span-4">
               <DivisionDossierCard
@@ -581,64 +597,6 @@ export function DivisionsShowcase() {
                   sizes="(max-width: 640px) 46vw, 420px"
                 />
               ))}
-            </div>
-          </div>
-
-          {/* 7. PH - Dedicated Brand & Visual Identity Studio */}
-          <div className="mirror-card overflow-hidden rounded-3xl p-4 sm:p-6">
-            <div className="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-12">
-              <div className="lg:col-span-5">
-                <DivisionDossierCard
-                  division={divisionByCode.PH}
-                  memberCountLabel="Liên kết PR × PH"
-                  footerAction={{
-                    label: "Xem đội ngũ Thiết kế",
-                    onClick: () => setActiveView("PH"),
-                  }}
-                />
-              </div>
-              <div className="group mirror-card relative flex flex-col justify-between overflow-hidden rounded-2xl border-cyan-300/25 bg-gradient-to-br from-cyan-500/12 via-slate-900/80 to-indigo-950/90 p-6 lg:col-span-7">
-                <div aria-hidden="true" className="mirror-glint absolute inset-0" />
-                <div
-                  aria-hidden="true"
-                  className="mirror-sweep absolute inset-y-0 -left-1/2 w-1/2"
-                />
-                <div className="relative z-10">
-                  <div className="inline-flex items-center gap-2 rounded-full border border-cyan-300/30 bg-cyan-400/15 px-3 py-1 font-mono text-[10px] font-bold tracking-wider text-cyan-100">
-                    <Palette className="h-3.5 w-3.5" />
-                    STUDIO NHẬN DIỆN
-                  </div>
-                  <h4 className="mt-4 font-[family-name:var(--font-space-grotesk)] text-xl font-bold text-white sm:text-2xl">
-                    Hệ sinh thái Ấn phẩm GEN 1.0
-                  </h4>
-                  <p className="mt-2.5 text-sm leading-relaxed text-slate-300">
-                    Chịu trách nhiệm toàn bộ ngôn ngữ thị giác kim loại bạc - kính
-                    khói cho bộ {TEAM_MEMBERS.length} chân dung thành viên, khung sự
-                    kiện VGP2026 và bộ AI Learning Toolkit.
-                  </p>
-                </div>
-
-                <div className="mt-6 grid grid-cols-1 gap-4 border-t border-white/10 pt-4 sm:grid-cols-3">
-                  <div>
-                    <p className="text-xs text-slate-400">Phối hợp trực tiếp</p>
-                    <p className="mt-1 text-sm font-semibold text-cyan-200">
-                      Ban Truyền Thông (PR)
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-400">Hạng mục chủ lực</p>
-                    <p className="mt-1 text-sm font-semibold text-white">
-                      Poster &amp; Identity
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-400">Bộ ấn phẩm</p>
-                    <p className="mt-1 text-sm font-semibold text-white">
-                      {TEAM_MEMBERS.length} Chân dung Gen 1.0
-                    </p>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -659,11 +617,11 @@ export function DivisionsShowcase() {
                   Hội Đồng Lãnh Đạo Gen 1.0
                 </p>
                 <h3 className="mt-1.5 font-[family-name:var(--font-space-grotesk)] text-2xl font-bold text-white">
-                  Ban Chủ Nhiệm &amp; Trưởng / Phó Các Ban Chuyên Trách
+                  Ban Chủ Nhiệm &amp; Trưởng / Phó 5 Phân Ban Chuyên Trách
                 </h3>
                 <p className="mt-1 text-sm text-slate-300">
-                  {leaderMembers.length} gương mặt dẫn dắt điều phối chuyên môn,
-                  truyền thông, đối ngoại, hậu cần và nhân sự toàn câu lạc bộ.
+                  {leaderMembers.length} gương mặt dẫn dắt điều phối 5 phân ban
+                  PR, HR, LOG, DOT và ER toàn câu lạc bộ.
                 </p>
               </div>
               <span className="inline-flex items-center gap-2 rounded-full border border-slate-200/30 bg-white/10 px-4 py-1.5 font-mono text-xs font-bold text-white">
@@ -691,71 +649,52 @@ export function DivisionsShowcase() {
       {/* VIEW 3: INDIVIDUAL DIVISION FOCUS */}
       {activeView !== "ALL" && activeView !== "LEADERS" && (
         <div className="mt-10 space-y-8">
-          {activeView === "PH" ? (
-            <>
-              <DivisionHeaderStrip
-                division={divisionByCode.PH}
-                memberCountLabel="Phối hợp sản xuất cùng Ban PR"
-              />
-              <div className="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
-                {prMembers.map((member) => (
-                  <PosterMirrorCard
-                    key={member.id}
-                    member={member}
-                    accent={divisionByCode.PH.accent}
-                    onSelect={setSelectedMember}
-                  />
-                ))}
-              </div>
-            </>
-          ) : (
-            (() => {
-              const currentDiv = divisionByCode[activeView];
-              const members = getMembersByDivision(activeView);
-              const gridClass =
-                members.length <= 2
-                  ? "mx-auto grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-2"
-                  : members.length === 6
-                    ? "grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 xl:grid-cols-6"
-                    : "grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4";
+          {(() => {
+            const currentDiv = divisionByCode[activeView];
+            const members = getMembersByDivision(activeView);
+            const gridClass =
+              members.length <= 2
+                ? "mx-auto grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-2"
+                : members.length === 6
+                  ? "grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 xl:grid-cols-6"
+                  : "grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4";
 
-              return (
-                <>
-                  <DivisionHeaderStrip
-                    division={currentDiv}
-                    memberCountLabel={`${members.length} thành viên`}
-                  />
+            return (
+              <>
+                <DivisionHeaderStrip
+                  division={currentDiv}
+                  memberCountLabel={`${members.length} thành viên`}
+                />
 
-                  {members.length === 1 ? (
-                    <div className="mx-auto grid max-w-4xl grid-cols-1 items-stretch gap-6 sm:grid-cols-2">
-                      <DivisionDossierCard
-                        division={currentDiv}
-                        memberCountLabel="1 Trưởng ban điều phối"
-                      />
+                {members.length === 1 ? (
+                  <div className="mx-auto grid max-w-4xl grid-cols-1 items-stretch gap-6 sm:grid-cols-2">
+                    <DivisionDossierCard
+                      division={currentDiv}
+                      memberCountLabel="1 Trưởng ban điều phối"
+                    />
+                    <PosterMirrorCard
+                      member={members[0]}
+                      accent={currentDiv.accent}
+                      onSelect={setSelectedMember}
+                      showFloorReflection
+                    />
+                  </div>
+                ) : (
+                  <div className={gridClass}>
+                    {members.map((member) => (
                       <PosterMirrorCard
-                        member={members[0]}
+                        key={member.id}
+                        member={member}
                         accent={currentDiv.accent}
                         onSelect={setSelectedMember}
-                        showFloorReflection
+                        showFloorReflection={activeView === "PM"}
                       />
-                    </div>
-                  ) : (
-                    <div className={gridClass}>
-                      {members.map((member) => (
-                        <PosterMirrorCard
-                          key={member.id}
-                          member={member}
-                          accent={currentDiv.accent}
-                          onSelect={setSelectedMember}
-                          showFloorReflection={activeView === "PM"}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </>
-              );
-            })()
-          )}
+                    ))}
+                  </div>
+                )}
+              </>
+            );
+          })()}
         </div>
       )}
 

@@ -20,12 +20,11 @@ export const MEMBER_RANK_PILL_CLASSES: Record<DivisionAccent, string> = {
 
 export const MEMBER_DIVISION_CALLSIGN: Record<DivisionCode, string> = {
   PM: "NAVIGATOR",
-  DOT: "TECH CORE",
   PR: "SIGNAL",
-  PH: "VISUALIST",
-  ER: "NEXUS",
-  LOG: "AEGIS OPS",
   HR: "PRISM",
+  LOG: "AEGIS OPS",
+  DOT: "TECH CORE",
+  ER: "NEXUS",
 };
 
 function LightningBadge({ className }: { className?: string }) {
@@ -41,24 +40,6 @@ function LightningBadge({ className }: { className?: string }) {
       className={className}
     >
       <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" />
-    </svg>
-  );
-}
-
-function PrismLensBadge({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      className={className}
-    >
-      <circle cx="12" cy="12" r="9" />
-      <polygon points="12 7 16.5 12 12 17 7.5 12 12 7" />
     </svg>
   );
 }
@@ -143,8 +124,6 @@ export function MemberRankIcon({
       return (
         <LightningBadge className={`${className} text-fuchsia-300`} />
       );
-    case "PH":
-      return <PrismLensBadge className={`${className} text-cyan-300`} />;
     case "ER":
       return <OrbitNexusBadge className={`${className} text-emerald-300`} />;
     case "LOG":

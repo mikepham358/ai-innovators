@@ -33,7 +33,7 @@ export interface AgendaItem {
   lead: string;
 }
 
-export type DivisionCode = "PM" | "DOT" | "PR" | "PH" | "ER" | "LOG" | "HR";
+export type DivisionCode = "PM" | "PR" | "HR" | "LOG" | "DOT" | "ER";
 
 export type MemberTier = "executive" | "head" | "member";
 
@@ -103,8 +103,8 @@ export const CLUB_META = {
   instagramHandle: "@aiinnovators.vgp",
   coreQuestion:
     "AI có thể giúp chúng ta tư duy sâu sắc hơn như thế nào mà không thay thế bộ não của chính mình?",
-  hackathonDate: "Thứ Bảy, 28/11/2026",
-  hackathonTime: "08:00 – 15:30",
+  hackathonDate: "Thứ Bảy, 23/01/2027",
+  hackathonTime: "06:30 - 15:35",
   hackathonLocation: "Vinschool Grand Park, TP. Thủ Đức",
   standards: [
     "UNESCO AI Competency",
@@ -173,7 +173,7 @@ export const BLOOM_STAGES: BloomStage[] = [
     vi: "CHIA SẺ",
     en: "Share",
     description:
-      "Trình diễn sản phẩm tại AI Learning Hackathon 28/11/2026 và lan tỏa AI Learning Toolkit cho cộng đồng học sinh.",
+      "Trình diễn sản phẩm tại AI Learning Hackathon 23/01/2027 và lan tỏa AI Learning Toolkit cho cộng đồng học sinh.",
   },
 ];
 
@@ -254,45 +254,108 @@ export const HACKATHON_SCORECARD: ScorecardCriterion[] = [
 
 export const HACKATHON_AGENDA: AgendaItem[] = [
   {
-    time: "08:00 – 08:20",
-    title: "Lễ Khai Mạc & Phổ Biến Quy Chế",
-    detail: "Thông qua cam kết liêm chính học thuật, công bố đề bài và giới thiệu Ban Giám khảo.",
-    lead: "Ban Điều hành & MC",
+    time: "06:30 - 06:45",
+    title: "Điểm danh & Phổ biến Ekip",
+    detail:
+      "Điểm danh toàn bộ nhân sự; Trưởng BTC phổ biến timeline, mục tiêu, chốt vị trí trực và quy trình xử lý phát sinh.",
+    lead: "Trưởng BTC & Ekip",
   },
   {
-    time: "08:30 – 11:30",
-    title: "Hackathon Chế Tác Nguyên Mẫu (3 giờ)",
-    detail: "20 đội thi tại 8 phòng thiết kế prompt Socratic, Walled-Garden NotebookLM và bản demo.",
-    lead: "20 Đội Thi & 16 Staff",
+    time: "06:45 - 07:20",
+    title: "Set-up & Kiểm tra",
+    detail:
+      "Kiểm tra, sắp xếp 8 phòng thi đấu, khu vực ngoài, thiết bị, hậu cần và nhân sự; đảm bảo mọi khu vực sẵn sàng hoạt động.",
+    lead: "LOG & Kỹ thuật",
   },
   {
-    time: "11:30 – 12:30",
-    title: "Nghỉ Trưa & Teabreak Kết Nối",
-    detail: "Phục vụ 150 suất ăn trưa và không gian giao lưu giữa thí sinh, mentor và ban tổ chức.",
+    time: "07:20 - 07:55",
+    title: "Sẵn sàng & Check-in Thí sinh",
+    detail:
+      "07:20 - 07:25: Nhân sự vào vị trí trực, chuẩn bị file check-in, giấy bút và thẻ đeo. 07:25 - 07:55: Đón thí sinh tại sảnh chính, phát số báo danh và ổn định chỗ ngồi.",
+    lead: "HR & Lễ tân",
+  },
+  {
+    time: "07:55 - 08:20",
+    title: "Khai mạc & Công bố Thể lệ",
+    detail:
+      "Tuyên bố lý do, giới thiệu 4 Giám khảo & BTC; phổ biến đề bài Hackathon, barem điểm, quy chế và phát lệnh di chuyển về 8 phòng thi đấu.",
+    lead: "MC, BTC & 4 Giám khảo",
+  },
+  {
+    time: "08:20 - 10:55",
+    title: "Thi đấu Chính thức",
+    detail:
+      "08:20 - 08:30: Công bố đề thi & làm quen máy tính. 08:30 - 10:55: Các đội thi đấu chế tác sản phẩm (nhắc mốc 5 phút cuối lúc 10:50 và nộp bài).",
+    lead: "Thí sinh & Giám sát phòng",
+  },
+  {
+    time: "10:55 - 12:15",
+    title: "Nghỉ trưa & Ổn định phòng",
+    detail:
+      "10:55 - 11:05: Ổn định lại phòng thi. 11:05 - 12:15: Di chuyển tới phòng ăn và nghỉ ngơi chuẩn bị cho phiên Pitching buổi chiều.",
     lead: "Ban Hậu cần (LOG)",
   },
   {
-    time: "12:40 – 14:40",
-    title: "Vòng Thuyết Trình & Phản Biện (Q&A)",
-    detail: "Mỗi đội thuyết trình demo nguyên mẫu (10 phút) và phản biện trực tiếp cùng BGK (8 phút).",
-    lead: "Hội đồng Giám khảo & ER",
+    time: "12:15 - 14:55",
+    title: "Vòng Pitching (10 Lượt) & Chấm điểm",
+    detail:
+      "12:15 - 12:30: Di chuyển vào phòng pitching. 12:30 - 14:35: Trình bày & phản biện lần lượt 10 lượt (Lượt 1 - 10). 14:35 - 14:55: Ban Giám khảo chấm điểm.",
+    lead: "Ban Giám khảo & ER",
   },
   {
-    time: "14:40 – 15:30",
-    title: "Tổng Kết Scorecard & Lễ Trao Giải",
-    detail: "Minigames trí tuệ, vinh danh Quán quân – Á quân – Quý quân và trao chứng nhận.",
-    lead: "Ban Điều hành & Cố vấn",
+    time: "15:00 - 15:35",
+    title: "Lễ Bế mạc & Trao giải",
+    detail:
+      "Đại diện BGK đánh giá chất lượng sản phẩm; trao Giải Khuyến khích, Ba, Nhì, Nhất; tri ân BGK, đối tác, Ekip BTC và chụp ảnh kỷ niệm.",
+    lead: "BTC, BGK & Toàn Ekip",
   },
 ];
 
+export const EXECUTIVE_DIVISION: DivisionItem = {
+  code: "PM",
+  name: "Ban Chủ Nhiệm",
+  englishTag: "Executive Board",
+  role: "Quản trị dự án tổng thể & điều phối chiến lược 5 phân ban chuyên trách",
+  highlights: [
+    "Chủ nhiệm & Phó Chủ nhiệm CLB",
+    "Điều phối tiến độ GP-Pitching & Hackathon",
+  ],
+  accent: "violet",
+};
+
 export const CLUB_DIVISIONS: DivisionItem[] = [
   {
-    code: "PM",
-    name: "Ban Điều Hành",
-    englishTag: "Executive Board",
-    role: "Quản trị dự án tổng thể & điều phối chiến lược 7 ban chuyên trách",
-    highlights: ["Lập kế hoạch 5 giai đoạn", "Điều phối tiến độ GP-Pitching"],
-    accent: "violet",
+    code: "PR",
+    name: "Ban Truyền Thông",
+    englishTag: "Public Relations & Design",
+    role: "Chiến dịch truyền thông, ấn phẩm nhận diện & lan tỏa học thuật",
+    highlights: [
+      "Truyền thông Assembly & mạng xã hội",
+      "Bộ nhận diện, Poster & AI Learning Toolkit",
+    ],
+    accent: "fuchsia",
+  },
+  {
+    code: "HR",
+    name: "Ban Nhân Sự",
+    englishTag: "Human Resources",
+    role: "Tuyển chọn, gắn kết & phát triển đội ngũ thành viên Gen 1.0",
+    highlights: [
+      "Vận hành mô hình Career Lab",
+      "Đánh giá CSAT & gắn kết nội bộ",
+    ],
+    accent: "rose",
+  },
+  {
+    code: "LOG",
+    name: "Ban Hậu Cần & Tài Chính",
+    englishTag: "Logistics & Finance",
+    role: "Cơ sở vật chất 8 phòng thi đấu & quản trị ngân sách",
+    highlights: [
+      "Điều phối hậu cần, thiết bị & phòng thi",
+      "Minh bạch Purchasing Request",
+    ],
+    accent: "amber",
   },
   {
     code: "DOT",
@@ -303,47 +366,21 @@ export const CLUB_DIVISIONS: DivisionItem[] = [
     accent: "blue",
   },
   {
-    code: "PR",
-    name: "Ban Truyền Thông",
-    englishTag: "Public Relations & Media",
-    role: "Chiến dịch truyền thông IGNITE & lan tỏa học thuật",
-    highlights: ["Truyền thông Assembly", "Nội dung giáo dục AI có kiểm chứng"],
-    accent: "fuchsia",
-  },
-  {
-    code: "PH",
-    name: "Ban Thiết Kế & Hình Ảnh",
-    englishTag: "Visual & Brand Studio",
-    role: "Bộ nhận diện AI INNOVATORS & ấn phẩm sự kiện",
-    highlights: ["Logo, Poster, Frame CLB", "Cẩm nang AI Learning Toolkit"],
-    accent: "cyan",
-    partnerNote:
-      "Khối sáng tạo hình ảnh Gen 1.0 phối hợp sản xuất ấn phẩm trực tiếp cùng Ban Truyền Thông (PR).",
-  },
-  {
     code: "ER",
     name: "Ban Đối Ngoại",
     englishTag: "External Relations",
     role: "Kết nối chuyên gia, diễn giả & Ban Giám khảo",
-    highlights: ["Làm việc với diễn giả RMIT/EdTech", "Huy động nguồn lực đồng hành"],
+    highlights: [
+      "Làm việc với diễn giả RMIT/EdTech",
+      "Huy động nguồn lực đồng hành",
+    ],
     accent: "emerald",
   },
-  {
-    code: "LOG",
-    name: "Ban Hậu Cần & Tài Chính",
-    englishTag: "Logistics & Finance",
-    role: "Cơ sở vật chất 10 phòng thi & quản trị ngân sách",
-    highlights: ["Điều phối 150 suất ăn & thiết bị", "Minh bạch Purchasing Request"],
-    accent: "amber",
-  },
-  {
-    code: "HR",
-    name: "Ban Nhân Sự",
-    englishTag: "Human Resources",
-    role: "Tuyển chọn, gắn kết & phát triển đội ngũ thành viên Gen 1.0",
-    highlights: ["Vận hành mô hình Career Lab", "Đánh giá CSAT & gắn kết nội bộ"],
-    accent: "rose",
-  },
+];
+
+export const ALL_DIVISION_META: DivisionItem[] = [
+  EXECUTIVE_DIVISION,
+  ...CLUB_DIVISIONS,
 ];
 
 export const TEAM_MEMBERS: TeamMember[] = [

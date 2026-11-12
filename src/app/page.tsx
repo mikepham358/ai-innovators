@@ -345,7 +345,7 @@ export default function HomePage() {
                   Sự kiện trọng điểm
                 </p>
                 <h2 className="mt-2 font-[family-name:var(--font-space-grotesk)] text-3xl font-bold text-white sm:text-4xl">
-                  AI Learning Hackathon 2026
+                  AI Learning Hackathon 2027
                 </h2>
               </div>
               <div className="flex flex-wrap gap-3 text-xs font-medium text-slate-200 sm:text-sm">
@@ -400,14 +400,14 @@ export default function HomePage() {
                 <div className="flex items-center gap-2.5">
                   <Layers className="h-5 w-5 text-blue-300" />
                   <h3 className="font-[family-name:var(--font-space-grotesk)] text-xl font-bold text-white">
-                    Lịch trình Ngày hội Thi đấu (28/11/2026)
+                    Lịch trình Chính thức (23/01/2027)
                   </h3>
                 </div>
-                <div className="mt-5 space-y-4">
+                <div className="mt-5 space-y-3">
                   {HACKATHON_AGENDA.map((slot) => (
                     <div
                       key={slot.time}
-                      className="mirror-subbox flex flex-col gap-2 rounded-xl p-4 sm:flex-row sm:items-start sm:gap-5"
+                      className="mirror-subbox flex flex-col gap-2 rounded-xl p-3.5 sm:flex-row sm:items-start sm:gap-5"
                     >
                       <div className="shrink-0 font-mono text-xs font-bold text-fuchsia-300 sm:w-32 sm:pt-0.5">
                         {slot.time}
@@ -457,7 +457,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* 7 Divisions */}
+        {/* 5 Divisions & Executive Board */}
         <section
           id="divisions"
           className="w-full px-4 py-16 sm:px-8 sm:py-20 lg:px-12 xl:px-16"
@@ -467,11 +467,11 @@ export default function HomePage() {
               Mô hình Classroom as a Career Lab • Zero PII
             </p>
             <h2 className="mt-2 font-[family-name:var(--font-space-grotesk)] text-3xl font-bold text-white sm:text-4xl">
-              7 Ban Chuyên Trách (Gen 1.0)
+              5 Phân Ban Chuyên Trách (Gen 1.0)
             </h2>
             <p className="mt-2 text-sm text-slate-300 sm:text-base">
-              Đội ngũ Ban Chủ Nhiệm, Trưởng ban và thành viên nòng cốt vận hành theo
-              chuẩn tổ chức chuyên nghiệp.
+              Ban Chủ Nhiệm cùng 5 phân ban PR, HR, LOG, DOT và ER trực tiếp vận
+              hành theo chuẩn tổ chức chuyên nghiệp.
             </p>
           </div>
 
@@ -495,7 +495,7 @@ export default function HomePage() {
                   Truy cập trình thiết kế câu lệnh Socratic chuẩn{" "}
                   <strong>PARTS</strong>, bộ kiểm tra{" "}
                   <strong>Zero PII</strong> và tài nguyên ôn tập trước ngày
-                  Hackathon 28/11/2026.
+                  Hackathon 23/01/2027.
                 </p>
               </div>
               <Link

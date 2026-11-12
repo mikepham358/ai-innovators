@@ -7,9 +7,9 @@ import { InstagramButton } from "./InstagramButton";
 const NAV_LINKS = [
   { href: "/#mission", label: "Sứ mệnh" },
   { href: "/#workshops", label: "4 Workshop" },
-  { href: "/#hackathon", label: "Hackathon 28/11" },
+  { href: "/#hackathon", label: "Hackathon 23/01" },
   { href: "/#prototypes", label: "Sản phẩm mẫu" },
-  { href: "/#divisions", label: "7 Chuyên ban" },
+  { href: "/#divisions", label: "5 Phân ban" },
 ];
 
 function AuthNavFallback() {

@@ -102,7 +102,7 @@ async function PortalContent() {
               className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-xs font-semibold text-slate-200 transition hover:bg-white/10 sm:text-sm"
             >
               <Calendar className="h-4 w-4 text-fuchsia-300" />
-              <span>Lịch Hackathon 28/11</span>
+              <span>Lịch Hackathon 23/01</span>
             </Link>
 
             {isAuthenticated ? (
