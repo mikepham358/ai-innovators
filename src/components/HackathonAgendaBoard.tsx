@@ -119,7 +119,10 @@ export function HackathonAgendaBoard() {
   };
 
   return (
-    <div className="glass-card flex flex-col justify-between rounded-2xl p-5 sm:p-6 lg:col-span-7">
+    <div
+      data-testid="hackathon-agenda-panel"
+      className="glass-card flex h-full min-w-0 flex-col justify-between rounded-2xl p-5 sm:p-6"
+    >
       <div>
         {/* Header + Smart Audience Switcher */}
         <div className="flex flex-col gap-4 border-b border-white/10 pb-5 sm:flex-row sm:items-center sm:justify-between">
@@ -273,10 +276,18 @@ export function HackathonAgendaBoard() {
         )}
 
         {/* Agenda Grid */}
-        <div className="mt-4 grid gap-3 md:grid-cols-2">
+        <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
           {visibleSlots.map((slot, index) => {
-            const isFullSpanTail =
-              visibleSlots.length % 2 === 1 && index === visibleSlots.length - 1;
+            const isLast = index === visibleSlots.length - 1;
+            const mdTailClass =
+              isLast && visibleSlots.length % 2 === 1 ? "md:col-span-2" : "";
+            const lgTailClass = !isLast
+              ? "lg:col-span-1"
+              : visibleSlots.length % 3 === 1
+                ? "lg:col-span-3"
+                : visibleSlots.length % 3 === 2
+                  ? "lg:col-span-2"
+                  : "lg:col-span-1";
             const roleTasks = slot.roleTasks ?? [];
             const focusedRoleTask =
               audience === "btc" && btcFilter !== "ALL"
@@ -287,9 +298,7 @@ export function HackathonAgendaBoard() {
             return (
               <article
                 key={slot.id}
-                className={`mirror-subbox flex flex-col justify-between gap-2.5 rounded-xl p-3.5 ${
-                  isFullSpanTail ? "md:col-span-2" : ""
-                }`}
+                className={`mirror-subbox flex flex-col justify-between gap-2.5 rounded-xl p-3.5 ${mdTailClass} ${lgTailClass}`}
               >
                 <div>
                   <div className="flex flex-wrap items-center justify-between gap-2">

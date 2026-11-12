@@ -359,12 +359,15 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="mt-10 grid gap-8 lg:grid-cols-12">
-              {/* Dual-Audience Smart Agenda (Left) */}
+            <div className="mt-10 grid items-stretch gap-6 lg:grid-cols-[3fr_1fr]">
+              {/* Dual-Audience Smart Agenda (Left - 3 parts) */}
               <HackathonAgendaBoard />
 
-              {/* Scorecard (Right) */}
-              <div className="glass-card flex flex-col justify-between rounded-2xl p-6 lg:sticky lg:top-24 lg:col-span-5 lg:self-start">
+              {/* Scorecard (Right - 1 part, equal height) */}
+              <div
+                data-testid="hackathon-scorecard-panel"
+                className="glass-card flex h-full min-w-0 flex-col justify-between rounded-2xl p-5 xl:p-6"
+              >
                 <div>
                   <div className="flex items-center gap-2.5">
                     <Award className="h-5 w-5 text-fuchsia-300" />
@@ -408,7 +411,7 @@ export default function HomePage() {
                       2 Chế độ • 10 Lượt Pitching
                     </span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2.5">
+                  <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-1 xl:grid-cols-2">
                     <div className="mirror-subbox rounded-xl p-3">
                       <p className="font-mono text-[10px] uppercase tracking-wider text-fuchsia-300">
                         Khung giờ BTC
